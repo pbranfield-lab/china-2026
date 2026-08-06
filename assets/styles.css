@@ -208,18 +208,30 @@ section.tight .section-title::after{width:110px;}
 
 @media (max-width:760px){
   .nav-toggle{display:block;}
+  /* backdrop-filter makes .site-nav the containing block for any
+     position:fixed descendant, which trapped the menu panel below inside
+     the header instead of letting it fill the viewport. Not needed here —
+     the bar is 94% opaque, so the blur is imperceptible anyway. */
+  .site-nav{backdrop-filter:none;}
   .nav-links{
-    position:fixed;inset:56px 0 0 0;
+    position:fixed;inset:0;
     background:var(--lacquer);
     flex-direction:column;
     align-items:flex-start;
-    padding:1.5rem;
+    /* Clears the header rather than matching its exact height: the panel
+       spans the full viewport and the header (z-index 80) paints over it,
+       so the menu can't drift out of sync with the bar's height. */
+    padding:5.25rem 1.5rem 1.5rem;
     gap:1.1rem;
     font-size:1.05rem;
     transform:translateX(100%);
     transition:transform .3s ease;
     z-index:79;
   }
+  /* The panel is a child of .site-nav, so it paints above the header's own
+     content no matter what — lift the brand, toggle and trim back over it. */
+  .nav-brand, .nav-toggle{position:relative;z-index:81;}
+  .site-nav::after{z-index:81;}
   .nav-links.open{transform:translateX(0);}
   .nav-links a{width:100%;}
   .nav-links a.nav-cta{text-align:center;}
