@@ -18,6 +18,17 @@
   });
 })();
 
+/* ---------- Version stamp (every page) ----------
+   No element guard: there's no per-page container to key off, so this
+   creates its own node and guards on the constant instead. */
+(function(){
+  if(typeof SITE_VERSION === "undefined") return;
+  const el = document.createElement("div");
+  el.className = "version-stamp";
+  el.textContent = "v" + SITE_VERSION;
+  document.body.appendChild(el);
+})();
+
 /* ---------- Scroll reveal ---------- */
 (function(){
   const revealEls = document.querySelectorAll(".reveal");

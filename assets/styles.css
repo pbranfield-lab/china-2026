@@ -593,6 +593,23 @@ section.tight .section-sub{margin-top:.5rem;font-size:.82rem;}
 
 footer{position:relative;text-align:center;color:var(--gold);opacity:.75;padding:3rem 1.5rem 4rem;font-size:.9rem;font-style:italic;}
 
+/* ---------- Version stamp ----------
+   z-index stays below every overlay (mobile nav 79, nav 80, location
+   popout 90, modal 100) so it is covered rather than floating over them,
+   and pointer-events:none keeps it from intercepting pins or thumbs. */
+.version-stamp{
+  position:fixed;
+  left:.55rem;bottom:.45rem;
+  z-index:5;
+  font-family:var(--font-body);
+  font-size:.62rem;
+  letter-spacing:.06em;
+  color:var(--gold);
+  opacity:.38;
+  pointer-events:none;
+  user-select:none;
+}
+
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
 .reveal.in{opacity:1;transform:translateY(0);}
 
