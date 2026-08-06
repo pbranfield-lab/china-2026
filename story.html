@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Story So Far — Maisie's Not-So-Forbidden City</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <pattern id="fretPattern" width="20" height="16" patternUnits="userSpaceOnUse">
+      <path d="M0 8 H5 V3 H15 V13 H20" fill="none" stroke="#c9a24a" stroke-width="2"/>
+    </pattern>
+  </defs>
+</svg>
+
+<header class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="seal-mini">紫</span> Maisie's Not-So-Forbidden City</a>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+  <nav class="nav-links" id="navLinks">
+    <a href="story.html">The Story</a>
+    <a href="family.html">Meet the Expedition</a>
+    <a href="map.html" class="nav-cta">🗺️ The Map</a>
+    <a href="gallery.html">Photo Gallery</a>
+  </nav>
+</header>
+
+<div class="hero compact">
+  <div class="seal-title"><span>紫禁城</span></div>
+  <h1>The Story So Far</h1>
+  <p class="sub">History bit. Don't worry, I made it interesting.</p>
+</div>
+
+<main>
+  <section>
+    <div class="scroll-panel reveal">
+      <div class="scroll-rod"></div>
+      <div class="scroll-body diary" id="historyIntro"></div>
+      <div class="scroll-rod"></div>
+    </div>
+  </section>
+
+  <section class="tight">
+    <div class="nav-cards reveal">
+      <a href="family.html" class="nav-card">
+        <div class="icon">👑</div>
+        <h3>Meet the Expedition</h3>
+        <p>Now meet the people who had to live through this.</p>
+      </a>
+      <a href="map.html" class="nav-card featured">
+        <div class="icon">🗺️</div>
+        <h3>Straight to the Map</h3>
+        <p>See what actually happened when we went in.</p>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  This page grows every time Dad finally uploads more photos off his camera roll. Check back later. — Maisie
+</footer>
+
+<script src="assets/data.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

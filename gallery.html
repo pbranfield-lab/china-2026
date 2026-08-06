@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Photo Gallery — Maisie's Not-So-Forbidden City</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="seal-mini">紫</span> Maisie's Not-So-Forbidden City</a>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+  <nav class="nav-links" id="navLinks">
+    <a href="story.html">The Story</a>
+    <a href="family.html">Meet the Expedition</a>
+    <a href="map.html" class="nav-cta">🗺️ The Map</a>
+    <a href="gallery.html">Photo Gallery</a>
+  </nav>
+</header>
+
+<div class="hero compact">
+  <div class="seal-title"><span>紫禁城</span></div>
+  <h1>Photo Gallery</h1>
+  <p class="sub">Every photo from the whole day, no map required. Click one for the full story.</p>
+</div>
+
+<main>
+  <section class="wide">
+    <div class="gallery-filter reveal" id="galleryFilter"></div>
+    <div class="gallery-grid reveal" id="galleryGrid"></div>
+  </section>
+
+  <section class="tight">
+    <div class="nav-cards reveal">
+      <a href="map.html" class="nav-card featured">
+        <div class="icon">🗺️</div>
+        <h3>See Them on the Map</h3>
+        <p>Same photos, but placed exactly where they happened.</p>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  This page grows every time Dad finally uploads more photos off his camera roll. Check back later. — Maisie
+</footer>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <img id="modalImg" src="" alt="" style="display:none" />
+    <div class="modal-body">
+      <div class="modal-location" id="modalLocation"></div>
+      <h3 id="modalTitle"></h3>
+      <div id="modalDetail"></div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>
