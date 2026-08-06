@@ -1,7 +1,7 @@
 /* ============================================================
    SITE VERSION — bump this one line; every page picks it up.
    ============================================================ */
-const SITE_VERSION = "1.0.0";
+const SITE_VERSION = "1.1.0";
 
 /* ============================================================
    HISTORY INTRO — Maisie's opening narration
