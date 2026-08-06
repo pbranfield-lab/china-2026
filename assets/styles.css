@@ -1,11 +1,14 @@
 :root{
   --lacquer:#161110;
   --lacquer-2:#241a17;
-  --vermillion:#9c1f28;
+  --vermillion:#8f2a2c;
   --vermillion-dark:#6e1119;
-  --vermillion-bright:#c22a2f;
+  --vermillion-bright:#a8393a;
   --gold:#c9a24a;
   --gold-bright:#e8c876;
+  --gold-dim:#9c8347;
+  --seal-ink:#b2431f;
+  --seal-ink-dark:#7a2c14;
   --paper:#efe4cc;
   --paper-dark:#e2d3ab;
   --ink:#2a221a;
@@ -13,13 +16,29 @@
   --jade:#4f7a63;
   --font-display:'Noto Serif SC', Georgia, 'Times New Roman', serif;
   --font-body:'Noto Sans SC', "Segoe UI", system-ui, -apple-system, sans-serif;
-  --shadow-deep: 0 24px 60px rgba(0,0,0,0.55);
+  --radius-panel:3px;
+  --shadow-lift: 0 4px 12px rgba(20,10,8,0.28);
+  --shadow-soft: 0 10px 26px rgba(20,10,8,0.32);
+  --shadow-deep: 0 24px 60px rgba(20,10,8,0.55);
+
+  /* Ornament primitives — self-contained inline SVG so nothing needs
+     duplicating across the five hand-maintained HTML files. */
+  --texture-paper:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  --texture-lacquer:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  /* Key-fret (回纹) molding, drawn once, repeated as a border strip.
+     Drawn 1:1 at its rendered size so the meander never squashes. */
+  --fret:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Cpath d='M0 5 H5 V2 H15 V8 H20' fill='none' stroke='%239c8347' stroke-width='1.5'/%3E%3C/svg%3E");
+  --fret-bright:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Cpath d='M0 5 H5 V2 H15 V8 H20' fill='none' stroke='%23c9a24a' stroke-width='1.5'/%3E%3C/svg%3E");
+  /* Same molding rotated 90° for the vertical runs of a full frame. */
+  --fret-v:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='20' viewBox='0 0 10 20'%3E%3Cpath d='M5 0 V5 H8 V15 H2 V20' fill='none' stroke='%239c8347' stroke-width='1.5'/%3E%3C/svg%3E");
 }
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{
   margin:0;
-  background:var(--lacquer);
+  background-color:var(--lacquer);
+  background-image:var(--texture-lacquer);
+  background-blend-mode:overlay;
   color:var(--ink);
   font-family:var(--font-body);
   line-height:1.6;
@@ -32,18 +51,121 @@ img{max-width:100%;display:block;}
   *{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important;scroll-behavior:auto !important;}
 }
 
-/* ---------- Key-fret divider (回纹) ---------- */
-.fret{display:block;width:100%;height:16px;}
+/* ============================================================
+   ORNAMENT PRIMITIVES
+   Shared period detailing, applied by grouping existing selectors
+   so no page markup has to change. Three techniques:
+     1. fret trim   — key-fret (回纹) molding used as a border strip
+     2. corner brackets — metal mounts at the corners of panels
+     3. seal stamp  — carved-seal ink impression (印泥), not a flat chip
+   ============================================================ */
+
+/* --- 1. Fret trim: a repeating molding line, not a one-off divider --- */
+.site-nav::after, .hero::after, footer::before{
+  content:"";
+  position:absolute;left:0;right:0;
+  height:10px;
+  background-image:var(--fret);
+  background-repeat:repeat-x;
+  background-size:20px 10px;
+  opacity:.7;
+  pointer-events:none;
+}
+.site-nav::after, .hero::after{bottom:0;}
+footer::before{top:0;}
+
+/* Fret divider between a section title and its subtitle */
+.section-title::after{
+  content:"";
+  display:block;
+  width:160px;height:10px;margin:.7rem auto 0;
+  background-image:var(--fret-bright);
+  background-repeat:repeat-x;
+  background-size:20px 10px;
+  opacity:.8;
+}
+section.tight .section-title::after{width:110px;}
+
+/* --- 2. Corner brackets: four small mounts, one pseudo-element --- */
+.nav-card::after, .family-card::after, .modal::after,
+.location-card::after, .map-case::after{
+  content:"";
+  position:absolute;inset:0;
+  pointer-events:none;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M0 12 V0 H12' fill='none' stroke='%239c8347' stroke-width='1.5'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M0 0 H12 V12' fill='none' stroke='%239c8347' stroke-width='1.5'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M0 0 V12 H12' fill='none' stroke='%239c8347' stroke-width='1.5'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M12 0 V12 H0' fill='none' stroke='%239c8347' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-size:12px 12px;
+  background-position:
+    7px 7px,
+    calc(100% - 7px) 7px,
+    7px calc(100% - 7px),
+    calc(100% - 7px) calc(100% - 7px);
+  opacity:.65;
+  transition:opacity .2s ease;
+}
+
+/* --- 3. Seal stamp: carved edge, mottled ink, soft bleed --- */
+.seal-mini, .seal-title, .pin{
+  position:relative;
+  border:none;
+  border-radius:0;
+  background:
+    radial-gradient(ellipse at 30% 25%, rgba(255,236,214,.20), transparent 58%),
+    radial-gradient(ellipse at 74% 84%, rgba(122,44,20,.42), transparent 62%),
+    linear-gradient(150deg, #c14e23 0%, var(--seal-ink) 62%, var(--seal-ink-dark) 100%);
+  clip-path:polygon(2% 5%, 96% 0%, 100% 95%, 95% 100%, 5% 97%, 0% 6%);
+  /* drop-shadow follows the carved silhouette; box-shadow would be clipped.
+     First layer is the ink bleed, second is the physical shadow. */
+  filter:
+    drop-shadow(0 0 2px rgba(178,67,31,.55))
+    drop-shadow(0 3px 6px rgba(20,10,8,.42));
+}
+
+/* --- Plaque buttons (匾额): one shape language for every labelled control.
+   The chamfer lives on a pseudo-element so the real control keeps a
+   rectangular hit box and an unclipped focus ring. --- */
+.nav-links a.nav-cta, .location-close, .gallery-filter button{
+  position:relative;
+  background:none;
+  border:none;
+  border-radius:0;
+  isolation:auto;
+}
+.nav-links a.nav-cta::before, .location-close::before, .gallery-filter button::before{
+  content:"";
+  position:absolute;inset:0;
+  z-index:-1;
+  background:linear-gradient(180deg, var(--paper), var(--paper-dark));
+  box-shadow:inset 0 0 0 1px var(--gold-dim), inset 0 0 0 4px rgba(255,255,255,.18);
+  clip-path:polygon(
+    6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px),
+    calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px);
+  transition:box-shadow .18s ease, background .18s ease;
+}
+/* Filled (emphasis) variant */
+.nav-links a.nav-cta::before, .gallery-filter button.active::before{
+  background:linear-gradient(180deg, var(--vermillion), var(--vermillion-dark));
+  box-shadow:inset 0 0 0 1px var(--gold-dim), inset 0 0 0 4px rgba(232,200,118,.14);
+}
+/* Pressed, not lit up — a carved object being pushed in */
+.nav-links a.nav-cta:hover::before, .location-close:hover::before,
+.gallery-filter button:hover::before{
+  box-shadow:inset 0 0 0 1px var(--gold-bright), inset 0 2px 6px rgba(0,0,0,.32);
+}
 
 /* ---------- Site nav ---------- */
 .site-nav{
   position:sticky;top:0;z-index:80;
   display:flex;align-items:center;justify-content:space-between;
   gap:1rem;
-  padding:.8rem 1.2rem;
-  background:rgba(22,17,16,0.92);
+  padding:.8rem 1.2rem 1rem;
+  background:rgba(22,17,16,0.94);
   backdrop-filter:blur(6px);
-  border-bottom:2px solid var(--gold);
+  border-bottom:1px solid var(--gold-dim);
 }
 .nav-brand{
   display:flex;align-items:center;gap:.55rem;
@@ -55,15 +177,14 @@ img{max-width:100%;display:block;}
   white-space:nowrap;
 }
 .nav-brand .seal-mini{
-  width:28px;height:28px;border-radius:5px;
-  background:linear-gradient(155deg, var(--vermillion-bright), var(--vermillion-dark));
-  border:1px solid var(--gold);
+  width:28px;height:28px;
   display:flex;align-items:center;justify-content:center;
   font-size:.85rem;color:var(--paper);flex-shrink:0;
+  text-shadow:0 1px 1px rgba(0,0,0,.45);
 }
 .nav-toggle{
   display:none;
-  background:none;border:2px solid var(--gold);border-radius:6px;
+  background:none;border:1px solid var(--gold-dim);border-radius:0;
   color:var(--gold-bright);font-size:1.2rem;width:40px;height:36px;
   cursor:pointer;
 }
@@ -79,11 +200,11 @@ img{max-width:100%;display:block;}
 }
 .nav-links a:hover, .nav-links a.current{color:var(--gold-bright);border-color:var(--gold-bright);}
 .nav-links a.nav-cta{
-  background:var(--vermillion);color:var(--paper);
-  padding:.5rem 1rem;border-radius:20px;border:1px solid var(--gold-bright);
+  color:var(--paper);
+  padding:.5rem 1.1rem;
   font-weight:600;
 }
-.nav-links a.nav-cta:hover{background:var(--vermillion-bright);border-color:var(--gold-bright);}
+.nav-links a.nav-cta:hover{color:var(--gold-bright);border-color:transparent;}
 
 @media (max-width:760px){
   .nav-toggle{display:block;}
@@ -111,9 +232,11 @@ img{max-width:100%;display:block;}
   text-align:center;
   color:var(--paper);
   overflow:hidden;
-  background:
-    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(156,31,40,0.35), transparent 70%),
+  background-image:
+    var(--texture-lacquer),
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(143,42,44,0.18), transparent 70%),
     linear-gradient(180deg, var(--lacquer-2) 0%, var(--lacquer) 75%);
+  background-blend-mode:overlay, normal, normal;
 }
 .hero.compact{padding:2.2rem 1.5rem 1.8rem;}
 .cloud-layer{position:absolute;inset:0;pointer-events:none;opacity:0.35;}
@@ -132,8 +255,8 @@ img{max-width:100%;display:block;}
 .hero.home-hero::before{
   content:"";position:absolute;inset:0;
   background:
-    linear-gradient(180deg, rgba(22,17,16,.55) 0%, rgba(22,17,16,.82) 100%),
-    radial-gradient(ellipse 70% 60% at 50% 30%, rgba(156,31,40,.22), transparent 70%);
+    linear-gradient(180deg, rgba(22,17,16,.58) 0%, rgba(22,17,16,.85) 100%),
+    radial-gradient(ellipse 70% 60% at 50% 30%, rgba(143,42,44,.12), transparent 70%);
 }
 .hero-hanzi{
   position:relative;z-index:1;
@@ -148,15 +271,12 @@ img{max-width:100%;display:block;}
 .hero.home-hero .byline{margin-top:.6rem;font-size:.72rem;}
 
 .seal-title{
-  position:relative;z-index:1;
+  z-index:1;
   width:118px;height:118px;
   margin:0 auto 1.4rem;
-  background:linear-gradient(155deg, var(--vermillion-bright), var(--vermillion-dark));
-  border:3px solid var(--gold);
-  border-radius:10px;
   display:flex;align-items:center;justify-content:center;
   transform:rotate(-2deg);
-  box-shadow:var(--shadow-deep), inset 0 0 0 2px rgba(232,200,118,0.25);
+  box-shadow:inset 0 0 0 2px rgba(232,200,118,0.22);
 }
 .hero.compact .seal-title{width:64px;height:64px;margin-bottom:.6rem;}
 .seal-title span{
@@ -197,24 +317,28 @@ img{max-width:100%;display:block;}
 }
 @media (max-width:820px){ .nav-cards{grid-template-columns:1fr 1fr;} }
 .nav-card{
+  position:relative;
   display:block;text-decoration:none;
-  background:linear-gradient(180deg, var(--paper), var(--paper-dark));
-  border-radius:6px;
-  padding:1.1rem .8rem;
-  box-shadow:var(--shadow-deep);
-  border:2px solid var(--gold);
+  background-color:var(--paper);
+  background-image:var(--texture-paper), linear-gradient(180deg, var(--paper), var(--paper-dark));
+  background-blend-mode:multiply, normal;
+  border-radius:var(--radius-panel);
+  padding:1.2rem 1rem;
+  box-shadow:var(--shadow-soft);
+  border:1px solid var(--gold-dim);
   text-align:center;
-  transition:transform .2s ease;
 }
-.nav-card:hover{transform:translateY(-4px);}
+.nav-card:hover::after, .nav-card:focus-visible::after{opacity:1;}
 .nav-card .icon{font-size:1.7rem;margin-bottom:.3rem;}
 .nav-card .hanzi{display:block;font-family:var(--font-display);font-size:.72rem;color:var(--gold);opacity:.8;margin-bottom:.15rem;letter-spacing:.1em;}
 .nav-card h3{margin:0 0 .3rem;color:var(--vermillion-dark);font-size:.95rem;}
 .nav-card p{margin:0;font-size:.76rem;color:var(--ink-soft);line-height:1.4;}
 .nav-card.featured{
-  background:linear-gradient(155deg, var(--vermillion-bright), var(--vermillion-dark));
-  border-color:var(--gold-bright);
+  background-image:var(--texture-lacquer), linear-gradient(160deg, var(--vermillion), var(--vermillion-dark));
+  background-blend-mode:overlay, normal;
+  border-color:var(--gold);
 }
+.nav-card.featured::after{opacity:.85;}
 .nav-card.featured h3{color:var(--paper);}
 .nav-card.featured p{color:#f1dfc4;}
 .nav-card.featured .hanzi{color:var(--gold-bright);}
@@ -228,8 +352,6 @@ section.tight{padding:1.2rem 1.5rem 2rem;}
 section.tight .section-head{margin-bottom:.8rem;}
 .section-title{color:var(--gold-bright);font-size:1.85rem;margin:0 0 .7rem;}
 section.tight .section-title{font-size:1.3rem;margin-bottom:.4rem;}
-.section-fret{max-width:220px;margin:0 auto;}
-section.tight .section-fret{max-width:140px;}
 .section-sub{color:#c9b98f;margin-top:.9rem;font-style:italic;font-size:.95rem;}
 section.tight .section-sub{margin-top:.5rem;font-size:.82rem;}
 
@@ -245,15 +367,17 @@ section.tight .section-sub{margin-top:.5rem;font-size:.82rem;}
   content:"";position:absolute;top:-6px;
   width:26px;height:32px;border-radius:8px;
   background:radial-gradient(circle at 35% 30%, var(--gold-bright), var(--gold) 60%, #8a6a24 100%);
-  box-shadow:var(--shadow-deep);
+  box-shadow:var(--shadow-lift);
 }
 .scroll-rod::before{left:-14px;}
 .scroll-rod::after{right:-14px;}
 .scroll-body{
-  background:
-    repeating-linear-gradient(180deg, rgba(0,0,0,0.02) 0 2px, transparent 2px 4px),
+  background-color:var(--paper);
+  background-image:
+    var(--texture-paper),
     linear-gradient(180deg, var(--paper) 0%, var(--paper-dark) 100%);
-  box-shadow:var(--shadow-deep);
+  background-blend-mode:multiply, normal;
+  box-shadow:var(--shadow-soft);
   padding:2.4rem 2.6rem;position:relative;
 }
 .scroll-body::before{
@@ -267,14 +391,23 @@ section.tight .section-sub{margin-top:.5rem;font-size:.82rem;}
 /* ---------- Family: seal-stamp cards ---------- */
 .family-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(210px,1fr));gap:1.6rem;}
 .family-card{
-  background:linear-gradient(180deg, var(--paper), var(--paper-dark));
-  border-radius:4px;padding:1.6rem 1.3rem;box-shadow:var(--shadow-deep);text-align:center;
+  position:relative;
+  background-color:var(--paper);
+  background-image:var(--texture-paper), linear-gradient(180deg, var(--paper), var(--paper-dark));
+  background-blend-mode:multiply, normal;
+  border:1px solid var(--gold-dim);
+  border-radius:var(--radius-panel);
+  padding:1.7rem 1.4rem;box-shadow:var(--shadow-soft);text-align:center;
 }
+/* Not a seal — it frames a rectangular portrait, so it keeps square corners
+   and a mounted double-line border rather than the carved stamp edge. */
 .seal-avatar{
-  width:88px;height:88px;margin:0 auto .9rem;border-radius:6px;
-  background:linear-gradient(155deg, var(--vermillion-bright), var(--vermillion-dark));
-  border:2px solid var(--ink);
-  box-shadow:inset 0 0 0 3px rgba(239,228,204,0.15), 0 6px 14px rgba(0,0,0,0.35);
+  width:88px;height:88px;margin:0 auto .9rem;border-radius:2px;
+  background:
+    radial-gradient(ellipse at 32% 28%, rgba(255,255,255,.12), transparent 55%),
+    linear-gradient(155deg, var(--vermillion), var(--vermillion-dark));
+  border:1px solid var(--gold-dim);
+  box-shadow:inset 0 0 0 3px rgba(239,228,204,0.18), var(--shadow-lift);
   display:flex;align-items:center;justify-content:center;
   font-size:2.2rem;color:var(--paper);transform:rotate(-3deg);overflow:hidden;
 }
@@ -288,35 +421,52 @@ section.tight .section-sub{margin-top:.5rem;font-size:.82rem;}
 .map-section{min-height:88vh;display:flex;flex-direction:column;justify-content:center;padding-top:1.5rem;padding-bottom:1.5rem;}
 .map-stage{display:flex;justify-content:center;}
 .map-case{
+  position:relative;
   width:100%;max-width:760px;
   background:repeating-linear-gradient(115deg, #3a2416 0 6px, #32200f 6px 12px);
-  border-radius:10px;padding:16px;box-shadow:var(--shadow-deep);border:2px solid var(--gold);
+  border-radius:var(--radius-panel);padding:22px;box-shadow:var(--shadow-deep);
+  border:1px solid var(--gold-dim);
   transition:filter .55s ease, transform .55s ease, opacity .4s ease;
+}
+/* Full-perimeter key-fret molding — the largest plain surface on the site,
+   so it carries the ornament rather than a bare gold rule. */
+.map-case::before{
+  content:"";
+  position:absolute;inset:7px;
+  pointer-events:none;
+  background-image:var(--fret), var(--fret), var(--fret-v), var(--fret-v);
+  background-repeat:repeat-x, repeat-x, repeat-y, repeat-y;
+  background-size:20px 10px, 20px 10px, 10px 20px, 10px 20px;
+  background-position:left top, left bottom, left top, right top;
+  opacity:.6;
 }
 .map-case.dimmed{filter:blur(7px) brightness(.4) saturate(.6);transform:scale(.93);pointer-events:none;}
 .map-inner{position:relative;background:var(--paper);border:2px solid var(--ink);border-radius:4px;overflow:hidden;}
 .map-inner img{width:100%;display:block;}
+/* A stamped seal on the plan, not a map-app marker: no glow, no pulse.
+   Carved edge and mottled ink come from the shared seal-stamp rule above. */
 .pin{
   position:absolute;transform:translate(-50%,-50%);
-  width:32px;height:32px;border-radius:50%;
-  background:radial-gradient(circle at 35% 30%, var(--vermillion-bright), var(--vermillion-dark));
-  border:2px solid var(--gold-bright);color:var(--paper);
+  width:30px;height:30px;
+  color:var(--paper);
   font-family:var(--font-display);font-weight:700;font-size:.85rem;
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;padding:0;box-shadow:0 3px 8px rgba(0,0,0,0.5);
-  animation:breathe 3s ease-in-out infinite;
+  cursor:pointer;padding:0;
+  text-shadow:0 1px 1px rgba(0,0,0,.5);
+  transition:transform .18s ease, filter .18s ease;
 }
 .pin:hover, .pin.active{
-  background:radial-gradient(circle at 35% 30%, var(--gold-bright), var(--gold));
-  color:var(--ink);transform:translate(-50%,-50%) scale(1.18);
-}
-@keyframes breathe{
-  0%,100%{box-shadow:0 3px 8px rgba(0,0,0,0.5), 0 0 0 0 rgba(232,200,118,0.5);}
-  50%{box-shadow:0 3px 8px rgba(0,0,0,0.5), 0 0 0 7px rgba(232,200,118,0);}
+  background:
+    radial-gradient(ellipse at 30% 25%, rgba(255,255,255,.2), transparent 55%),
+    linear-gradient(150deg, var(--gold-bright), var(--gold));
+  color:var(--ink);
+  text-shadow:0 1px 0 rgba(255,255,255,.35);
+  transform:translate(-50%,-50%) scale(1.14);
 }
 .compass{
   position:absolute;top:10px;right:10px;width:38px;height:38px;border-radius:50%;
-  background:var(--paper);border:2px solid var(--gold);
+  background:var(--paper);border:1px solid var(--gold-dim);
+  box-shadow:inset 0 0 0 3px rgba(156,131,71,.22);
   display:flex;align-items:center;justify-content:center;
   font-family:var(--font-display);font-weight:700;color:var(--vermillion-dark);font-size:.75rem;
 }
@@ -329,8 +479,10 @@ section.tight .section-sub{margin-top:.5rem;font-size:.82rem;}
 .location-overlay.open .location-backdrop{background:rgba(8,5,4,0.6);}
 .location-card{
   position:relative;width:100%;max-width:640px;max-height:86vh;overflow-y:auto;
-  background:linear-gradient(180deg, var(--paper), var(--paper-dark));
-  border-radius:4px;box-shadow:var(--shadow-deep);border:2px solid var(--gold);
+  background-color:var(--paper);
+  background-image:var(--texture-paper), linear-gradient(180deg, var(--paper), var(--paper-dark));
+  background-blend-mode:multiply, normal;
+  border-radius:var(--radius-panel);box-shadow:var(--shadow-deep);border:1px solid var(--gold-dim);
   padding:2rem 2.1rem 2.2rem;
   transform:scale(.82) translateY(24px);opacity:0;
   transition:transform .5s cubic-bezier(.2,.85,.25,1), opacity .35s ease;
@@ -338,10 +490,10 @@ section.tight .section-sub{margin-top:.5rem;font-size:.82rem;}
 .location-overlay.open .location-card{transform:scale(1) translateY(0);opacity:1;}
 .location-close{
   position:sticky;top:0;float:right;margin:-.4rem -.4rem .6rem 1rem;
-  background:var(--vermillion);color:var(--paper);border:2px solid var(--gold-bright);
-  border-radius:20px;padding:.4rem .9rem;font-size:.78rem;font-weight:600;
+  color:var(--ink);
+  padding:.45rem 1rem;font-size:.78rem;font-weight:600;
   cursor:pointer;display:inline-flex;align-items:center;gap:.4rem;
-  box-shadow:0 4px 10px rgba(0,0,0,.35);
+  font-family:var(--font-body);
 }
 .panel{min-height:180px;clear:both;}
 .panel .placeholder{color:var(--ink-soft);font-style:italic;text-align:center;padding:3rem 1rem;}
@@ -355,29 +507,48 @@ section.tight .section-sub{margin-top:.5rem;font-size:.82rem;}
 /* ---------- Photo thumbs (used in popout + gallery page) ---------- */
 .photo-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(130px,1fr));gap:1rem;margin-top:1.4rem;}
 .photo-thumb{
-  position:relative;cursor:pointer;border-radius:2px;overflow:visible;
-  background:#fff;border:6px solid #fff;box-shadow:0 6px 14px rgba(0,0,0,0.3);
-  text-align:left;transition:transform .15s;
+  position:relative;cursor:pointer;border-radius:var(--radius-panel);overflow:visible;
+  background:var(--paper);border:8px solid var(--paper);
+  box-shadow:var(--shadow-lift);
+  text-align:left;transition:transform .15s ease, box-shadow .15s ease;
 }
+/* Mounted album corners across the top two corners of the photo itself,
+   replacing the old adhesive-tape strip. Kept off the caption area. */
 .photo-thumb::before{
-  content:"";position:absolute;top:-10px;left:14px;width:38px;height:16px;
-  background:repeating-linear-gradient(45deg, rgba(194,42,47,0.75) 0 4px, rgba(232,200,118,0.75) 4px 8px);
-  transform:rotate(-6deg);box-shadow:0 2px 3px rgba(0,0,0,0.25);
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15'%3E%3Cpath d='M0 0 H15 L0 15 Z' fill='%23efe4cc' stroke='%239c8347' stroke-width='1'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15'%3E%3Cpath d='M15 0 V15 L0 0 Z' fill='%23efe4cc' stroke='%239c8347' stroke-width='1'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-size:15px 15px;
+  background-position:left top, right top;
+  opacity:.92;
 }
-.photo-thumb:hover{transform:translateY(-4px) rotate(-1deg);}
+.photo-thumb:hover{transform:translateY(-2px);box-shadow:var(--shadow-soft);}
 .photo-thumb img{aspect-ratio:4/3;object-fit:cover;width:100%;}
 .photo-thumb .cap{padding:.5rem .3rem .2rem;font-size:.76rem;color:var(--ink-soft);}
-.photo-empty{grid-column:1/-1;text-align:center;color:var(--ink-soft);font-style:italic;padding:1.4rem;border:2px dashed var(--gold);border-radius:4px;}
+.photo-empty{
+  grid-column:1/-1;text-align:center;color:var(--ink-soft);font-style:italic;
+  padding:1.6rem 1.4rem;border-radius:var(--radius-panel);
+  background-image:var(--fret), var(--fret);
+  background-repeat:repeat-x, repeat-x;
+  background-size:20px 10px, 20px 10px;
+  background-position:left top, left bottom;
+  opacity:.9;
+}
 
 /* ---------- Bonus feature (e.g. Maisie's princess photo) ---------- */
 .bonus-feature{
+  position:relative;
   display:grid;grid-template-columns:minmax(200px,320px) 1fr;
   gap:1.6rem;align-items:center;
-  background:linear-gradient(180deg, var(--paper), var(--paper-dark));
-  border-radius:6px;box-shadow:var(--shadow-deep);border:2px solid var(--gold);
-  padding:1.3rem;
+  background-color:var(--paper);
+  background-image:var(--texture-paper), linear-gradient(180deg, var(--paper), var(--paper-dark));
+  background-blend-mode:multiply, normal;
+  border-radius:var(--radius-panel);box-shadow:var(--shadow-soft);border:1px solid var(--gold-dim);
+  padding:1.4rem;
 }
-.bonus-feature img{border-radius:4px;box-shadow:0 8px 20px rgba(0,0,0,.35);}
+.bonus-feature img{border-radius:2px;box-shadow:var(--shadow-lift);}
 .bonus-feature .bonus-eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);font-weight:700;margin-bottom:.4rem;}
 .bonus-feature h3{margin:0 0 .5rem;color:var(--vermillion-dark);font-size:1.2rem;}
 .bonus-feature p{margin:0 0 .7rem;font-size:.92rem;color:var(--ink-soft);}
@@ -391,26 +562,36 @@ section.tight .section-sub{margin-top:.5rem;font-size:.82rem;}
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(160px,1fr));gap:1.3rem;}
 .gallery-filter{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-bottom:2rem;}
 .gallery-filter button{
-  background:var(--paper);color:var(--ink);border:2px solid var(--gold);border-radius:16px;
-  padding:.35rem .9rem;font-size:.78rem;cursor:pointer;font-family:var(--font-body);
+  color:var(--ink);
+  padding:.42rem 1rem;font-size:.78rem;cursor:pointer;font-family:var(--font-body);
 }
-.gallery-filter button.active{background:var(--vermillion);color:var(--paper);border-color:var(--gold-bright);}
+.gallery-filter button.active{color:var(--paper);}
 
 /* ---------- Modal ---------- */
 .modal-overlay{position:fixed;inset:0;background:rgba(10,6,5,0.82);display:none;align-items:center;justify-content:center;padding:1.5rem;z-index:100;}
 .modal-overlay.open{display:flex;}
-.modal{background:var(--paper);border-radius:6px;max-width:640px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:var(--shadow-deep);position:relative;border:2px solid var(--gold);}
+.modal{
+  background-color:var(--paper);
+  background-image:var(--texture-paper);
+  background-blend-mode:multiply;
+  border-radius:var(--radius-panel);max-width:640px;width:100%;max-height:88vh;overflow-y:auto;
+  box-shadow:var(--shadow-deep);position:relative;border:1px solid var(--gold-dim);
+}
 .modal img{width:100%;}
 .modal-body{padding:1.6rem 1.9rem 2.1rem;}
 .modal-body h3{color:var(--vermillion-dark);margin:.2rem 0 .8rem;}
 .modal-body .modal-location{font-size:.8rem;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem;}
+/* Stays circular on purpose — an icon-only close is more recognisable
+   as a disc than forced into the plaque shape. */
 .modal-close{
   position:absolute;top:.7rem;right:.7rem;width:36px;height:36px;border-radius:50%;
-  background:var(--vermillion);color:var(--paper);border:2px solid var(--gold-bright);
+  background:var(--vermillion);color:var(--paper);border:1px solid var(--gold-dim);
   font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow-lift);
 }
+.modal-close:hover{background:var(--vermillion-bright);border-color:var(--gold-bright);}
 
-footer{text-align:center;color:var(--gold);opacity:.75;padding:3rem 1.5rem 4rem;font-size:.9rem;font-style:italic;}
+footer{position:relative;text-align:center;color:var(--gold);opacity:.75;padding:3rem 1.5rem 4rem;font-size:.9rem;font-style:italic;}
 
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
 .reveal.in{opacity:1;transform:translateY(0);}
