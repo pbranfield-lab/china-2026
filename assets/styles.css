@@ -115,12 +115,37 @@ img{max-width:100%;display:block;}
     radial-gradient(ellipse 60% 50% at 50% 0%, rgba(156,31,40,0.35), transparent 70%),
     linear-gradient(180deg, var(--lacquer-2) 0%, var(--lacquer) 75%);
 }
-.hero.compact{padding:2.6rem 1.5rem 2.2rem;}
+.hero.compact{padding:2.2rem 1.5rem 1.8rem;}
 .cloud-layer{position:absolute;inset:0;pointer-events:none;opacity:0.35;}
 .cloud-layer svg{position:absolute;width:160%;max-width:none;}
 .cloud-1{top:6%;left:-30%;animation:drift 70s linear infinite;}
 .cloud-2{top:22%;left:-60%;animation:drift 95s linear infinite reverse;opacity:0.6;}
 @keyframes drift{from{transform:translateX(0);}to{transform:translateX(55%);}}
+
+/* Home hero: one wide Forbidden City photo behind a dark scrim */
+.hero.home-hero{
+  padding:1.6rem 1rem 1.5rem;min-height:0;
+  background-image:url('forbidden-city-hero.jpg');
+  background-size:cover;
+  background-position:center 60%;
+}
+.hero.home-hero::before{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(180deg, rgba(22,17,16,.55) 0%, rgba(22,17,16,.82) 100%),
+    radial-gradient(ellipse 70% 60% at 50% 30%, rgba(156,31,40,.22), transparent 70%);
+}
+.hero-hanzi{
+  position:relative;z-index:1;
+  font-family:var(--font-display);font-weight:700;
+  color:var(--gold);opacity:.85;
+  font-size:.85rem;letter-spacing:.3em;
+  margin-bottom:.3rem;
+}
+.hero.home-hero .seal-title{width:56px;height:56px;margin-bottom:.5rem;}
+.hero.home-hero .seal-title span{font-size:1.15rem;}
+.hero.home-hero h1{font-size:clamp(1.3rem, 3.6vw, 1.8rem);}
+.hero.home-hero .byline{margin-top:.6rem;font-size:.72rem;}
 
 .seal-title{
   position:relative;z-index:1;
@@ -133,72 +158,80 @@ img{max-width:100%;display:block;}
   transform:rotate(-2deg);
   box-shadow:var(--shadow-deep), inset 0 0 0 2px rgba(232,200,118,0.25);
 }
-.hero.compact .seal-title{width:80px;height:80px;margin-bottom:.9rem;}
+.hero.compact .seal-title{width:64px;height:64px;margin-bottom:.6rem;}
 .seal-title span{
   font-family:var(--font-display);
   font-size:2.6rem;font-weight:900;color:var(--paper);
   writing-mode:vertical-rl;letter-spacing:.15em;
 }
-.hero.compact .seal-title span{font-size:1.7rem;}
+.hero.compact .seal-title span{font-size:1.4rem;}
 .hero .kicker{
   position:relative;z-index:1;
-  letter-spacing:.3em;text-transform:uppercase;font-size:.72rem;
-  color:var(--gold-bright);margin-bottom:.6rem;
+  letter-spacing:.3em;text-transform:uppercase;font-size:.68rem;
+  color:var(--gold-bright);margin-bottom:.4rem;
 }
 .hero h1{
   position:relative;z-index:1;
-  font-size:clamp(2.1rem, 5.5vw, 3.6rem);
-  margin:0 0 .6rem;color:var(--gold-bright);
+  font-size:clamp(1.7rem, 4.5vw, 2.6rem);
+  margin:0 0 .4rem;color:var(--gold-bright);
   text-shadow:0 2px 20px rgba(0,0,0,.6);
 }
-.hero.compact h1{font-size:clamp(1.6rem, 4.5vw, 2.4rem);}
+.hero.compact h1{font-size:clamp(1.4rem, 3.8vw, 1.9rem);}
 .hero p.sub{
   position:relative;z-index:1;
-  max-width:600px;margin:0 auto;font-size:1.1rem;color:#f1e5c8;
+  max-width:560px;margin:0 auto;font-size:.95rem;color:#f1e5c8;
 }
+.hero.home-hero p.sub{font-size:.88rem;}
 .hero .byline{
   position:relative;z-index:1;
-  margin-top:1.8rem;font-size:.92rem;color:var(--gold);font-style:italic;
+  margin-top:.8rem;font-size:.78rem;color:var(--gold);font-style:italic;
 }
 
 /* ---------- Home nav cards ---------- */
 .nav-cards{
   display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
-  gap:1.4rem;
+  grid-template-columns:repeat(4, 1fr);
+  gap:.9rem;
   max-width:1000px;margin:0 auto;
   padding:0 1.5rem;
 }
+@media (max-width:820px){ .nav-cards{grid-template-columns:1fr 1fr;} }
 .nav-card{
   display:block;text-decoration:none;
   background:linear-gradient(180deg, var(--paper), var(--paper-dark));
   border-radius:6px;
-  padding:1.8rem 1.5rem;
+  padding:1.1rem .8rem;
   box-shadow:var(--shadow-deep);
   border:2px solid var(--gold);
   text-align:center;
   transition:transform .2s ease;
 }
 .nav-card:hover{transform:translateY(-4px);}
-.nav-card .icon{font-size:2.2rem;margin-bottom:.6rem;}
-.nav-card h3{margin:0 0 .4rem;color:var(--vermillion-dark);font-size:1.15rem;}
-.nav-card p{margin:0;font-size:.86rem;color:var(--ink-soft);}
+.nav-card .icon{font-size:1.7rem;margin-bottom:.3rem;}
+.nav-card .hanzi{display:block;font-family:var(--font-display);font-size:.72rem;color:var(--gold);opacity:.8;margin-bottom:.15rem;letter-spacing:.1em;}
+.nav-card h3{margin:0 0 .3rem;color:var(--vermillion-dark);font-size:.95rem;}
+.nav-card p{margin:0;font-size:.76rem;color:var(--ink-soft);line-height:1.4;}
 .nav-card.featured{
   background:linear-gradient(155deg, var(--vermillion-bright), var(--vermillion-dark));
   border-color:var(--gold-bright);
 }
 .nav-card.featured h3{color:var(--paper);}
 .nav-card.featured p{color:#f1dfc4;}
+.nav-card.featured .hanzi{color:var(--gold-bright);}
 
 /* ---------- Sections ---------- */
 main{background:var(--lacquer);}
 section{max-width:920px;margin:0 auto;padding:4rem 1.5rem;}
 section.wide{max-width:1140px;}
-section.tight{padding-top:2.5rem;}
-.section-head{text-align:center;margin-bottom:2.2rem;}
+section.tight{padding:1.2rem 1.5rem 2rem;}
+.section-head{text-align:center;margin-bottom:1.1rem;}
+section.tight .section-head{margin-bottom:.8rem;}
 .section-title{color:var(--gold-bright);font-size:1.85rem;margin:0 0 .7rem;}
+section.tight .section-title{font-size:1.3rem;margin-bottom:.4rem;}
 .section-fret{max-width:220px;margin:0 auto;}
+section.tight .section-fret{max-width:140px;}
 .section-sub{color:#c9b98f;margin-top:.9rem;font-style:italic;font-size:.95rem;}
+section.tight .section-sub{margin-top:.5rem;font-size:.82rem;}
 
 /* ---------- Scroll panel (signature element) ---------- */
 .scroll-panel{position:relative;margin:0 auto;max-width:780px;}
@@ -335,6 +368,24 @@ section.tight{padding-top:2.5rem;}
 .photo-thumb img{aspect-ratio:4/3;object-fit:cover;width:100%;}
 .photo-thumb .cap{padding:.5rem .3rem .2rem;font-size:.76rem;color:var(--ink-soft);}
 .photo-empty{grid-column:1/-1;text-align:center;color:var(--ink-soft);font-style:italic;padding:1.4rem;border:2px dashed var(--gold);border-radius:4px;}
+
+/* ---------- Bonus feature (e.g. Maisie's princess photo) ---------- */
+.bonus-feature{
+  display:grid;grid-template-columns:minmax(200px,320px) 1fr;
+  gap:1.6rem;align-items:center;
+  background:linear-gradient(180deg, var(--paper), var(--paper-dark));
+  border-radius:6px;box-shadow:var(--shadow-deep);border:2px solid var(--gold);
+  padding:1.3rem;
+}
+.bonus-feature img{border-radius:4px;box-shadow:0 8px 20px rgba(0,0,0,.35);}
+.bonus-feature .bonus-eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);font-weight:700;margin-bottom:.4rem;}
+.bonus-feature h3{margin:0 0 .5rem;color:var(--vermillion-dark);font-size:1.2rem;}
+.bonus-feature p{margin:0 0 .7rem;font-size:.92rem;color:var(--ink-soft);}
+.bonus-feature p:last-child{margin-bottom:0;}
+@media (max-width:640px){
+  .bonus-feature{grid-template-columns:1fr;text-align:center;}
+  .bonus-feature img{max-width:260px;margin:0 auto;}
+}
 
 /* ---------- Gallery page ---------- */
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(160px,1fr));gap:1.3rem;}
