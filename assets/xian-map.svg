@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 605 719" width="605" height="719" role="img" aria-label="Schematic plan of the Xi'an trip: the walled old city and the Terracotta Army museum complex">
+  <title>Xi'an — schematic trip plan</title>
+
+  <defs>
+    <style>
+      .paper   { fill:#efe4cc; }
+      .hall    { fill:#e2d3ab; stroke:#9c8347; stroke-width:2; }
+      .hall-lg { fill:#e2d3ab; stroke:#8f2a2c; stroke-width:2.5; }
+      .wall    { fill:none; stroke:#8f2a2c; stroke-width:4; }
+      .wall-in { fill:#e8dcbe; stroke:#9c8347; stroke-width:1.5; }
+      .lbl     { font-family:Georgia,'Times New Roman',serif; font-size:15px; fill:#2a221a; }
+      .lbl-sm  { font-family:Georgia,'Times New Roman',serif; font-size:12px; fill:#5c4f3c; }
+      .lbl-hz  { font-family:Georgia,'Times New Roman',serif; font-size:13px; fill:#8f2a2c; }
+      .head    { font-family:Georgia,'Times New Roman',serif; font-size:17px; fill:#8f2a2c; letter-spacing:1px; }
+      .link    { fill:none; stroke:#9c8347; stroke-width:2; stroke-dasharray:7 6; }
+      .tick    { stroke:#9c8347; stroke-width:1.5; }
+    </style>
+  </defs>
+
+  <rect width="605" height="719" class="paper"/>
+  <rect x="8" y="8" width="589" height="703" fill="none" stroke="#9c8347" stroke-width="2"/>
+
+  <!-- ============ THE OLD CITY (top) ============ -->
+  <text x="302" y="52" class="head" text-anchor="middle">THE OLD CITY · 西安城</text>
+
+  <!-- city wall -->
+  <rect x="95" y="85" width="360" height="120" rx="4" class="wall"/>
+  <rect x="103" y="93" width="344" height="104" rx="3" class="wall-in"/>
+  <!-- gate towers on the wall -->
+  <rect x="118" y="178" width="30" height="16" rx="2" fill="#8f2a2c"/>
+  <rect x="260" y="77" width="30" height="16" rx="2" fill="#8f2a2c"/>
+  <rect x="440" y="130" width="16" height="30" rx="2" fill="#8f2a2c"/>
+  <rect x="94" y="130" width="16" height="30" rx="2" fill="#8f2a2c"/>
+
+  <!-- Bell Tower, dead centre of the old street grid -->
+  <line x1="266" y1="97" x2="266" y2="193" class="tick"/>
+  <line x1="107" y1="129" x2="443" y2="129" class="tick"/>
+  <rect x="252" y="116" width="28" height="28" rx="2" fill="#e2d3ab" stroke="#8f2a2c" stroke-width="2.5"/>
+  <text x="266" y="163" class="lbl-sm" text-anchor="middle">Bell Tower</text>
+  <text x="266" y="177" class="lbl-hz" text-anchor="middle">钟楼</text>
+
+  <!-- Muslim Quarter / Ever-Bright City block -->
+  <rect x="378" y="86" width="62" height="34" rx="3" class="hall"/>
+  <text x="409" y="76" class="lbl-sm" text-anchor="middle">Muslim Quarter</text>
+
+  <text x="133" y="222" class="lbl-sm" text-anchor="middle">City Wall</text>
+  <text x="133" y="236" class="lbl-hz" text-anchor="middle">城墙</text>
+  <text x="470" y="112" class="lbl-sm">Ever-Bright</text>
+  <text x="470" y="126" class="lbl-sm">City</text>
+
+  <!-- ============ connector ============ -->
+  <path d="M 302 245 L 302 268" class="link"/>
+  <text x="316" y="262" class="lbl-sm">about 40 km east →</text>
+
+  <!-- ============ THE MUSEUM COMPLEX (bottom) ============ -->
+  <text x="302" y="298" class="head" text-anchor="middle">THE TERRACOTTA ARMY · 兵马俑</text>
+
+  <!-- Pit 3 -->
+  <rect x="270" y="312" width="95" height="52" rx="4" class="hall"/>
+  <text x="317" y="336" class="lbl" text-anchor="middle">Pit 3</text>
+  <text x="317" y="353" class="lbl-hz" text-anchor="middle">三号坑</text>
+
+  <!-- Pit 2 -->
+  <rect x="320" y="372" width="120" height="72" rx="4" class="hall"/>
+  <text x="380" y="402" class="lbl" text-anchor="middle">Pit 2</text>
+  <text x="380" y="421" class="lbl-hz" text-anchor="middle">二号坑</text>
+
+  <!-- Pit 1 — the big one -->
+  <rect x="120" y="404" width="190" height="98" rx="4" class="hall-lg"/>
+  <text x="215" y="443" class="lbl" text-anchor="middle" font-size="17">Pit 1</text>
+  <text x="215" y="463" class="lbl-hz" text-anchor="middle">一号坑</text>
+  <text x="215" y="482" class="lbl-sm" text-anchor="middle">~6,000 figures</text>
+
+  <!-- Restored figures hall -->
+  <rect x="390" y="470" width="120" height="72" rx="4" class="hall"/>
+  <text x="450" y="500" class="lbl" text-anchor="middle">Figures</text>
+  <text x="450" y="518" class="lbl" text-anchor="middle">Hall</text>
+
+  <!-- Entrance -->
+  <rect x="225" y="604" width="155" height="58" rx="4" class="hall"/>
+  <text x="302" y="630" class="lbl" text-anchor="middle">Entrance</text>
+  <text x="302" y="649" class="lbl-hz" text-anchor="middle">博物馆入口</text>
+
+  <!-- walking route through the complex -->
+  <path d="M 302 604 L 302 560 L 215 560 L 215 502" class="link"/>
+  <path d="M 302 560 L 450 560 L 450 542" class="link"/>
+
+  <text x="302" y="694" class="lbl-sm" text-anchor="middle">Not to scale — drawn for this page</text>
+</svg>

@@ -467,6 +467,15 @@ section.tight .section-sub{margin-top:.5rem;font-size:.82rem;}
   text-shadow:0 1px 1px rgba(0,0,0,.5);
   transition:transform .18s ease, filter .18s ease;
 }
+/* The Xi'an plan is hand-drawn and sparse, so full-size seals sit too heavy on
+   it and cover the hall labels. Smaller and semi-transparent until hovered. */
+:root[data-trip="xian"] .pin{
+  width:22px;height:22px;
+  font-size:.7rem;
+  opacity:.72;
+}
+:root[data-trip="xian"] .pin:hover,
+:root[data-trip="xian"] .pin.active{opacity:1;}
 .pin:hover, .pin.active{
   background:
     radial-gradient(ellipse at 30% 25%, rgba(255,255,255,.2), transparent 55%),

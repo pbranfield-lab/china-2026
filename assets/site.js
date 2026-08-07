@@ -4,6 +4,30 @@
    only wire up the bits of UI they actually contain.
    ============================================================ */
 
+/* ---------- Current trip ----------
+   Resolved from ?trip=<id>. Falling back to TRIPS[0] keeps every existing
+   link (and the already-deployed site) working with no query string. */
+const CURRENT_TRIP = (function(){
+  if(typeof TRIPS === "undefined") return null;
+  const id = new URLSearchParams(location.search).get("trip");
+  return TRIPS.find(t => t.id === id) || TRIPS[0];
+})();
+
+const TRIP_LOCATIONS = (CURRENT_TRIP && typeof LOCATIONS !== "undefined")
+  ? LOCATIONS.filter(l => l.trip === CURRENT_TRIP.id)
+  : (typeof LOCATIONS !== "undefined" ? LOCATIONS : []);
+
+/* Family portraits are trip-agnostic and always live in the Forbidden City
+   folder — they must NOT follow CURRENT_TRIP or they 404 on other trips. */
+const FAMILY_PHOTO_DIR = "forbidden-city";
+
+/* Resolve a photo's src from its OWN trip, not the current one, so a photo
+   always points at the right folder regardless of which page shows it. */
+function photoSrc(photo){
+  const trip = (typeof TRIPS !== "undefined") ? TRIPS.find(t => t.id === photo.trip) : null;
+  return `Photographs/${trip ? trip.photoDir : FAMILY_PHOTO_DIR}/${photo.file}`;
+}
+
 /* ---------- Nav: mobile toggle + current-page highlight ---------- */
 (function(){
   const toggle = document.getElementById("navToggle");
@@ -14,8 +38,20 @@
   }
   const here = location.pathname.split("/").pop() || "index.html";
   document.querySelectorAll(".nav-links a[href]").forEach(a=>{
-    if(a.getAttribute("href") === here) a.classList.add("current");
+    const hrefPath = a.getAttribute("href").split("?")[0] || "index.html";
+    if(hrefPath === here) a.classList.add("current");
+    if(CURRENT_TRIP) a.setAttribute("href", hrefPath + "?trip=" + CURRENT_TRIP.id);
   });
+})();
+
+/* Expose the trip on <body> so CSS can tune per-trip (the hand-drawn Xi'an
+   plan is sparser than the Forbidden City one, so its pins want to be quieter). */
+if(CURRENT_TRIP) document.documentElement.setAttribute("data-trip", CURRENT_TRIP.id);
+
+/* ---------- Hero seal: show the current trip's characters ---------- */
+(function(){
+  const seal = document.getElementById("heroSeal");
+  if(seal && CURRENT_TRIP) seal.textContent = CURRENT_TRIP.chinese;
 })();
 
 /* ---------- Version stamp (every page) ----------
@@ -46,7 +82,10 @@
 /* ---------- History intro (story page) ---------- */
 (function(){
   const el = document.getElementById("historyIntro");
-  if(el && typeof HISTORY_INTRO !== "undefined") el.innerHTML = HISTORY_INTRO;
+  if(!el) return;
+  const intro = (CURRENT_TRIP && CURRENT_TRIP.intro)
+    || (typeof HISTORY_INTRO !== "undefined" ? HISTORY_INTRO : null);
+  if(intro) el.innerHTML = intro;
 })();
 
 /* ---------- Family grid (family page) ---------- */
@@ -69,11 +108,11 @@
       if(!av) return;
       av.innerHTML = "";
       const el = document.createElement("img");
-      el.src = `Photographs/forbidden-city/${person.file}`;
+      el.src = `Photographs/${FAMILY_PHOTO_DIR}/${person.file}`;
       el.alt = person.name;
       av.appendChild(el);
     };
-    img.src = `Photographs/forbidden-city/${person.file}`;
+    img.src = `Photographs/${FAMILY_PHOTO_DIR}/${person.file}`;
   });
 })();
 
@@ -88,7 +127,7 @@ let openPhoto = function(){};
   const modalLocation = document.getElementById("modalLocation");
 
   openPhoto = function(photo){
-    modalImg.src = `Photographs/forbidden-city/${photo.file}`;
+    modalImg.src = photoSrc(photo);
     modalImg.alt = photo.caption;
     modalImg.style.display = "block";
     modalTitle.textContent = photo.caption;
@@ -105,6 +144,39 @@ let openPhoto = function(){};
   document.addEventListener("keydown", e=>{ if(e.key==="Escape") closePhotoModal(); });
 })();
 
+/* ---------- Map page: swap the plan + credit for the current trip ---------- */
+(function(){
+  if(!CURRENT_TRIP) return;
+  const img = document.getElementById("mapImg");
+  if(img){
+    img.src = "assets/" + CURRENT_TRIP.map;
+    img.alt = CURRENT_TRIP.mapAlt;
+  }
+  const legend = document.getElementById("mapLegend");
+  if(legend) legend.textContent = CURRENT_TRIP.mapCredit;
+})();
+
+/* ---------- Home page: a card per trip ---------- */
+(function(){
+  const chooser = document.getElementById("tripChooser");
+  if(!chooser || typeof TRIPS === "undefined") return;
+  const cards = TRIPS.map(trip=>{
+    const a = document.createElement("a");
+    a.className = "nav-card";
+    a.href = `map.html?trip=${trip.id}`;
+    a.innerHTML = `
+      <div class="icon">${trip.icon}</div>
+      <span class="hanzi">${trip.chinese}</span>
+      <h3>${trip.name}</h3>
+      <p>${trip.blurb}</p>
+    `;
+    return a;
+  });
+  // Trip cards go first; whatever's already in the markup (Meet the Expedition)
+  // stays put at the end.
+  chooser.prepend(...cards);
+})();
+
 /* ---------- Map page: pins + focus-shift popout ---------- */
 (function(){
   const pinLayer = document.getElementById("pinLayer");
@@ -119,7 +191,7 @@ let openPhoto = function(){};
   const locationClose = document.getElementById("locationClose");
   let currentLocation = null;
 
-  LOCATIONS.forEach(loc=>{
+  TRIP_LOCATIONS.forEach(loc=>{
     const btn = document.createElement("button");
     btn.className = "pin";
     btn.style.left = loc.x + "%";
@@ -133,7 +205,7 @@ let openPhoto = function(){};
   });
 
   function showLocation(id){
-    currentLocation = LOCATIONS.find(l=>l.id===id);
+    currentLocation = TRIP_LOCATIONS.find(l=>l.id===id);
     if(!currentLocation) return;
     document.querySelectorAll(".pin").forEach(p=>p.classList.toggle("active", p.dataset.id===id));
     renderPanel();
@@ -157,7 +229,7 @@ let openPhoto = function(){};
     const photosHtml = photos.length
       ? photos.map(p=>`
           <button class="photo-thumb" data-photo-index="${PHOTOS.indexOf(p)}">
-            <img src="Photographs/forbidden-city/${p.file}" alt="${p.caption}" loading="lazy" />
+            <img src="${photoSrc(p)}" alt="${p.caption}" loading="lazy" />
             <div class="cap">${p.caption}</div>
           </button>
         `).join("")
@@ -167,7 +239,7 @@ let openPhoto = function(){};
       <h2>${loc.num}. ${loc.name}</h2>
       <div class="chinese">${loc.chinese}</div>
       <div class="story">${loc.story}</div>
-      ${williamToggle.checked ? `<div class="william-box"><b>William, unimpressed, from the corner:</b><br>${loc.william}</div>` : ""}
+      ${(williamToggle.checked && loc.william) ? `<div class="william-box"><b>William, unimpressed, from the corner:</b><br>${loc.william}</div>` : ""}
       <div class="photo-grid">${photosHtml}</div>
     `;
     detailPanel.querySelectorAll(".photo-thumb").forEach(btn=>{
@@ -176,10 +248,12 @@ let openPhoto = function(){};
   }
   williamToggle.addEventListener("change", renderPanel);
 
-  // Deep link support: map.html?loc=imperial-garden opens straight to that popout
+  // Deep link support: map.html?loc=imperial-garden opens straight to that popout.
+  // Validated against the current trip, so a mismatched ?trip=/?loc= pair is ignored
+  // rather than half-opening a popout for a pin that isn't on this map.
   const params = new URLSearchParams(location.search);
   const deepLoc = params.get("loc");
-  if(deepLoc && LOCATIONS.some(l=>l.id===deepLoc)){
+  if(deepLoc && TRIP_LOCATIONS.some(l=>l.id===deepLoc)){
     showLocation(deepLoc);
   }
 })();
@@ -189,13 +263,15 @@ let openPhoto = function(){};
   const galleryGrid = document.getElementById("galleryGrid");
   if(!galleryGrid || typeof PHOTOS === "undefined") return;
 
+  const tripPhotos = CURRENT_TRIP ? PHOTOS.filter(p=>p.trip===CURRENT_TRIP.id) : PHOTOS;
+
   function renderGallery(filterLoc){
-    const items = filterLoc ? PHOTOS.filter(p=>p.location===filterLoc) : PHOTOS;
+    const items = filterLoc ? tripPhotos.filter(p=>p.location===filterLoc) : tripPhotos;
     galleryGrid.innerHTML = items.map(p=>{
-      const loc = LOCATIONS.find(l=>l.id===p.location);
+      const loc = TRIP_LOCATIONS.find(l=>l.id===p.location);
       return `
         <button class="photo-thumb gallery-item" data-photo-id="${p.id}">
-          <img src="Photographs/forbidden-city/${p.file}" alt="${p.caption}" loading="lazy" />
+          <img src="${photoSrc(p)}" alt="${p.caption}" loading="lazy" />
           <div class="cap">${loc ? loc.num + '. ' + loc.name : ''}</div>
         </button>
       `;
@@ -221,8 +297,8 @@ let openPhoto = function(){};
     allBtn.addEventListener("click", ()=>{ setActive(allBtn); renderGallery(null); });
     filterBar.appendChild(allBtn);
 
-    const locsUsed = [...new Set(PHOTOS.map(p=>p.location))]
-      .map(id=>LOCATIONS.find(l=>l.id===id))
+    const locsUsed = [...new Set(tripPhotos.map(p=>p.location))]
+      .map(id=>TRIP_LOCATIONS.find(l=>l.id===id))
       .filter(Boolean)
       .sort((a,b)=>a.num-b.num);
     locsUsed.forEach(loc=>{
