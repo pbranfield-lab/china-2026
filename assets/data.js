@@ -16,7 +16,7 @@ const HISTORY_INTRO = `
 `;
 
 /* ============================================================
-   FAMILY DATA — portrait files are optional, looked up in Photographs/
+   FAMILY DATA — portrait files are optional, looked up in Photographs/forbidden-city/
    ============================================================ */
 const FAMILY = [
   { id:"mum", name:"Xianghong", role:"Argues With Everyone, Usually Wins", file:"mum.jpg", emoji:"👑",

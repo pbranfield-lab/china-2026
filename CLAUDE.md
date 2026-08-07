@@ -22,7 +22,7 @@ There is no lint, test, or build command — verify changes by loading the pages
 
 **`assets/data.js`** is the single source of content/data, loaded before `site.js`:
 - `HISTORY_INTRO` — HTML string injected into `story.html`.
-- `FAMILY` — array of family member objects (`id`, `name`, `role`, `file`, `emoji`, `bio`) rendered into `family.html`. `file` is a portrait filename looked up in `Photographs/` and swapped in for the emoji avatar if the image loads.
+- `FAMILY` — array of family member objects (`id`, `name`, `role`, `file`, `emoji`, `bio`) rendered into `family.html`. `file` is a portrait filename looked up in `Photographs/forbidden-city/` and swapped in for the emoji avatar if the image loads.
 - `LOCATIONS` — array of map-pin/story entries (`id`, `num`, `x`/`y` as percentage coordinates over `assets/forbidden-city-map.png`, `name`, `chinese`, `story` HTML, `william` quote). Drives the pins in `map.html`.
 - `PHOTOS` — array of photo entries (`id`, `location` — must match a `LOCATIONS.id` — `file`, `caption`, `detail` HTML). Backs both the map popout's photo grid and `gallery.html`.
 - `EMPTY_STATE_LINES` — filler text shown for a location with no photos yet.
@@ -40,9 +40,9 @@ There is no lint, test, or build command — verify changes by loading the pages
 
 ## Adding content
 
-- **New photo**: drop the image into `Photographs/`, then add an entry to `PHOTOS` in `assets/data.js` with a `location` matching an existing `LOCATIONS.id`.
+- **New photo**: drop the image into `Photographs/forbidden-city/`, then add an entry to `PHOTOS` in `assets/data.js` with a `location` matching an existing `LOCATIONS.id`.
 - **New map location**: add an entry to `LOCATIONS` in `assets/data.js` with `x`/`y` read off the labeled floor plan (`assets/forbidden-city-map.png`) as percentages, plus `story` and `william` copy.
-- **Family portraits**: place the image in `Photographs/` and reference it via the `file` field in `FAMILY`; it's picked up automatically.
+- **Family portraits**: place the image in `Photographs/forbidden-city/` and reference it via the `file` field in `FAMILY`; it's picked up automatically.
 - `Guide/guide.txt` holds raw exported chat notes (photo-by-photo historical detail) used as source material when writing `story`/`detail` copy — not code, and not wired into the site.
 
 ## Content voice

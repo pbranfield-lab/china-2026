@@ -69,11 +69,11 @@
       if(!av) return;
       av.innerHTML = "";
       const el = document.createElement("img");
-      el.src = `Photographs/${person.file}`;
+      el.src = `Photographs/forbidden-city/${person.file}`;
       el.alt = person.name;
       av.appendChild(el);
     };
-    img.src = `Photographs/${person.file}`;
+    img.src = `Photographs/forbidden-city/${person.file}`;
   });
 })();
 
@@ -88,7 +88,7 @@ let openPhoto = function(){};
   const modalLocation = document.getElementById("modalLocation");
 
   openPhoto = function(photo){
-    modalImg.src = `Photographs/${photo.file}`;
+    modalImg.src = `Photographs/forbidden-city/${photo.file}`;
     modalImg.alt = photo.caption;
     modalImg.style.display = "block";
     modalTitle.textContent = photo.caption;
@@ -157,7 +157,7 @@ let openPhoto = function(){};
     const photosHtml = photos.length
       ? photos.map(p=>`
           <button class="photo-thumb" data-photo-index="${PHOTOS.indexOf(p)}">
-            <img src="Photographs/${p.file}" alt="${p.caption}" loading="lazy" />
+            <img src="Photographs/forbidden-city/${p.file}" alt="${p.caption}" loading="lazy" />
             <div class="cap">${p.caption}</div>
           </button>
         `).join("")
@@ -195,7 +195,7 @@ let openPhoto = function(){};
       const loc = LOCATIONS.find(l=>l.id===p.location);
       return `
         <button class="photo-thumb gallery-item" data-photo-id="${p.id}">
-          <img src="Photographs/${p.file}" alt="${p.caption}" loading="lazy" />
+          <img src="Photographs/forbidden-city/${p.file}" alt="${p.caption}" loading="lazy" />
           <div class="cap">${loc ? loc.num + '. ' + loc.name : ''}</div>
         </button>
       `;
