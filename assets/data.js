@@ -1,7 +1,7 @@
 /* ============================================================
    SITE VERSION — bump this one line; every page picks it up.
    ============================================================ */
-const SITE_VERSION = "1.2.0";
+const SITE_VERSION = "1.3.0";
 
 /* ============================================================
    HISTORY INTRO — Maisie's opening narration
@@ -52,17 +52,71 @@ const TRIPS = [
 const ofTrip = (trip, items) => items.map(o => ({ ...o, trip }));
 
 /* ============================================================
+   TEN MIND-BLOWING FACTS — ten per trip, rendered into story.html.
+   `stat` is the headline number; `text` is Maisie explaining why it's mad.
+   Keep these factual: the whole point is that they're genuinely real.
+   ============================================================ */
+const FACTS = {
+  "forbidden-city": [
+    { stat:"980", label:"buildings",
+      text:`Not rooms, whole <strong>buildings</strong>, nearly a thousand of them still standing behind one wall. At that point it isn't a house, it's a town, and basically one family were allowed to use it.` },
+    { stat:"8,707", label:"rooms",
+      text:`If you slept in a different room every night it would take you nearly <strong>24 years</strong> to get round them all. Everyone used to say it had 9,999 and a half, because a full ten thousand was only allowed for Heaven, which is a mad reason to stop building, but ok.` },
+    { stat:"1,000,000", label:"workers",
+      text:`Reportedly about a million people, building one place, for <strong>14 years</strong>. That's like filling Wembley eleven times over and telling every single person in there to go and do bricks.` },
+    { stat:"0", label:"nails",
+      text:`The big timber halls have got <strong>no nails in them at all</strong> — it's wooden brackets slotted into each other, called dougong. It's sat through earthquakes and it's still standing, which is more than flat-pack furniture can say.` },
+    { stat:"492", label:"years of emperors",
+      text:`Twenty-four emperors, two different dynasties, one address, 1420 all the way to 1912. America hasn't even existed that long.` },
+    { stat:"10", label:"roof animals",
+      text:`The little animals on the roof ridge tell you how important a building is, and the Hall of Supreme Harmony has got the maximum <strong>ten</strong>. No other building in the whole of China is allowed that many. Dam.` },
+    { stat:"308", label:"fire vats",
+      text:`Giant bronze and iron water vats parked all over the place in case the wooden palace went up. In winter they lit <strong>fires underneath them</strong> so the water didn't freeze. Fires, to protect from fires.` },
+    { stat:"0", label:"trees in the big courtyards",
+      text:`Done on purpose so nobody could hide behind one and jump out at the Emperor. All the green bits are shoved right at the back, which also means there is <strong>no shade whatsoever</strong> in the main courtyards, and I can personally confirm that.` },
+    { stat:"52 m", label:"of moat",
+      text:`The moat is wider than an Olympic swimming pool is long, and then there's a wall over ten metres high behind that. "Forbidden" wasn't like a suggestion, they properly meant it.` },
+    { stat:"19 million", label:"visitors a year",
+      text:`It's the most visited museum on earth, which works out at roughly <strong>fifty thousand people a day</strong>. Quite funny for somewhere that was built entirely to keep everybody out.` }
+  ],
+
+  "xian": [
+    { stat:"8,000", label:"clay soldiers",
+      text:`Plus about <strong>670 horses</strong> and 130 chariots, all buried on purpose so one man wouldn't have to be dead on his own. Pit 1 by itself is around 230 metres long, so longer than two football pitches end to end.` },
+    { stat:"1974", label:"the year anyone found it",
+      text:`Some farmers were digging a well for water and hit a clay head. Two thousand years of the maddest thing in China just sat down there, and it got found by people who were <strong>thirsty</strong>.` },
+    { stat:"~2,000", label:"actually dug up so far",
+      text:`Out of eight thousand. Most of that army is <strong>still under the ground right now</strong>, while you're reading this, and they're going slow on purpose so they don't wreck it.` },
+    { stat:"0", label:"identical faces",
+      text:`Not one repeat, out of thousands. Somebody sat and did thousands of separate human faces by hand, for something that was going straight into a hole in the ground forever.` },
+    { stat:"38", label:"years to build the tomb",
+      text:`Reportedly around <strong>700,000 workers</strong>, and Qin Shi Huang started the whole thing when he was about <strong>13</strong>. Thirteen. I'm eleven and I haven't got plans past Friday.` },
+    { stat:"minutes", label:"before the paint vanished",
+      text:`Every warrior was painted proper bright colours and the paint survived two thousand years sealed underground, then air got to it and it curled off in <strong>minutes</strong>. So what everyone's looking at now is basically the leftovers.` },
+    { stat:"east", label:"the way they all face",
+      text:`The entire army is pointed <strong>east</strong>, which is where the six states he conquered were. So even dead, he's got thousands of soldiers stood staring at everyone he beat.` },
+    { stat:"mercury", label:"in the soil above his tomb",
+      text:`Ancient writings said his tomb has <strong>rivers of liquid mercury</strong> running through a little model of his empire, and everyone assumed that was made up until soil tests came back with really high mercury. Nobody has opened it. Fair enough, honestly.` },
+    { stat:"13.7 km", label:"of city wall",
+      text:`It goes the whole way round the old city and the top is <strong>wide enough to cycle on</strong>. A six-hundred-year-old wall that's now basically a bike lane, which I do think is cool.` },
+    { stat:"13", label:"dynasties ruled from here",
+      text:`Xi'an used to be called Chang'an and it was the eastern end of the entire Silk Road. In the Tang dynasty it might've been the <strong>biggest city on the planet</strong>, about a million people, which is a lot of people for that long ago.` }
+  ]
+};
+
+/* ============================================================
    FAMILY DATA — portrait files are optional, looked up in Photographs/forbidden-city/
-   (family portraits are trip-agnostic and always live in the forbidden-city folder)
+   `file` is a path relative to Photographs/, INCLUDING the trip folder, because
+   a portrait lives in the folder of the trip it was actually taken on.
    ============================================================ */
 const FAMILY = [
-  { id:"mum", name:"Xianghong", role:"Argues With Everyone, Usually Wins", file:"mum.jpg", emoji:"👑",
+  { id:"mum", name:"Xianghong", role:"Argues With Everyone, Usually Wins", file:"forbidden-city/mum.jpg", emoji:"👑",
     bio:"Mum's Chinese, dead proud of it, and honestly a bit fiery — she'll argue with anyone about anything and normally win. She's got this yellow bag she puts over her hair whenever the sun's out to protect it, which I get major secondhand embarrassment from but also kind of love. If a guide tells her no, she just walks off and asks a different guide the exact same question two minutes later." },
-  { id:"dad", name:"Paul", role:"Chief Photography Officer", file:"dad.jpg", emoji:"📷",
+  { id:"dad", name:"Paul", role:"Chief Photography Officer", file:"forbidden-city/dad.jpg", emoji:"📷",
     bio:"Dad works in IT, cooks a proper good dinner, and is at the gym more than anyone I know. He watches me play football every week and never misses a Chelsea match either. On this trip his phone was basically glued to his hand taking photos \"for the archive\" — we've seen about six of them." },
-  { id:"william", name:"William", role:"18, Never Without His AirPods", file:"william.jpg", emoji:"🙄",
+  { id:"william", name:"William", role:"18, Never Without His AirPods", file:"forbidden-city/william.jpg", emoji:"🙄",
     bio:"My brother, 18, hair like a poodle, AirPods in permanently laughing at something on his phone. He's obsessed with his clothes and his LV bag and reckons that makes him too cool for old buildings. His entire personality is winding me up until I actually want to fight him, and it still works every single time." },
-  { id:"maisie", name:"Maisie", role:"Narrator, Striker, Age 11", file:"maisie.jpg", emoji:"✨",
+  { id:"maisie", name:"Maisie", role:"Narrator, Striker, Age 11", file:"forbidden-city/maisie.jpg", emoji:"✨",
     bio:"Me. I'm sassy, a bit sensitive, and my brother annoys me about nine times a day. I play football, striker, so yes I will size up basically anything like it's a defence I need to get past. Also into Olivia Rodrigo, my phone, and judging stuff on whether I'd actually wear it." }
 ];
 

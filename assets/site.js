@@ -17,15 +17,11 @@ const TRIP_LOCATIONS = (CURRENT_TRIP && typeof LOCATIONS !== "undefined")
   ? LOCATIONS.filter(l => l.trip === CURRENT_TRIP.id)
   : (typeof LOCATIONS !== "undefined" ? LOCATIONS : []);
 
-/* Family portraits are trip-agnostic and always live in the Forbidden City
-   folder — they must NOT follow CURRENT_TRIP or they 404 on other trips. */
-const FAMILY_PHOTO_DIR = "forbidden-city";
-
 /* Resolve a photo's src from its OWN trip, not the current one, so a photo
    always points at the right folder regardless of which page shows it. */
 function photoSrc(photo){
   const trip = (typeof TRIPS !== "undefined") ? TRIPS.find(t => t.id === photo.trip) : null;
-  return `Photographs/${trip ? trip.photoDir : FAMILY_PHOTO_DIR}/${photo.file}`;
+  return trip ? `Photographs/${trip.photoDir}/${photo.file}` : `Photographs/${photo.file}`;
 }
 
 /* ---------- Nav: mobile toggle + current-page highlight ---------- */
@@ -88,6 +84,29 @@ if(CURRENT_TRIP) document.documentElement.setAttribute("data-trip", CURRENT_TRIP
   if(intro) el.innerHTML = intro;
 })();
 
+/* ---------- Ten mind-blowing facts (story page) ----------
+   The section is hidden in the markup and only revealed if the current trip
+   actually has facts, so a trip without them doesn't leave an empty heading. */
+(function(){
+  const grid = document.getElementById("factsGrid");
+  if(!grid || typeof FACTS === "undefined" || !CURRENT_TRIP) return;
+  const facts = FACTS[CURRENT_TRIP.id];
+  if(!facts || !facts.length) return;
+
+  grid.innerHTML = facts.map((f, i)=>`
+    <div class="fact-card">
+      <div class="fact-index">${String(i + 1).padStart(2, "0")}</div>
+      <div class="fact-stat">${f.stat}</div>
+      <div class="fact-label">${f.label}</div>
+      <p class="fact-text">${f.text}</p>
+    </div>
+  `).join("");
+
+  const sub = document.getElementById("factsSub");
+  if(sub) sub.textContent = `Ten things about ${CURRENT_TRIP.name} I genuinely did not believe until I checked.`;
+  document.getElementById("factsSection").hidden = false;
+})();
+
 /* ---------- Family grid (family page) ---------- */
 (function(){
   const familyGrid = document.getElementById("familyGrid");
@@ -108,11 +127,11 @@ if(CURRENT_TRIP) document.documentElement.setAttribute("data-trip", CURRENT_TRIP
       if(!av) return;
       av.innerHTML = "";
       const el = document.createElement("img");
-      el.src = `Photographs/${FAMILY_PHOTO_DIR}/${person.file}`;
+      el.src = `Photographs/${person.file}`;
       el.alt = person.name;
       av.appendChild(el);
     };
-    img.src = `Photographs/${FAMILY_PHOTO_DIR}/${person.file}`;
+    img.src = `Photographs/${person.file}`;
   });
 })();
 

@@ -26,9 +26,10 @@ There is no lint, test, or build command — verify changes by loading the pages
 - `TRIPS` — the top-level concept. Each entry has `id` (used in `?trip=`), `name`, `chinese`, `city`, `icon`, `blurb`, `map` (filename under `assets/`), `mapAlt`, `mapCredit`, `photoDir` (folder under `Photographs/`), and `intro` (the HTML string for `story.html`). `photoDir` is deliberately separate from `id` so URLs stay short while folders stay descriptive (`id:"xian"` → `photoDir:"terracotta-warriors"`).
 - `HISTORY_INTRO` / `TERRACOTTA_INTRO` — per-trip intro HTML strings, referenced from `TRIPS[].intro`.
 - `ofTrip(trip, items)` — small helper that stamps `trip` onto every object in a group, so the tag is declared once per group instead of on every entry.
-- `FAMILY` — array of family member objects (`id`, `name`, `role`, `file`, `emoji`, `bio`) rendered into `family.html`. Deliberately **trip-agnostic**: portraits always resolve from `Photographs/forbidden-city/` regardless of the current trip (see `FAMILY_PHOTO_DIR` in `site.js`) — pointing them at `CURRENT_TRIP.photoDir` would 404 on every other trip.
+- `FAMILY` — array of family member objects (`id`, `name`, `role`, `file`, `emoji`, `bio`) rendered into `family.html`. **`file` is a path relative to `Photographs/` that includes the trip folder** (e.g. `"forbidden-city/mum.jpg"`), because a portrait lives in the folder of the trip it was actually taken on. `site.js` uses it verbatim as `Photographs/${person.file}` — never prepend a trip directory.
 - `LOCATIONS` — flat array built from `...ofTrip("<trip>", [...])` groups. Each entry: `id`, `trip`, `num`, `x`/`y` as percentage coordinates over that trip's plan image, `name`, `chinese`, `story` HTML, and an **optional** `william` quote. `num` restarts at 1 per trip (pins are filtered per trip, so it needn't be globally unique). Drives the pins in `map.html`.
 - `PHOTOS` — flat array, same `ofTrip` treatment. Each entry: `id`, `trip`, `location` (must match a `LOCATIONS.id`), `file`, `caption`, `detail` HTML. Backs both the map popout's photo grid and `gallery.html`.
+- `FACTS` — object keyed by trip id, each holding ten `{ stat, label, text }` objects for the "10 Mind-Blowing Facts" section on `story.html`. `stat` is the big headline number (keep it under ~9 characters), `label` names what it counts, `text` is 2–3 sentences of Maisie with `<strong>` on the key figure. **These must be factually true** — that is the entire point of the section. Hedge reported/traditional figures with "reportedly".
 - `EMPTY_STATE_LINES` — filler text shown for a location with no photos yet.
 
 **`assets/site.js`** is all vanilla JS, structured as independent IIFEs, one per feature, each guarding on `document.getElementById(...)` so a page only wires up the UI blocks it actually has. A few module-scope constants are resolved first, before any IIFE:
@@ -43,6 +44,7 @@ Then, per feature:
 - Hero seal (`#heroSeal`) swapped to the current trip's characters — on `story.html`/`gallery.html` only; `family.html` stays trip-agnostic.
 - Scroll-reveal via `IntersectionObserver` for `.reveal` elements.
 - Trip intro injection from `CURRENT_TRIP.intro` (`story.html`).
+- The "10 Mind-Blowing Facts" grid, rendered from `FACTS[CURRENT_TRIP.id]` (`story.html`). `#factsSection` is `hidden` in the markup and only unhidden when the current trip actually has facts, so a trip without them doesn't leave a bare heading.
 - Family grid rendering with async portrait swap-in (`family.html`).
 - Photo modal (`#modalOverlay`) — shared by both `map.html`'s popout and `gallery.html`; exposes a shared `openPhoto(photo)` closure.
 - Map plan/credit swap from `CURRENT_TRIP` (`#mapImg`, `#mapLegend`), and the home-page trip chooser rendered into `#tripChooser` (`index.html`).
