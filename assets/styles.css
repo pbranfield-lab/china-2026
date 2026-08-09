@@ -15,28 +15,16 @@
   --coral-2:#B7332A;
   --mint:#8FE3DE;
   --cream:#F5EDD8;
-  --jade:#2E8B72;
-  --jade-2:#17604F;
+  /* Darker than the spec's first pass: at #2E8B72 the mint label text on a jade
+     fact tile measured 2.81:1, well under AA. See the jade field below. */
+  --jade:#1B5949;
+  --jade-2:#123F34;
 
   /* Light surfaces, kept for the long-form reading panel only. */
   --paper:#F7EFDA;
   --paper-dark:#EBDFC0;
   --ink:#20323A;
   --ink-soft:#4C6570;
-
-  /* ---- Legacy aliases -------------------------------------------------
-     Rules further down still name the lacquer-era tokens. Remapping them
-     here re-colours the whole site in one step; the component tasks replace
-     the usages and the final CSS task deletes this block. */
-  --lacquer:#062430;
-  --lacquer-2:#0A3644;
-  --vermillion:#F2604C;
-  --vermillion-dark:#B7332A;
-  --vermillion-bright:#FF7A63;
-  --gold-bright:#FFD86B;
-  --gold-dim:#D9B65A;
-  --seal-ink:#F2604C;
-  --seal-ink-dark:#B7332A;
 
   --font-display:'Fraunces', Georgia, 'Times New Roman', serif;
   --font-ui:'Outfit', "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -796,7 +784,7 @@ section.tight .section-sub{margin-top:.5rem;font-size:.84rem;}
   background:linear-gradient(158deg, var(--coral) 0%, #C93B2E 55%, var(--coral-2) 100%);
 }
 .fact-tile[data-enamel="jade"], .fact-pop[data-enamel="jade"]{
-  background:linear-gradient(158deg, #37A187 0%, var(--jade) 50%, var(--jade-2) 100%);
+  background:linear-gradient(158deg, #226655 0%, var(--jade) 50%, var(--jade-2) 100%);
 }
 .fact-tile[data-enamel="deep"], .fact-pop[data-enamel="deep"]{
   background:linear-gradient(158deg, #14586B 0%, #0C4457 50%, #072E3C 100%);
@@ -977,10 +965,10 @@ footer{position:relative;text-align:center;color:var(--mint);opacity:.8;padding:
   .scroll-rod::before, .scroll-rod::after{width:20px;height:26px;top:-5px;}
   .scroll-rod::before{left:-10px;}
   .scroll-rod::after{right:-10px;}
-  .family-grid{grid-template-columns:repeat(auto-fit, minmax(150px,1fr));gap:1rem;}
+  .family-grid{grid-template-columns:repeat(auto-fit, minmax(150px,1fr));gap:1.1rem;}
   .family-card{padding:1.1rem .8rem;}
   .map-case{padding:8px;}
-  .pin{width:34px;height:34px;font-size:.85rem;}
+  .pin{width:30px;height:30px;font-size:.8rem;}
   .compass{width:32px;height:32px;font-size:.65rem;}
   .panel{padding:0;}
   .modal-body{padding:1.2rem 1.3rem 1.6rem;}
@@ -988,7 +976,17 @@ footer{position:relative;text-align:center;color:var(--mint);opacity:.8;padding:
   .gallery-grid{grid-template-columns:repeat(auto-fill, minmax(120px,1fr));gap:.8rem;}
   .map-section{min-height:0;}
   .location-overlay{padding:0;}
-  .location-card{max-width:100%;max-height:100vh;height:100vh;border-radius:0;padding:1.3rem 1.2rem 2rem;}
+  .location-card{max-width:100%;max-height:100vh;height:100vh;border-radius:0;padding:1.3rem 1.2rem 2rem;box-shadow:none;}
   .nav-cards{grid-template-columns:1fr 1fr;gap:.9rem;}
   .nav-card{padding:1.2rem .9rem;}
+  .facts-grid{grid-template-columns:repeat(auto-fit, minmax(140px,1fr));gap:1.4rem .8rem;padding:.9rem 1rem 0;}
+  .fact-tile{padding:1.1rem .85rem .9rem;}
+  .fact-overlay{padding:.6rem;}
+  .fact-pop{padding:1.4rem 1.15rem 1.1rem;max-height:92vh;}
+  .fact-pop-stat{font-size:2.5rem;}
+  .fact-foot{gap:.5rem;margin-top:1.1rem;}
+  .fact-arrow{width:36px;height:36px;}
+  .fact-count{display:none;}   /* the dots already say where you are */
+  .fact-who img{width:40px;height:40px;}
+  .bonus-feature{padding:1.1rem;}
 }
