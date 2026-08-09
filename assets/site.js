@@ -301,6 +301,10 @@ if(CURRENT_TRIP) document.documentElement.setAttribute("data-trip", CURRENT_TRIP
     const trip = TRIPS.find(t => t.id === tripId);
     return `<li>${trip ? trip.name : tripId} ambience: <a href="${a.sourceUrl}">“${a.title}”</a> by ${a.author} (${a.license})</li>`;
   });
+  if(typeof HANZI !== "undefined" && HANZI.length){
+    lines.push(`<li>Character strokes: <a href="https://hanziwriter.org">Hanzi Writer</a> (MIT),
+      data from <a href="https://github.com/skishore/makemeahanzi">Make Me a Hanzi</a> (Arphic Public License)</li>`);
+  }
   if(!lines.length) return;
   box.innerHTML = `<h3>Credits, because fair's fair</h3>
     <ul>${lines.join("")}</ul>`;
@@ -1084,6 +1088,107 @@ let openPhoto = function(){};
   });
 
   if(grid.children.length) document.getElementById("thenNow").hidden = false;
+})();
+
+/* ---------- Hanzi playground (play page) ----------
+   Vendored HanziWriter drives the stroke box; per-character data lives in
+   assets/vendor/hanzi-data/<hex>.js wrapped as plain scripts so the page
+   works on file:// with no fetch/CORS. Under reduced motion the character
+   renders completed instead of autoplaying strokes; the tracing quiz is
+   user-driven so it stays. The 🔊 button only appears if the browser
+   actually has a Chinese voice. */
+(function(){
+  const grid = document.getElementById("hanziGrid");
+  const stage = document.getElementById("hanziStage");
+  if(!grid || !stage || typeof HANZI === "undefined" || !HANZI.length) return;
+  if(typeof HanziWriter === "undefined") return;
+
+  const hex = ch => ch.codePointAt(0).toString(16);
+  function charDataLoader(char, onLoad, onError){
+    if(window.HANZI_DATA && HANZI_DATA[char]) return onLoad(HANZI_DATA[char]);
+    const s = document.createElement("script");
+    s.src = `assets/vendor/hanzi-data/${hex(char)}.js`;
+    s.onload = () => (window.HANZI_DATA && HANZI_DATA[char])
+      ? onLoad(HANZI_DATA[char])
+      : onError(new Error("no data for " + char));
+    s.onerror = onError;
+    document.head.appendChild(s);
+  }
+
+  const tones = ["teal", "coral", "jade", "deep"];
+  const traced = () => store.get("hanzi", {}) || {};
+  let currentBtn = null;
+
+  HANZI.forEach((h, i)=>{
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "hanzi-tile";
+    b.dataset.enamel = tones[i % tones.length];
+    b.innerHTML = `
+      <span class="hanzi-glyph">${h.char}</span>
+      <span class="hanzi-pinyin">${h.pinyin}</span>
+      <span class="hanzi-mean">${h.meaning}</span>
+      ${traced()[h.char] ? `<span class="hanzi-done" title="Traced">✓</span>` : ""}`;
+    b.addEventListener("click", ()=> select(h, b));
+    grid.appendChild(b);
+  });
+
+  function select(h, btn){
+    if(currentBtn) currentBtn.classList.remove("active");
+    currentBtn = btn;
+    btn.classList.add("active");
+    stage.hidden = false;
+    stage.innerHTML = `
+      <div class="hanzi-box"></div>
+      <div class="hanzi-side">
+        <h3 class="hanzi-word"><span class="hanzi-glyphword">${h.char}</span> ${h.pinyin} — ${h.meaning}</h3>
+        <p class="hanzi-wordline">As in <b class="hanzi-glyphword">${h.word}</b>, ${h.wordMeaning}.</p>
+        <div class="hanzi-actions">
+          <button type="button" class="hanzi-btn" data-act="watch">${REDUCED_MOTION ? "Show it done" : "▶ Watch the strokes"}</button>
+          <button type="button" class="hanzi-btn" data-act="trace">✍️ Trace it</button>
+          <button type="button" class="hanzi-btn" data-act="speak" hidden>🔊 Say it</button>
+        </div>
+        <p class="hanzi-status" aria-live="polite"></p>
+      </div>`;
+    const writer = HanziWriter.create(stage.querySelector(".hanzi-box"), h.char, {
+      width: 220, height: 220, padding: 12,
+      charDataLoader,
+      strokeColor: "#302217",
+      outlineColor: "#E4D2AE",
+      drawingColor: "#C93A2B",
+      radicalColor: "#C93A2B",
+      delayBetweenStrokes: 350,
+      showCharacter: false
+    });
+    if(REDUCED_MOTION) writer.showCharacter();
+    const status = stage.querySelector(".hanzi-status");
+    stage.querySelector('[data-act="watch"]').addEventListener("click", ()=>{
+      status.textContent = "";
+      if(REDUCED_MOTION){ writer.showCharacter(); }
+      else { writer.hideCharacter(); writer.animateCharacter(); }
+    });
+    stage.querySelector('[data-act="trace"]').addEventListener("click", ()=>{
+      status.textContent = "Draw the strokes in the right order — it'll put you straight if you go wrong. There's a proper order, apparently, and it matters.";
+      writer.quiz({
+        onComplete: ()=>{
+          SoundKit.fx("right");
+          store.patch("hanzi", { [h.char]: true });
+          status.textContent = `That's ${h.char} done. You just wrote actual Chinese.`;
+          if(!btn.querySelector(".hanzi-done"))
+            btn.insertAdjacentHTML("beforeend", `<span class="hanzi-done" title="Traced">✓</span>`);
+        }
+      });
+    });
+    const speakBtn = stage.querySelector('[data-act="speak"]');
+    SoundKit.hasZhVoice(ok=>{
+      if(!ok) return;
+      speakBtn.hidden = false;
+      speakBtn.addEventListener("click", ()=> SoundKit.speak(h.word || h.char));
+    });
+    stage.scrollIntoView({ behavior: REDUCED_MOTION ? "auto" : "smooth", block: "nearest" });
+  }
+
+  document.getElementById("hanzi").hidden = false;
 })();
 
 /* ---------- Home page: "Did you know?" teaser ----------

@@ -66,7 +66,7 @@ a{color:inherit;}
 img{max-width:100%;display:block;}
 /* The Latin families carry no CJK, so every hanzi element is pinned. */
 .seal-mini, .seal-title span, .hero-hanzi, .nav-card .hanzi, .panel .chinese,
-.era-hanzi{
+.era-hanzi, .hanzi-glyph, .hanzi-glyphword{
   font-family:var(--font-hanzi);
 }
 :focus-visible{outline:3px solid var(--blue);outline-offset:3px;}
@@ -117,7 +117,7 @@ section.tight .section-title::after{width:110px;}
 .enamel,
 .nav-card, .family-card, .location-card, .modal,
 .bonus-feature, .fact-tile, .fact-pop, .teaser-card, .quiz-card,
-.play-credits, .leg-card{
+.play-credits, .leg-card, .hanzi-tile, .hanzi-stage{
   position:relative;
   border:2.5px solid var(--ink);
   border-radius:var(--radius-panel);
@@ -135,6 +135,7 @@ section.tight .section-title::after{width:110px;}
 .nav-card > *, .family-card > *, .modal > *,
 .bonus-feature > *, .fact-tile > *, .fact-pop > *,
 .teaser-card > *, .quiz-card > *, .play-credits > *, .leg-card > *,
+.hanzi-tile > *, .hanzi-stage > *,
 .location-card > .panel, .location-card > .william-toggle{
   position:relative;
 }
@@ -1350,6 +1351,64 @@ footer{position:relative;text-align:center;color:var(--ink-soft);padding:3rem 1.
 }
 .tn-credit a{color:var(--blue);}
 
+/* ---------- Hanzi playground (play page) ---------- */
+.hanzi-grid{
+  display:grid;grid-template-columns:repeat(auto-fill, minmax(96px,1fr));
+  gap:1rem;max-width:760px;margin:0 auto;
+}
+.hanzi-tile{
+  cursor:pointer;
+  display:grid;gap:.12rem;justify-items:center;
+  padding:.75rem .4rem .6rem;
+  text-align:center;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.hanzi-tile:hover{transform:translate(-2px,-3px);box-shadow:var(--pop-big);}
+.hanzi-tile.active{outline:3px solid var(--blue);outline-offset:2px;}
+.hanzi-tile[data-enamel="teal"]{border-color:var(--blue);}
+.hanzi-tile[data-enamel="coral"]{border-color:var(--red);}
+.hanzi-tile[data-enamel="jade"]{border-color:var(--jade);}
+.hanzi-tile[data-enamel="deep"]{border-color:var(--gold-deep);}
+.hanzi-glyph{font-size:2.1rem;line-height:1.1;color:var(--ink);}
+.hanzi-pinyin{font-family:var(--font-ui);font-weight:800;font-size:.72rem;color:var(--red-deep);}
+.hanzi-mean{font-family:var(--font-ui);font-size:.66rem;color:var(--ink-soft);}
+.hanzi-done{
+  position:absolute;top:-8px;right:-8px;
+  width:22px;height:22px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--jade);color:#FFF6EC;
+  border:2px solid var(--ink);border-radius:50%;
+  font-size:.7rem;font-weight:800;
+}
+.hanzi-stage{
+  display:grid;grid-template-columns:auto minmax(0,1fr);gap:1.4rem;align-items:start;
+  max-width:640px;margin:1.8rem auto 0;
+  padding:1.2rem 1.3rem;
+}
+.hanzi-box{
+  width:220px;height:220px;
+  background:var(--paper);
+  border:2px solid var(--ink);border-radius:12px;
+}
+.hanzi-word{font-family:var(--font-display);font-weight:400;font-size:1.2rem;color:var(--ink);}
+.hanzi-word .hanzi-glyphword{font-size:1.6rem;margin-right:.15rem;}
+.hanzi-wordline{font-family:var(--font-body);font-weight:600;font-size:.88rem;color:var(--ink);margin-top:.4rem;}
+.hanzi-actions{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:.8rem;}
+.hanzi-btn{
+  cursor:pointer;
+  font-family:var(--font-ui);font-size:.8rem;font-weight:800;color:var(--ink);
+  background:var(--cream);
+  border:2px solid var(--ink);border-radius:var(--radius-pill);
+  padding:.45rem .9rem;
+  box-shadow:0 3px 0 rgba(48,34,23,.82);
+}
+.hanzi-btn:active{transform:translateY(3px);box-shadow:0 0 0 rgba(48,34,23,.82);}
+.hanzi-status{
+  margin-top:.7rem;
+  font-family:var(--font-body);font-weight:600;font-size:.85rem;color:var(--ink-soft);
+  min-height:1.2em;
+}
+
 /* ---------- Sound toggle ----------
    Injected by site.js on every page, bottom-right (the version stamp owns
    bottom-left). Same pill language as the other labelled controls, kept
@@ -1449,4 +1508,7 @@ footer{position:relative;text-align:center;color:var(--ink-soft);padding:3rem 1.
   .journey-map{top:64px;z-index:4;padding:.7rem .7rem .5rem;}
   .journey-distance-num{font-size:1.4rem;}
   .leg-card{margin-bottom:52vh;}
+  /* Hanzi stage stacks with the stroke box centred. */
+  .hanzi-stage{grid-template-columns:1fr;justify-items:center;text-align:center;}
+  .hanzi-actions{justify-content:center;}
 }

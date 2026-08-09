@@ -138,6 +138,20 @@ A replacement loop should stay CC0 (or CC BY with the credit added to the
 play.html panel), keep to roughly 60 s / ≤400 KB, and update `AUDIO`, this
 table and `node tools/check.mjs` will hold it to that.
 
+## Vendored libraries
+
+`assets/vendor/` holds the only third-party code on the site:
+
+- `hanzi-writer.min.js` — [Hanzi Writer](https://hanziwriter.org) v3.7.2, MIT
+  (licence file alongside). Loaded by play.html only.
+- `hanzi-data/<hex>.js` — per-character stroke data from hanzi-writer-data,
+  wrapped as plain scripts (`HANZI_DATA["中"] = {…}`) so the playground works
+  on `file://` with no fetch. Derived from Make Me a Hanzi under the Arphic
+  Public License — see `hanzi-data-NOTICE.txt`. **Adding a character to
+  `HANZI` in extras.js means adding its data file here** (filename is the
+  char's codepoint in hex); check.mjs verifies the pairing, and the credits
+  panel on play.html already names both projects.
+
 ## Privacy
 
 Curation must drop anything that isn't a photograph of a place. The raw Great Wall

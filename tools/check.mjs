@@ -180,6 +180,21 @@ check("JOURNEY route resolves, chains, and matches the map markers", () => {
   return null;
 });
 
+check("HANZI entries have data files, fields, and the vendor script", () => {
+  const { TRIPS, HANZI } = loadData();
+  const ids = new Set(TRIPS.map(t => t.id));
+  for (const h of HANZI){
+    for (const k of ["char","pinyin","meaning","word","wordMeaning"])
+      if (!h[k]) return `${h.char || "?"} is missing ${k}`;
+    if (h.trip && !ids.has(h.trip)) return `${h.char} names unknown trip ${h.trip}`;
+    const f = `assets/vendor/hanzi-data/${h.char.codePointAt(0).toString(16)}.js`;
+    if (!existsSync(join(ROOT, f))) return `${f} does not exist`;
+  }
+  if (HANZI.length && !read("play.html").includes('src="assets/vendor/hanzi-writer.min.js"'))
+    return "play.html does not load the vendored hanzi-writer";
+  return null;
+});
+
 check("THEN_NOW pairs resolve: trips, files, credits and now-photos", () => {
   const { TRIPS, PHOTOS, THEN_NOW } = loadData();
   const ids = new Set(TRIPS.map(t => t.id));

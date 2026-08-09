@@ -103,7 +103,23 @@ const TIMELINE = {
   ]
 };
 
-const HANZI = [];
+/* Characters for the tracing playground — all drawn from the trips' own
+   names. Each char has a stroke-data file at
+   assets/vendor/hanzi-data/<codepoint-hex>.js (check.mjs verifies). */
+const HANZI = [
+  { char:"中", pinyin:"zhōng", meaning:"middle",        trip:null,             word:"中国",   wordMeaning:"China — literally the Middle Country" },
+  { char:"国", pinyin:"guó",   meaning:"country",       trip:null,             word:"中国",   wordMeaning:"China" },
+  { char:"北", pinyin:"běi",   meaning:"north",         trip:"forbidden-city", word:"北京",   wordMeaning:"Beijing — the northern capital" },
+  { char:"京", pinyin:"jīng",  meaning:"capital",       trip:"forbidden-city", word:"北京",   wordMeaning:"Beijing" },
+  { char:"长", pinyin:"cháng", meaning:"long",          trip:"great-wall",     word:"长城",   wordMeaning:"the Great Wall — literally the long wall" },
+  { char:"城", pinyin:"chéng", meaning:"wall, city",    trip:"great-wall",     word:"长城",   wordMeaning:"the Great Wall" },
+  { char:"兵", pinyin:"bīng",  meaning:"soldier",       trip:"xian",           word:"兵马俑", wordMeaning:"the Terracotta Army" },
+  { char:"马", pinyin:"mǎ",    meaning:"horse",         trip:"xian",           word:"兵马俑", wordMeaning:"the Terracotta Army" },
+  { char:"俑", pinyin:"yǒng",  meaning:"burial figure", trip:"xian",           word:"兵马俑", wordMeaning:"the Terracotta Army" },
+  { char:"西", pinyin:"xī",    meaning:"west",          trip:"xitang",         word:"西塘",   wordMeaning:"Xitang — and 西安 Xi'an has it too" },
+  { char:"上", pinyin:"shàng", meaning:"up, above",     trip:"shanghai",       word:"上海",   wordMeaning:"Shanghai — literally upon the sea" },
+  { char:"海", pinyin:"hǎi",   meaning:"sea",           trip:"shanghai",       word:"上海",   wordMeaning:"Shanghai" }
+];
 
 const COMPARATORS = {};
 

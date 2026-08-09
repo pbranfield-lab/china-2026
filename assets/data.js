@@ -14,7 +14,7 @@
 /* ============================================================
    SITE VERSION — bump this one line; every page picks it up.
    ============================================================ */
-const SITE_VERSION = "3.8.0";
+const SITE_VERSION = "3.9.0";
 
 /* Tag a group of entries with their trip, so the tag is declared once per
    group instead of repeated on every object. */

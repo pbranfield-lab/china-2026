@@ -1,0 +1,12 @@
+The stroke-order data files in this directory (assets/vendor/hanzi-data/*.js)
+are wrapped, unmodified per-character JSON from the hanzi-writer-data package
+(https://github.com/chanind/hanzi-writer-data), which derives from the
+Make Me a Hanzi project (https://github.com/skishore/makemeahanzi).
+
+Make Me a Hanzi's graphical data derives from Arphic Technology's fonts and is
+licensed under the Arphic Public License. A copy of that license is available
+at https://github.com/skishore/makemeahanzi/blob/master/APL.txt — under its
+terms this notice and that license travel with the data.
+
+The Hanzi Writer library itself (assets/vendor/hanzi-writer.min.js) is MIT
+licensed; see hanzi-writer-LICENSE.txt alongside this file.
