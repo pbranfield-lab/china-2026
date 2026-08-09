@@ -136,21 +136,28 @@ if(CURRENT_TRIP) document.documentElement.setAttribute("data-trip", CURRENT_TRIP
 })();
 
 /* ---------- Ten mind-blowing facts (story page) ----------
-   The section is hidden in the markup and only revealed if the current trip
-   actually has facts, so a trip without them doesn't leave an empty heading. */
+   Teaser tiles show only the number. The fact itself lives in a popout you
+   step through with ←/→ without closing, so reading all ten is one gesture
+   rather than ten. The section is hidden in the markup and only revealed if
+   the current trip actually has facts, so a trip without them doesn't leave
+   an empty heading. */
 (function(){
   const grid = document.getElementById("factsGrid");
   if(!grid || typeof FACTS === "undefined" || !CURRENT_TRIP) return;
   const facts = FACTS[CURRENT_TRIP.id];
   if(!facts || !facts.length) return;
 
+  /* Four enamel fields, cycled by index. Real cloisonné is polychrome, and a
+     grid of identical tiles reads as a spreadsheet. */
+  const ENAMELS = ["teal", "coral", "jade", "deep"];
+
   grid.innerHTML = facts.map((f, i)=>`
-    <div class="fact-card">
-      <div class="fact-index">${String(i + 1).padStart(2, "0")}</div>
-      <div class="fact-stat">${f.stat}</div>
-      <div class="fact-label">${f.label}</div>
-      <p class="fact-text">${f.text}</p>
-    </div>
+    <button class="fact-tile" data-index="${i}" data-enamel="${ENAMELS[i % ENAMELS.length]}">
+      <span class="fact-index">${String(i + 1).padStart(2, "0")}</span>
+      <span class="fact-stat" data-stat="${f.stat}">${f.stat}</span>
+      <span class="fact-label">${f.label}</span>
+      <span class="fact-hint">tap to find out →</span>
+    </button>
   `).join("");
 
   const sub = document.getElementById("factsSub");
@@ -210,6 +217,147 @@ if(CURRENT_TRIP) document.documentElement.setAttribute("data-trip", CURRENT_TRIP
       section.scrollIntoView({ block:"start" });
     });
   }
+
+  /* ---- Count the stats up when the grid first comes into view ----
+     Only the leading number animates; any suffix ("52 m", "19 million") is
+     re-appended every frame so the tile never changes shape mid-count. This is
+     a content change rather than a CSS animation, so the stylesheet's
+     prefers-reduced-motion blanket can't suppress it — it needs its own guard. */
+  const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function countUp(el){
+    const raw = el.dataset.stat;
+    const parts = raw.match(/^([\d,]+(?:\.\d+)?)(.*)$/);
+    if(!parts) return;                                   // e.g. a purely verbal stat
+    const target = parseFloat(parts[1].replace(/,/g, ""));
+    if(!isFinite(target)) return;
+    const suffix = parts[2];
+    const decimals = (parts[1].split(".")[1] || "").length;
+    /* Group thousands only if the stat itself does. Years are the reason:
+       counting to "1974" would otherwise read "1,974" every frame and then
+       snap to the ungrouped string on the last one. */
+    const grouped = parts[1].indexOf(",") !== -1;
+    const DURATION = 900;
+    const started = performance.now();
+    (function frame(now){
+      const t = Math.min(1, (now - started) / DURATION);
+      const eased = 1 - Math.pow(1 - t, 3);
+      if(t < 1){
+        el.textContent = (target * eased).toLocaleString("en-GB", {
+          minimumFractionDigits:decimals, maximumFractionDigits:decimals,
+          useGrouping:grouped
+        }) + suffix;
+        requestAnimationFrame(frame);
+      } else {
+        el.textContent = raw;                            // land on the exact string
+      }
+    })(started);
+  }
+  if(!REDUCED && "IntersectionObserver" in window){
+    const io = new IntersectionObserver((entries, obs)=>{
+      entries.forEach(e=>{
+        if(!e.isIntersecting) return;
+        obs.unobserve(e.target);                         // count once, never again
+        countUp(e.target);
+      });
+    }, {threshold:0.4});
+    grid.querySelectorAll(".fact-stat").forEach(el=>io.observe(el));
+  }
+
+  /* ---- The popout ----
+     Guarded separately so a page served from an older cache still gets working
+     tiles, a revealed section and a working jump link. */
+  const overlay = document.getElementById("factOverlay");
+  const pop = overlay && overlay.querySelector(".fact-pop");
+  if(!overlay || !pop) return;
+
+  const elBadge = document.getElementById("factBadge");
+  const elStat  = document.getElementById("factStat");
+  const elLabel = document.getElementById("factLabel");
+  const elQuote = document.getElementById("factQuote");
+  const elCount = document.getElementById("factCount");
+  const elDots  = document.getElementById("factDots");
+  const btnPrev = document.getElementById("factPrev");
+  const btnNext = document.getElementById("factNext");
+  const btnClose = document.getElementById("factClose");
+
+  let index = 0;
+  let lastFocused = null;
+
+  elDots.innerHTML = facts.map((f, i)=>
+    `<span class="fact-dot" data-index="${i}"></span>`).join("");
+
+  function draw(){
+    const f = facts[index];
+    elBadge.textContent = `Fact ${String(index + 1).padStart(2, "0")} of ${facts.length}`;
+    elStat.textContent  = f.stat;
+    elLabel.textContent = f.label;
+    // The opening quote mark is its own element in the markup; this closes it.
+    elQuote.innerHTML   = f.text + "”";
+    elCount.textContent = `${index + 1} / ${facts.length}`;
+    pop.dataset.enamel  = ENAMELS[index % ENAMELS.length];
+    Array.prototype.forEach.call(elDots.children, (dot, i)=>
+      dot.classList.toggle("on", i === index));
+  }
+
+  function openFact(i){
+    index = i;
+    draw();
+    lastFocused = document.activeElement;
+    overlay.hidden = false;
+    /* Replay the spring even if the overlay was somehow already open — reading
+       the offsetHeight is what forces the restart. */
+    pop.style.animation = "none";
+    void pop.offsetHeight;
+    pop.style.animation = "";
+    btnClose.focus();
+  }
+
+  function closeFact(){
+    if(overlay.hidden) return;
+    overlay.hidden = true;
+    if(lastFocused && lastFocused.focus) lastFocused.focus();
+    lastFocused = null;
+  }
+
+  /* Wraps rather than stopping at either end — ten facts is a loop, not a
+     queue, and a dead arrow at fact 10 reads like a bug. */
+  function step(delta){
+    index = (index + delta + facts.length) % facts.length;
+    draw();
+  }
+
+  grid.addEventListener("click", e=>{
+    const tile = e.target.closest(".fact-tile");
+    if(tile) openFact(parseInt(tile.dataset.index, 10));
+  });
+  btnPrev.addEventListener("click", ()=>step(-1));
+  btnNext.addEventListener("click", ()=>step(1));
+  btnClose.addEventListener("click", closeFact);
+  elDots.addEventListener("click", e=>{
+    const dot = e.target.closest(".fact-dot");
+    if(!dot) return;
+    index = parseInt(dot.dataset.index, 10);
+    draw();
+  });
+  overlay.addEventListener("click", e=>{ if(e.target === overlay) closeFact(); });
+
+  /* Keyboard is bound to the overlay rather than the document: focus is moved
+     inside on open and trapped there, so this can't fire while the reader is
+     elsewhere on the page, and it can't collide with another page's Escape
+     handler. */
+  const FOCUSABLE = "button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])";
+  overlay.addEventListener("keydown", e=>{
+    if(e.key === "Escape"){ closeFact(); return; }
+    if(e.key === "ArrowRight"){ e.preventDefault(); step(1); return; }
+    if(e.key === "ArrowLeft"){ e.preventDefault(); step(-1); return; }
+    if(e.key !== "Tab") return;
+    const items = Array.prototype.filter.call(
+      pop.querySelectorAll(FOCUSABLE), el => el.offsetParent !== null);
+    if(!items.length) return;
+    const first = items[0], last = items[items.length - 1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  });
 })();
 
 /* ---------- Family grid (family page) ---------- */
