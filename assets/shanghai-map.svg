@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 605 500" width="605" height="500" role="img" aria-label="Schematic plan of the Shanghai trip: the Huangpu River with the Bund on one side, the Lujiazui towers on the other, Yu Garden and the Maglev">
+  <title>Shanghai — schematic trip plan</title>
+
+  <defs>
+    <style>
+      .paper   { fill:#efe4cc; }
+      .water   { fill:#b9cdd1; stroke:#7d9aa3; stroke-width:2; }
+      .hall    { fill:#e2d3ab; stroke:#9c8347; stroke-width:2; }
+      .hall-lg { fill:#e2d3ab; stroke:#8f2a2c; stroke-width:2.5; }
+      .tower   { fill:#e2d3ab; stroke:#8f2a2c; stroke-width:2.5; }
+      .lbl     { font-family:Georgia,'Times New Roman',serif; font-size:15px; fill:#2a221a; }
+      .lbl-sm  { font-family:Georgia,'Times New Roman',serif; font-size:12px; fill:#5c4f3c; }
+      .lbl-hz  { font-family:Georgia,'Times New Roman',serif; font-size:13px; fill:#8f2a2c; }
+      .head    { font-family:Georgia,'Times New Roman',serif; font-size:17px; fill:#8f2a2c; letter-spacing:1px; }
+      .link    { fill:none; stroke:#9c8347; stroke-width:2; stroke-dasharray:7 6; }
+    </style>
+  </defs>
+
+  <rect width="605" height="500" class="paper"/>
+  <rect x="8" y="8" width="589" height="484" fill="none" stroke="#9c8347" stroke-width="2"/>
+
+  <text x="302" y="44" class="head" text-anchor="middle">SHANGHAI · 上海</text>
+
+  <!-- The Huangpu River, bending around Lujiazui -->
+  <path d="M 300 20 C 280 90 280 150 310 210 C 340 270 340 330 300 400 C 285 430 280 455 282 492
+           L 362 492 C 358 450 366 420 390 370 C 415 315 415 255 385 195 C 360 145 362 80 380 20 Z" class="water"/>
+  <text x="332" y="452" class="lbl-hz" text-anchor="middle">黄浦江</text>
+
+  <!-- West bank: the Bund, a parade of old stone buildings -->
+  <rect x="196" y="120" width="66" height="30" class="hall-lg"/>
+  <rect x="200" y="158" width="62" height="26" class="hall"/>
+  <rect x="196" y="192" width="66" height="30" class="hall"/>
+  <rect x="202" y="230" width="60" height="26" class="hall"/>
+  <text x="150" y="140" class="lbl" text-anchor="middle">The Bund</text>
+  <text x="150" y="158" class="lbl-hz" text-anchor="middle">外滩</text>
+  <text x="140" y="220" class="lbl-sm" text-anchor="middle">52 old buildings</text>
+  <text x="140" y="236" class="lbl-sm" text-anchor="middle">in a row</text>
+
+  <!-- Old town: Yu Garden with its pond and zig-zag bridge -->
+  <rect x="62" y="330" width="118" height="88" rx="6" class="hall-lg"/>
+  <circle cx="121" cy="374" r="24" class="water"/>
+  <path d="M 100 380 L 112 380 L 112 368 L 130 368 L 130 378 L 142 378" fill="none" stroke="#8f2a2c" stroke-width="2.5"/>
+  <text x="121" y="310" class="lbl" text-anchor="middle">Yu Garden</text>
+  <text x="182" y="310" class="lbl-hz" text-anchor="middle">豫园</text>
+
+  <!-- East bank: Lujiazui and the three supertalls, plus the Oriental Pearl -->
+  <circle cx="424" cy="150" r="15" class="tower"/>
+  <text x="424" y="122" class="lbl-sm" text-anchor="middle">Oriental Pearl</text>
+
+  <rect x="452" y="180" width="34" height="34" rx="3" class="tower"/>
+  <text x="530" y="196" class="lbl-sm" text-anchor="middle">Jin Mao 金茂</text>
+
+  <rect x="452" y="228" width="34" height="34" rx="3" class="tower"/>
+  <text x="536" y="244" class="lbl-sm" text-anchor="middle">"Bottle opener"</text>
+
+  <rect x="452" y="276" width="34" height="34" rx="17" class="tower"/>
+  <text x="536" y="288" class="lbl-sm" text-anchor="middle">Shanghai Tower</text>
+  <text x="536" y="304" class="lbl-sm" text-anchor="middle">632 m ↑</text>
+
+  <text x="470" y="90" class="lbl" text-anchor="middle">Lujiazui</text>
+  <text x="470" y="106" class="lbl-hz" text-anchor="middle">陆家嘴</text>
+
+  <!-- The Maglev, streaking off towards the airport -->
+  <path d="M 380 430 L 560 430" class="link"/>
+  <path d="M 545 422 L 561 430 L 545 438" fill="none" stroke="#9c8347" stroke-width="2"/>
+  <text x="470" y="416" class="lbl-sm" text-anchor="middle">Maglev to the airport 磁悬浮</text>
+
+  <text x="302" y="478" class="lbl-sm" text-anchor="middle">Not to scale — drawn for this page</text>
+</svg>

@@ -62,8 +62,9 @@ containers they carry (`#historyIntro`, `#familyGrid`, `#pinLayer`/`#detailPanel
 template for a new one.
 
 **Trips.** One set of pages, made trip-aware by `?trip=<id>`; no param falls back
-to `TRIPS[0]`. Currently the Forbidden City (Beijing), Xi'an, and the Great Wall
-at Mutianyu.
+to `TRIPS[0]`. Currently the Forbidden City (Beijing), Xi'an, the Great Wall
+at Mutianyu, Xitang Water Town (⚠️ its `photoDir` is `"xitan"` — the folder's
+spelling, not the town's), and Shanghai.
 
 ### The data layer
 
@@ -99,8 +100,12 @@ Field notes, per global:
   **optional** `credit:{author, license, licenseUrl}`. Backs both the map popout
   grid and the gallery. Video is flagged by the explicit `type` field, never by
   sniffing the extension.
-- **`FACTS`** — keyed by trip id, ten `{stat, label, text}` each. `stat` is the
-  headline number (keep it short — under ~9 characters), `text` is 2–3 sentences
+- **`FACTS`** — keyed by trip id, ten `{stat, label, text}` each, plus an
+  optional `q`: a plain-English quiz question ("How many rooms has the
+  Forbidden City got?") that The Big Quiz shows instead of the cryptic
+  label-based fallback — give one to every fact whose stat is a single
+  leading number. `stat` is the headline number (keep it short — under ~9
+  characters), `text` is 2–3 sentences
   of Maisie with `<strong>` on the key figure. **These must be factually true** —
   that is the entire point of the section. Hedge reported figures with
   "reportedly".

@@ -9,7 +9,7 @@ rules below are not optional and are repeated in `CLAUDE.md` for that reason.
 - **New photo** — drop it into `Photographs/<photoDir>/`, add an entry to that
   trip's `photos` array in `assets/data/<trip>.js`, with a `location` matching a
   `LOCATIONS.id` on the same trip. Photo id prefixes so far: `p*` Forbidden City,
-  `x*` Xi'an, `g*` Great Wall. Web-size it first: existing photos are ~1400px
+  `x*` Xi'an, `g*` Great Wall, `t*` Xitang, `s*` Shanghai. Web-size it first: existing photos are ~1400px
   on the long edge and 60–250 KB, not raw camera dumps.
 - **New video** — same, but re-encode to **H.264** first (phone video is usually
   HEVC, which most browsers won't play) and add `type:"video"`. No LFS in this
@@ -78,22 +78,28 @@ in it.
 
 ## Sourced (non-family) photos
 
-Must not mention any family member, and must stay factual. Currently three, all
-Xi'an:
+Must not mention any family member, and must stay factual. Currently nine:
 
-| File | Author | Licence |
-|---|---|---|
-| `bell-tower-day.jpg` | Wang Zhongyin | CC BY-SA 4.0 |
-| `muslim-quarter-great-mosque-sign.jpg` | Qianeal | CC BY-SA 4.0 |
-| `muslim-quarter-xiyangshi-arch.jpg` | thierrytutin | CC BY 2.0 |
+| File | Author | Licence | Source |
+|---|---|---|---|
+| `terracotta-warriors/bell-tower-day.jpg` | Wang Zhongyin | CC BY-SA 4.0 | not recorded |
+| `terracotta-warriors/muslim-quarter-great-mosque-sign.jpg` | Qianeal | CC BY-SA 4.0 | not recorded |
+| `terracotta-warriors/muslim-quarter-xiyangshi-arch.jpg` | thierrytutin | CC BY 2.0 | not recorded |
+| `xitan/corridor-lanterns.jpg` | Veravermouth | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File:Der_lange_Korridor_mit_Laternen_(Xitang).jpg) |
+| `xitan/canal-night-lanterns.jpg` | そらみみ (Soramimi) | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File:Canal_in_Xitang_Town_at_night_1.jpg) |
+| `xitan/huanxiu-bridge-night.jpg` | そらみみ (Soramimi) | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File:Huanxiuqiao_Bridge_on_canal_in_Xitang_Town_at_night.jpg) |
+| `shanghai/bund-buildings-night.jpg` | DvTor8303 | CC0 | [Commons](https://commons.wikimedia.org/wiki/File:Shanghai_Bund_at_night_20260417_(4).jpg) |
+| `shanghai/yu-garden-teahouse.jpg` | Fredlyfish4 | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File:Huxinting_Teahouse_2016.jpg) |
+| `shanghai/maglev-train.jpg` | kallerna | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File:Shanghai_Maglev_2.jpg) |
 
 The Great Wall trip is entirely family photos. Each sourced photo carries a
 `credit` object so the attribution renders on the page — **a new sourced photo
 needs one; listing it in a doc is not sufficient**, because CC BY / BY-SA require
 the attribution to be visible wherever the work is shown.
 
-The `credit` objects still have no `source` URL: the originals' URLs were never
-recorded, so full TASL attribution remains incomplete.
+The three Xi'an `credit` objects still have no source URL recorded (the
+originals' URLs were lost), so their TASL attribution remains incomplete; the
+Xitang and Shanghai ones are recorded above.
 
 ## Privacy
 

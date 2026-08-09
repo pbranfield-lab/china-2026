@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 605 500" width="605" height="500" role="img" aria-label="Schematic plan of Xitang water town: the canals, the covered corridor, the bridges and the lanes">
+  <title>Xitang — schematic trip plan</title>
+
+  <defs>
+    <style>
+      .paper   { fill:#efe4cc; }
+      .water   { fill:#b9cdd1; stroke:#7d9aa3; stroke-width:2; }
+      .hall    { fill:#e2d3ab; stroke:#9c8347; stroke-width:2; }
+      .hall-lg { fill:#e2d3ab; stroke:#8f2a2c; stroke-width:2.5; }
+      .bridge  { fill:none; stroke:#8f2a2c; stroke-width:3.5; }
+      .lbl     { font-family:Georgia,'Times New Roman',serif; font-size:15px; fill:#2a221a; }
+      .lbl-sm  { font-family:Georgia,'Times New Roman',serif; font-size:12px; fill:#5c4f3c; }
+      .lbl-hz  { font-family:Georgia,'Times New Roman',serif; font-size:13px; fill:#8f2a2c; }
+      .head    { font-family:Georgia,'Times New Roman',serif; font-size:17px; fill:#8f2a2c; letter-spacing:1px; }
+      .boat    { fill:#9c8347; stroke:#5c4f3c; stroke-width:1.5; }
+    </style>
+  </defs>
+
+  <rect width="605" height="500" class="paper"/>
+  <rect x="8" y="8" width="589" height="484" fill="none" stroke="#9c8347" stroke-width="2"/>
+
+  <text x="302" y="44" class="head" text-anchor="middle">XITANG WATER TOWN · 西塘</text>
+
+  <!-- The branch canal, running down from the north -->
+  <rect x="330" y="58" width="38" height="162" class="water"/>
+  <!-- The main canal, west to east -->
+  <rect x="20" y="215" width="565" height="44" class="water"/>
+
+  <!-- North-bank houses, with Shipi Lane as the sliver between two of them -->
+  <rect x="60" y="168" width="82" height="40" class="hall"/>
+  <rect x="158" y="168" width="82" height="40" class="hall"/>
+  <text x="150" y="152" class="lbl-sm" text-anchor="middle">Shipi Lane</text>
+  <text x="150" y="120" class="lbl-hz" text-anchor="middle">石皮弄</text>
+  <line x1="150" y1="158" x2="150" y2="168" stroke="#9c8347" stroke-width="1.5"/>
+
+  <rect x="256" y="168" width="58" height="40" class="hall"/>
+
+  <!-- Songzilaifeng Bridge over the branch canal -->
+  <path d="M 322 140 Q 349 118 376 140" class="bridge"/>
+  <text x="425" y="120" class="lbl-sm" text-anchor="middle">Songzilaifeng Bridge</text>
+  <text x="425" y="136" class="lbl-hz" text-anchor="middle">送子来凤桥</text>
+
+  <!-- The photo studio, north-east quarter -->
+  <rect x="440" y="150" width="105" height="52" rx="4" class="hall-lg"/>
+  <text x="492" y="172" class="lbl-sm" text-anchor="middle">Photo studio</text>
+  <text x="492" y="190" class="lbl-hz" text-anchor="middle">汉服写真</text>
+
+  <!-- Huanxiu Bridge over the main canal -->
+  <path d="M 232 237 Q 255 210 278 237" class="bridge"/>
+  <text x="255" y="200" class="lbl-sm" text-anchor="middle">Huanxiu Bridge 环秀桥</text>
+
+  <!-- A boat on the canal -->
+  <path d="M 95 236 Q 110 246 125 236 L 118 231 L 102 231 Z" class="boat"/>
+  <text x="110" y="212" class="lbl-sm" text-anchor="middle">boats 摇橹船</text>
+
+  <!-- The covered corridor along the south bank -->
+  <rect x="60" y="266" width="370" height="26" rx="3" class="hall-lg"/>
+  <text x="245" y="316" class="lbl" text-anchor="middle">Misty-Rain Corridor</text>
+  <text x="245" y="334" class="lbl-hz" text-anchor="middle">烟雨长廊</text>
+
+  <!-- South-side houses -->
+  <rect x="80" y="352" width="90" height="44" class="hall"/>
+  <rect x="330" y="352" width="110" height="44" class="hall"/>
+  <text x="385" y="378" class="lbl-sm" text-anchor="middle">snack street</text>
+
+  <text x="302" y="472" class="lbl-sm" text-anchor="middle">Not to scale — drawn for this page</text>
+</svg>

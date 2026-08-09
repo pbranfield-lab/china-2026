@@ -38,6 +38,8 @@ const DATA_FILES = [
   "assets/data/forbidden-city.js",
   "assets/data/xian.js",
   "assets/data/great-wall.js",
+  "assets/data/xitang.js",
+  "assets/data/shanghai.js",
   "assets/data.js"                 // the assembler; must come last
 ];
 

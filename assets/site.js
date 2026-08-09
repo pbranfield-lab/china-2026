@@ -818,7 +818,7 @@ let openPhoto = function(){};
         <span class="quiz-badge">Question ${idx + 1} of ${quiz.length}</span>
         <span class="quiz-score" aria-label="Score">${"⭐".repeat(score) || "☆"}</span>
       </div>
-      <h3 class="quiz-q">Guess the ${q.year ? "year" : "number"}: <em>${q.fact.label}</em></h3>
+      <h3 class="quiz-q">${q.fact.q || `Guess the ${q.year ? "year" : "number"}: <em>${q.fact.label}</em>`}</h3>
       <div class="quiz-choices">
         ${q.choices.map((c, i)=>`<button class="quiz-choice" type="button" data-i="${i}">${c.text}</button>`).join("")}
       </div>

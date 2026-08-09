@@ -13,7 +13,7 @@
 /* ============================================================
    SITE VERSION — bump this one line; every page picks it up.
    ============================================================ */
-const SITE_VERSION = "3.1.0";
+const SITE_VERSION = "3.2.0";
 
 /* Tag a group of entries with their trip, so the tag is declared once per
    group instead of repeated on every object. */
@@ -29,7 +29,9 @@ const ofTrip = (trip, items) => items.map(o => ({ ...o, trip }));
 const TRIP_MODULES = [
   TRIP_FORBIDDEN_CITY,
   TRIP_XIAN,
-  TRIP_GREAT_WALL
+  TRIP_GREAT_WALL,
+  TRIP_XITANG,
+  TRIP_SHANGHAI
 ];
 
 const TRIPS     = TRIP_MODULES.map(m => m.trip);

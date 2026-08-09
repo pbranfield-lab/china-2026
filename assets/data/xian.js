@@ -26,14 +26,19 @@ const TRIP_XIAN = {
 
   facts: [
     { stat:"8,000", label:"clay soldiers",
+      q:"How many clay soldiers are buried in the Terracotta Army?",
       text:`Plus about <strong>670 horses</strong> and 130 chariots, all buried on purpose so one man wouldn't have to be dead on his own. Pit 1 by itself is around 230 metres long, so longer than two football pitches end to end.` },
     { stat:"1974", label:"the year anyone found it",
+      q:"What year did anyone actually find the Terracotta Army?",
       text:`Some farmers were digging a well for water and hit a clay head. Two thousand years of the maddest thing in China just sat down there, and it got found by people who were <strong>thirsty</strong>.` },
     { stat:"~2,000", label:"actually dug up so far",
+      q:"How many of the warriors have actually been dug up so far?",
       text:`Out of eight thousand. Most of that army is <strong>still under the ground right now</strong>, while you're reading this, and they're going slow on purpose so they don't wreck it.` },
     { stat:"0", label:"identical faces",
+      q:"Out of thousands of warrior faces, how many are identical?",
       text:`Not one repeat, out of thousands. Somebody sat and did thousands of separate human faces by hand, for something that was going straight into a hole in the ground forever.` },
     { stat:"38", label:"years to build the tomb",
+      q:"How many years did the First Emperor's tomb take to build?",
       text:`Reportedly around <strong>700,000 workers</strong>, and Qin Shi Huang started the whole thing when he was about <strong>13</strong>. Thirteen. I'm eleven and I haven't got plans past Friday.` },
     { stat:"minutes", label:"before the paint vanished",
       text:`Every warrior was painted proper bright colours and the paint survived two thousand years sealed underground, then air got to it and it curled off in <strong>minutes</strong>. So what everyone's looking at now is basically the leftovers.` },
@@ -42,8 +47,10 @@ const TRIP_XIAN = {
     { stat:"mercury", label:"in the soil above his tomb",
       text:`Ancient writings said his tomb has <strong>rivers of liquid mercury</strong> running through a little model of his empire, and everyone assumed that was made up until soil tests came back with really high mercury. Nobody has opened it. Fair enough, honestly.` },
     { stat:"13.7 km", label:"of city wall",
+      q:"How long is the wall that goes the whole way round Xi'an's old city?",
       text:`It goes the whole way round the old city and the top is <strong>wide enough to cycle on</strong>. A six-hundred-year-old wall that's now basically a bike lane, which I do think is cool.` },
     { stat:"13", label:"dynasties ruled from here",
+      q:"How many dynasties ruled China from Xi'an?",
       text:`Xi'an used to be called Chang'an and it was the eastern end of the entire Silk Road. In the Tang dynasty it might've been the <strong>biggest city on the planet</strong>, about a million people, which is a lot of people for that long ago.` }
   ],
 
