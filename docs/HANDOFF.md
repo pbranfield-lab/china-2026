@@ -1,10 +1,13 @@
 # Handoff — start here in a fresh session
 
-Last updated 2026-08-08, end of session. Read this, then `CLAUDE.md` for the
+Last updated 2026-08-09, end of session. Read this, then `CLAUDE.md` for the
 architecture detail.
 
-**State: the Great Wall trip is built and validated, NOT yet committed.**
-Nothing has been pushed. See "Where things stand" below.
+**State: everything is done, verified, committed and live.** Working tree clean,
+`master` pushed, site up. There is nothing half-finished to pick up — the next
+session starts fresh. Jump to **"Picking it back up"** at the bottom.
+
+Live at `https://pbranfield-lab.github.io/china-2026/`.
 
 ---
 
@@ -67,42 +70,49 @@ resized, never referenced. Check every batch for tickets/screenshots.
 
 ---
 
-## Where things stand
+## Shipped commits
 
-```
-modified:   CLAUDE.md, assets/data.js, assets/site.js, assets/styles.css,
-            gallery.html, map.html, docs/xian-moments.md
-new:        assets/great-wall-map.svg, docs/great-wall-curation.md,
-            docs/great-wall-moments.md, Photographs/the-great-wall/ (28 files)
-```
+| | |
+|---|---|
+| `4fe8e75` | The Great Wall trip + the China 2026 rebrand (42 files) |
+| `17c3664` | Hardened the jump to the facts section |
+| `1c066b8` | Documented the rename; added a README |
 
-**Not yet done:**
-- Not committed, not pushed.
-- **Not verified in a browser.** Paul's global CLAUDE.md says to ask first
-  because Playwright is token-hungry, and he hadn't answered by end of session.
-  The data validator passes clean, but nothing has actually been *rendered*.
-- The panorama SVG has never been looked at by a human. Pin positions were
-  computed from the SVG coordinates, so they should land on the right features,
-  but that's arithmetic, not eyesight.
+Plus, outside the repo: renamed on GitHub to `china-2026`, and a redirect stub
+published at the old name (see the warning under "Project shape").
 
 ---
 
-## Verification checklist (not yet run)
+## Verification — what was actually checked
 
-`cd C:\Claude\China && python -m http.server 8899`
+All of this was run in a real browser against the local server and passed:
 
-- [ ] `?trip=great-wall` renders on all five pages
-- [ ] No-`?trip=` regression: every page still defaults to the Forbidden City
-- [ ] Pins land on sensible features on the panorama (village, lift line, wall,
-      tower, steps, chute) and don't cover the labels
-- [ ] Video thumb shows a frame + ▶ badge, not a black box
-- [ ] Video plays in the modal; **audio stops when the modal closes**
-- [ ] Opening an image straight after a video doesn't leave the video showing
-- [ ] Deep links: `map.html?trip=great-wall&loc=toboggan`
-- [ ] Mismatched pair degrades: `map.html?trip=xian&loc=toboggan`
-- [ ] No William boxes on Great Wall locations (there are no `william` fields)
-- [ ] Family avatars don't 404 on `?trip=great-wall`
-- [ ] No console errors, no horizontal overflow at 390px
+- `?trip=great-wall` on all five pages; no-`?trip=` still defaults to the
+  Forbidden City (12 pins, its own map, compass back)
+- All six panorama pins land on their features (village, lift line, wall, tower,
+  steps, chute); compass correctly hidden
+- Video thumb shows a frame + ▶ badge; plays in the modal; **on close it's
+  paused AND the `src` is dropped**; opening a still straight after swaps back
+- Gallery: 27 images + 1 video, no broken images, no horizontal overflow
+- Deep link `?trip=great-wall&loc=toboggan` opens the popout; mismatched
+  `?trip=xian&loc=toboggan` degrades without half-opening
+- No William boxes on Great Wall locations; family avatars load on every trip
+- Every internal link carries the right trip, on all pages
+- Old public URL forwards to the new one, preserving path and query
+
+### The one thing not verified
+
+**The jump button's own click** (the gold "Jump to the 10 Mind-Blowing Facts").
+Landing on `story.html#facts` from the nav link *is* verified working. The
+button itself couldn't be tested because **programmatic scrolling is suppressed
+in the browser-automation context** — a plain `window.scrollTo(0, 900)` on a
+3225px page leaves `scrollY` at 0. Worth one manual click.
+
+⚠️ That same suppression, plus the screenshot tool resizing the viewport (which
+resets scroll), made scroll behaviour *look* broken repeatedly during this
+session when it wasn't. **If you're checking anything scroll-related in a future
+session, don't trust screenshots or programmatic scroll — read `window.scrollY`
+after a real page load, or check by hand.**
 
 ---
 
@@ -189,12 +199,28 @@ from `TRIPS` automatically.
 7. **Per-trip pin CSS** is scoped via `:root[data-trip="..."]`. Xi'an and the
    Great Wall both shrink their pins; the Great Wall also hides the compass,
    because a side-on panorama has no north.
-8. `#factsSection` is `hidden` until the current trip actually has facts.
+8. The facts section is `id="facts"` (renamed from `factsSection` so `#facts`
+   works as an anchor) and stays `hidden` until the current trip has facts.
 9. **`map.html` and `gallery.html` each hold their own copy of the modal
    markup.** Change one, change the other.
 10. **`unloadVideo()` drops the `src`, it doesn't just pause.** A paused video
     that keeps its `src` carries on buffering and bleeds audio behind the
     closed overlay.
+11. **Every internal link is rewritten to carry `?trip=`, not just the nav.**
+    This was a real bug: only `.nav-links` was being rewritten, so the in-page
+    "what to look at next" cards dropped the trip and the Great Wall gallery's
+    "See them on the map" opened the Forbidden City map. The rewrite **skips
+    links that already contain `trip=`** — that is what stops the home-page
+    chooser cards all being rewritten to the same trip. Don't remove that check.
+12. **Hash is split off before the query** when rewriting hrefs, or
+    `story.html#facts` becomes `story.html#facts?trip=…` with the param stuck
+    inside the fragment.
+13. **The `#facts` landing jump re-asserts position for ~1.2s** and releases on
+    `wheel`/`keydown`/`pointerdown`/`touchstart`. It's not over-engineering: the
+    section is revealed by script, and the big CJK webfonts land after load and
+    reflow the long intro by hundreds of pixels, so a single jump lands wrong.
+    `pointerdown` is in the list because a scrollbar drag fires none of the
+    others.
 
 ---
 
@@ -269,9 +295,47 @@ the fan/ice-cream error and flagging every person it named by outfit-matching.
 
 ---
 
-## Suggested next steps
+## Picking it back up
 
-1. Verify in a browser (checklist above) — **ask Paul first**.
-2. Get the identity table in `docs/great-wall-moments.md` confirmed or corrected.
-3. Commit and push. Paul has been merging straight to `master` (live).
-4. Chase the Great Wall family moments / William quotes.
+Nothing is half-done. Sanity check first:
+
+```
+cd C:\Claude\China
+git status                 # expect clean
+git remote -v              # MUST say china-2026, not forbidden-city-maisie
+node --check assets/data.js && node --check assets/site.js
+```
+
+**More trips are coming** — that's the expected next job, and it's the path the
+architecture is built for.
+
+### Adding the next trip (the whole job)
+
+1. Drop raw photos into `Photographs/<photoDir>/`, then follow the **photo
+   curation workflow** above. Triage with contact sheets, but **open every
+   keeper at full size before writing a word about it**, propose a rename table,
+   and wait for Paul's OK before touching disk.
+2. Add a `TRIPS` entry: `id`, `name`, `chinese`, `city`, `icon`, `blurb`, `map`,
+   `mapAlt`, `mapCredit`, `photoDir`, `hero`, `intro`.
+   ⚠️ `map` resolves under `assets/`; `hero` is a full page-relative path and
+   should be **landscape** (the hero is a short, wide band).
+3. Draw a plan or panorama into `assets/`. Read pin `x`/`y` off it as
+   percentages. Add `:root[data-trip="<id>"]` pin CSS if the artwork is sparse.
+4. Add `ofTrip("<id>", [...])` groups to `LOCATIONS` and `PHOTOS`, and a
+   `FACTS["<id>"]` entry of ten **verified** facts.
+5. Bump `SITE_VERSION` in `data.js`.
+6. Run the validator, then verify in a browser (**ask first** — Paul's global
+   CLAUDE.md says browser checks are token-hungry).
+
+**No HTML changes are needed.** The home-page chooser, the hero subtitle count
+and the nav all derive from `TRIPS`. If you find yourself editing five HTML
+files to add a trip, stop — you've missed the point of the architecture.
+
+### Smaller outstanding items
+
+1. **Get the identity table in `docs/great-wall-moments.md` confirmed.** Names
+   in those captions are inferred from outfits. This is live and public.
+2. One manual click of the facts jump button (see verification section).
+3. Chase the Great Wall family moments / William quotes — that trip currently
+   has none by design.
+4. Consider visible CC attribution for the three sourced Xi'an photos.
