@@ -1191,6 +1191,98 @@ let openPhoto = function(){};
   document.getElementById("hanzi").hidden = false;
 })();
 
+/* ---------- Spot-It (play page) ----------
+   A zoomed crop of a family photo (never credited/sourced ones, so no
+   in-game attribution is owed) against four thumbnails. The crop is pure
+   CSS background positioning computed per round — no per-photo data.
+   Photos are referenced by id; nothing indexes into PHOTOS positionally.
+   The zoom tightens as a streak grows and resets on a miss. */
+(function(){
+  const card = document.getElementById("spotCard");
+  if(!card || typeof PHOTOS === "undefined") return;
+  const pool = PHOTOS.filter(p => !p.credit && p.type !== "video");
+  if(pool.length < 8) return;
+
+  let streak = 0;
+  let zoom = 340;
+  const best = () => store.get("spotBest", 0);
+  const MILESTONES = {
+    3: "Three in a row. Alright, someone's warmed up.",
+    5: "Five in a row. Okay, this is actually getting impressive.",
+    10: "Ten in a row. That's expert level and I'll allow it."
+  };
+
+  function pick(n){
+    const set = [], used = new Set();
+    let guard = 200;
+    while(set.length < n && guard--){
+      const p = pool[Math.floor(Math.random() * pool.length)];
+      if(!used.has(p.id)){ used.add(p.id); set.push(p); }
+    }
+    return set;
+  }
+
+  function round(){
+    const four = pick(4);
+    const it = four[Math.floor(Math.random() * four.length)];
+    const posX = 15 + Math.random() * 70;
+    const posY = 15 + Math.random() * 70;
+    card.innerHTML = `
+      <div class="spot-top">
+        <span class="quiz-badge">Spot It</span>
+        <span class="spot-streak">Streak <b>${streak}</b> · Best <b>${best()}</b></span>
+      </div>
+      <div class="spot-zoom" role="img"
+           aria-label="A zoomed-in detail from one of the four photos below"
+           style="background-image:url('${photoSrc(it)}');background-size:${zoom}%;background-position:${posX}% ${posY}%"></div>
+      <p class="spot-q">Which photo is that from?</p>
+      <div class="spot-choices">
+        ${four.map(p => `
+          <button type="button" class="spot-choice" data-id="${p.id}">
+            <img src="${photoSrc(p)}" alt="${p.caption}" loading="lazy">
+          </button>`).join("")}
+      </div>
+      <p class="spot-verdict" aria-live="polite"></p>`;
+    const verdict = card.querySelector(".spot-verdict");
+    const buttons = [...card.querySelectorAll(".spot-choice")];
+    buttons.forEach(b => b.addEventListener("click", ()=>{
+      const right = b.dataset.id === it.id;
+      buttons.forEach(x=>{
+        x.disabled = true;
+        if(x.dataset.id === it.id) x.classList.add("correct");
+        else if(x === b) x.classList.add("wrong");
+      });
+      let line;
+      if(right){
+        streak++;
+        zoom = Math.min(500, zoom + 15);
+        SoundKit.fx("right");
+        line = MILESTONES[streak] || "Got it. You've clearly been paying attention.";
+        if(streak > best()){
+          store.set("spotBest", streak);
+          line += " New personal best. Write that down somewhere, this is history.";
+        }
+      } else {
+        streak = 0;
+        zoom = 340;
+        SoundKit.fx("wrong");
+        line = "Nope — it was that one. To be fair, I zoomed in really far.";
+      }
+      verdict.textContent = line;
+      const next = document.createElement("button");
+      next.type = "button";
+      next.className = "quiz-next";
+      next.textContent = "Next one →";
+      next.addEventListener("click", round);
+      verdict.after(next);
+      next.focus();
+    }));
+  }
+
+  round();
+  document.getElementById("spotit").hidden = false;
+})();
+
 /* ---------- Home page: "Did you know?" teaser ----------
    One random fact from any trip, straight under the hero, with a dice button
    to shuffle — the hook that pulls a visitor from the front door into a trip.
