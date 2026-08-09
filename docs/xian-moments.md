@@ -93,16 +93,17 @@ must stay factual and must not mention family.
 - What did you actually eat? Anything Maisie refused outright?
 - Did anyone try on hanfu, or just watch?
 - What was the coloured smoke/light show about?
-- Did you get to the Muslim Quarter itself, or only Ever-Bright City? **If you
-  didn't go, say so** — the sourced photos should then be reframed as "the bit
-  we didn't get to" rather than implying you were there.
 - **William one-liner:** _(none yet)_
 
 ---
 
-## Open question
+## Resolved
 
-The location is currently named "Ever-Bright City & the Muslim Quarter" and
-merges both. If you never actually visited the Muslim Quarter, tell me and I'll
-split it or drop the sourced photos — the site shouldn't imply a visit that
-didn't happen.
+**The Muslim Quarter question is settled (8 Aug 2026).** Paul confirmed the
+family did go — the two night photos are Ever-Bright City, and the Muslim
+Quarter photos are sourced only because nobody photographed it, not because
+nobody went. The merged `xian-by-night` location stands as-is; no split needed
+and the sourced photos stay.
+
+Those two sourced images must still stay factual and must not mention family
+(`muslim-quarter-great-mosque-sign.jpg`, `muslim-quarter-xiyangshi-arch.jpg`).

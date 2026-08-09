@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Maisie's Not-So-Forbidden City</title>
+<title>China 2026 — a family trip, told by Maisie</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
@@ -12,10 +12,11 @@
 <body>
 
 <header class="site-nav">
-  <a href="index.html" class="nav-brand"><span class="seal-mini">紫</span> Maisie's Not-So-Forbidden City</a>
+  <a href="index.html" class="nav-brand"><span class="seal-mini">中</span> China 2026</a>
   <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
   <nav class="nav-links" id="navLinks">
     <a href="story.html">The Story</a>
+    <a href="story.html#facts">🤯 10 Facts</a>
     <a href="family.html">Meet the Expedition</a>
     <a href="map.html" class="nav-cta">🗺️ The Map</a>
     <a href="gallery.html">Photo Gallery</a>
@@ -23,10 +24,13 @@
 </header>
 
 <div class="hero home-hero">
-  <div class="hero-hanzi">紫禁城 · 兵马俑</div>
+  <div class="hero-hanzi">中国 · 二〇二六</div>
   <div class="seal-title"><span>中国</span></div>
-  <h1>Maisie's Not-So-Forbidden City</h1>
-  <p class="sub">Two trips across China — Beijing and Xi'an — told by me, Maisie, aged 11, world's leading expert.</p>
+  <h1>China 2026</h1>
+  <!-- The trip count and city list are rewritten from TRIPS on load, so adding a
+       trip never leaves a stale "two trips" claim here. This markup is the
+       no-JS fallback. -->
+  <p class="sub" id="heroSub">Our trips across China, told by me, Maisie, aged 11, world's leading expert.</p>
   <p class="byline">Mum (Queen of China, allegedly) · Dad (photographer, self-appointed) · William (18, insufferable)</p>
 </div>
 

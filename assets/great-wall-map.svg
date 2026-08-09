@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" width="900" height="620" role="img" aria-label="Hand-drawn side-on panorama of the Great Wall at Mutianyu: the wall running along the ridge, with the village, chairlift and toboggan run below">
+  <title>Mutianyu — side-on panorama</title>
+
+  <defs>
+    <style>
+      .paper    { fill:#efe4cc; }
+      .far      { fill:#ddd0b4; }
+      .mid      { fill:#cfc09c; }
+      .near     { fill:#bda981; }
+      .fore     { fill:#a89066; }
+      .wall     { fill:none; stroke:#8f2a2c; stroke-width:10; stroke-linecap:round; stroke-linejoin:round; }
+      .crenel   { fill:none; stroke:#8f2a2c; stroke-width:7; stroke-dasharray:6 9; stroke-linecap:butt; }
+      .tower    { fill:#e2d3ab; stroke:#8f2a2c; stroke-width:2.5; }
+      .roof     { fill:#8f2a2c; }
+      .cable    { fill:none; stroke:#5c4f3c; stroke-width:1.8; }
+      .chute    { fill:none; stroke:#9c8347; stroke-width:3.5; stroke-dasharray:9 6; stroke-linecap:round; }
+      .hut      { fill:#e2d3ab; stroke:#9c8347; stroke-width:1.5; }
+      .hutroof  { fill:#9c8347; }
+      .tree     { fill:#8a9a6b; }
+      .lbl      { font-family:Georgia,'Times New Roman',serif; font-size:14px; fill:#2a221a; }
+      .lbl-sm   { font-family:Georgia,'Times New Roman',serif; font-size:12px; fill:#5c4f3c; }
+      .lbl-hz   { font-family:Georgia,'Times New Roman',serif; font-size:13px; fill:#8f2a2c; }
+      .head     { font-family:Georgia,'Times New Roman',serif; font-size:18px; fill:#8f2a2c; letter-spacing:2px; }
+    </style>
+  </defs>
+
+  <rect width="900" height="620" class="paper"/>
+  <rect x="8" y="8" width="884" height="604" fill="none" stroke="#9c8347" stroke-width="2"/>
+
+  <text x="450" y="46" class="head" text-anchor="middle">MUTIANYU · 慕田峪长城</text>
+
+  <!-- ============ distant ranges ============ -->
+  <path class="far" d="M 0 205 C 70 170, 130 185, 190 160 C 250 135, 300 165, 370 150
+                       C 440 135, 500 160, 570 140 C 640 120, 700 150, 770 132
+                       C 830 117, 870 140, 900 128 L 900 250 L 0 250 Z"/>
+  <path class="mid" d="M 0 248 C 60 215, 120 232, 185 212 C 250 192, 310 220, 380 205
+                       C 450 190, 510 214, 585 192 C 660 170, 720 200, 795 180
+                       C 845 167, 875 186, 900 178 L 900 300 L 0 300 Z"/>
+
+  <!-- ============ the wall ridge ============ -->
+  <!-- Crest line: the wall and the ridge share this exact path, so the wall
+       reads as sitting on the crest rather than floating over it. -->
+  <path class="near" d="M 0 300 C 80 250, 140 230, 210 255 C 280 280, 330 235, 400 250
+                        C 470 265, 520 215, 600 205 C 680 195, 740 225, 810 200
+                        C 860 185, 890 195, 900 190 L 900 620 L 0 620 Z"/>
+
+  <path class="wall" d="M 0 300 C 80 250, 140 230, 210 255 C 280 280, 330 235, 400 250
+                        C 470 265, 520 215, 600 205 C 680 195, 740 225, 810 200
+                        C 860 185, 890 195, 900 190"/>
+  <path class="crenel" transform="translate(0,-7)"
+        d="M 0 300 C 80 250, 140 230, 210 255 C 280 280, 330 235, 400 250
+           C 470 265, 520 215, 600 205 C 680 195, 740 225, 810 200
+           C 860 185, 890 195, 900 190"/>
+
+  <!-- watchtowers along the crest -->
+  <g>
+    <rect class="tower" x="107" y="246" width="26" height="24"/>
+    <path class="roof" d="M 102 246 L 138 246 L 120 234 Z"/>
+
+    <rect class="tower" x="287" y="225" width="26" height="24"/>
+    <path class="roof" d="M 282 225 L 318 225 L 300 213 Z"/>
+
+    <rect class="tower" x="457" y="231" width="26" height="24"/>
+    <path class="roof" d="M 452 231 L 488 231 L 470 219 Z"/>
+
+    <rect class="tower" x="637" y="180" width="26" height="24"/>
+    <path class="roof" d="M 632 180 L 668 180 L 650 168 Z"/>
+
+    <rect class="tower" x="817" y="174" width="26" height="24"/>
+    <path class="roof" d="M 812 174 L 848 174 L 830 162 Z"/>
+  </g>
+
+  <!-- ============ the chairlift ============ -->
+  <g>
+    <path class="cable" d="M 300 545 L 470 262"/>
+    <path class="cable" d="M 312 549 L 482 266"/>
+    <!-- pylons -->
+    <line x1="352" y1="463" x2="352" y2="487" class="cable"/>
+    <line x1="344" y1="463" x2="362" y2="463" class="cable"/>
+    <line x1="416" y1="357" x2="416" y2="381" class="cable"/>
+    <line x1="408" y1="357" x2="426" y2="357" class="cable"/>
+    <!-- chairs -->
+    <g fill="#5c4f3c">
+      <rect x="326" y="500" width="13" height="4" rx="1"/>
+      <rect x="326" y="504" width="4" height="7" rx="1"/>
+      <rect x="386" y="404" width="13" height="4" rx="1"/>
+      <rect x="386" y="408" width="4" height="7" rx="1"/>
+      <rect x="440" y="315" width="13" height="4" rx="1"/>
+      <rect x="440" y="319" width="4" height="7" rx="1"/>
+    </g>
+    <text x="356" y="424" class="lbl-sm" transform="rotate(-59 356 424)">chairlift up</text>
+  </g>
+
+  <!-- ============ the toboggan run ============ -->
+  <path class="chute" d="M 655 216 C 690 280, 660 330, 700 385 C 738 437, 706 486, 748 528 L 762 556"/>
+  <text x="782" y="452" class="lbl-sm">toboggan</text>
+  <text x="782" y="468" class="lbl-sm">down</text>
+
+  <!-- ============ trees on the lower slopes ============ -->
+  <g class="tree" opacity=".55">
+    <ellipse cx="70"  cy="392" rx="26" ry="19"/>
+    <ellipse cx="128" cy="418" rx="21" ry="15"/>
+    <ellipse cx="196" cy="386" rx="24" ry="17"/>
+    <ellipse cx="252" cy="424" rx="19" ry="14"/>
+    <ellipse cx="470" cy="400" rx="27" ry="19"/>
+    <ellipse cx="536" cy="372" rx="22" ry="16"/>
+    <ellipse cx="596" cy="418" rx="25" ry="18"/>
+    <ellipse cx="668" cy="452" rx="20" ry="15"/>
+    <ellipse cx="828" cy="392" rx="26" ry="19"/>
+    <ellipse cx="878" cy="430" rx="20" ry="15"/>
+    <ellipse cx="392" cy="470" rx="22" ry="16"/>
+    <ellipse cx="608" cy="520" rx="24" ry="17"/>
+    <ellipse cx="856" cy="520" rx="22" ry="16"/>
+  </g>
+
+  <!-- ============ foreground slope + the village ============ -->
+  <path class="fore" d="M 0 500 C 90 470, 180 492, 280 478 C 380 464, 460 496, 560 486
+                        C 660 476, 740 504, 830 490 C 870 484, 890 492, 900 488
+                        L 900 620 L 0 620 Z"/>
+
+  <!-- village / visitor centre -->
+  <g>
+    <rect class="hut" x="176" y="536" width="46" height="30"/>
+    <path class="hutroof" d="M 170 536 L 228 536 L 199 521 Z"/>
+    <rect class="hut" x="232" y="544" width="34" height="22"/>
+    <path class="hutroof" d="M 227 544 L 271 544 L 249 533 Z"/>
+    <rect class="hut" x="140" y="550" width="30" height="18"/>
+    <path class="hutroof" d="M 135 550 L 175 550 L 155 540 Z"/>
+    <text x="204" y="588" class="lbl" text-anchor="middle">Visitor centre &amp; village</text>
+  </g>
+
+  <!-- path from the village to the lift station -->
+  <path class="chute" stroke="#5c4f3c" stroke-width="2" stroke-dasharray="5 5" d="M 240 556 C 272 552, 288 550, 302 546"/>
+
+  <text x="450" y="606" class="lbl-sm" text-anchor="middle">Not to scale — drawn for this page. The restored stretch runs about 5.4 km with 23 watchtowers.</text>
+</svg>

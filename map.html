@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <!--
-  How to add real photos: drop image files into Photographs/forbidden-city/, then add an
-  entry to the PHOTOS array in assets/data.js (id, location, file, caption, detail). Family
-  portraits (mum.jpg, dad.jpg, william.jpg, maisie.jpg in Photographs/forbidden-city/) are
-  picked up automatically
-  on family.html. Map background: assets/forbidden-city-map.png — labeled plan by Tommy
-  Chen (Wikimedia Commons, CC BY-SA 3.0 / GFDL), pins and commentary are extra.
+  This page is trip-aware via ?trip=<id>; with no param it falls back to TRIPS[0].
+  The map image, alt text and credit below are only the no-JS fallback — site.js
+  overwrites all three from the current trip. See CLAUDE.md for how to add a
+  photo, a location or a whole trip; it's all data in assets/data.js.
 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>The Map — Maisie's Not-So-Forbidden City</title>
+<title>The Map — China 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
@@ -20,10 +18,11 @@
 <body>
 
 <header class="site-nav">
-  <a href="index.html" class="nav-brand"><span class="seal-mini">紫</span> Maisie's Not-So-Forbidden City</a>
+  <a href="index.html" class="nav-brand"><span class="seal-mini">中</span> China 2026</a>
   <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
   <nav class="nav-links" id="navLinks">
     <a href="story.html">The Story</a>
+    <a href="story.html#facts">🤯 10 Facts</a>
     <a href="family.html">Meet the Expedition</a>
     <a href="map.html" class="nav-cta">🗺️ The Map</a>
     <a href="gallery.html">Photo Gallery</a>
@@ -71,6 +70,7 @@
   <div class="modal">
     <button class="modal-close" id="modalClose">✕</button>
     <img id="modalImg" src="" alt="" style="display:none" />
+    <video id="modalVideo" controls playsinline preload="metadata" style="display:none"></video>
     <div class="modal-body">
       <div class="modal-location" id="modalLocation"></div>
       <h3 id="modalTitle"></h3>

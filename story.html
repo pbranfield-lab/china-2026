@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>The Story So Far — Maisie's Not-So-Forbidden City</title>
+<title>The Story So Far — China 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
@@ -12,10 +12,11 @@
 <body>
 
 <header class="site-nav">
-  <a href="index.html" class="nav-brand"><span class="seal-mini">紫</span> Maisie's Not-So-Forbidden City</a>
+  <a href="index.html" class="nav-brand"><span class="seal-mini">中</span> China 2026</a>
   <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
   <nav class="nav-links" id="navLinks">
     <a href="story.html">The Story</a>
+    <a href="story.html#facts">🤯 10 Facts</a>
     <a href="family.html">Meet the Expedition</a>
     <a href="map.html" class="nav-cta">🗺️ The Map</a>
     <a href="gallery.html">Photo Gallery</a>
@@ -26,6 +27,8 @@
   <div class="seal-title"><span id="heroSeal">紫禁城</span></div>
   <h1>The Story So Far</h1>
   <p class="sub">History bit. Don't worry, I made it interesting.</p>
+  <!-- Unhidden by site.js only when the current trip actually has facts. -->
+  <a class="hero-jump" id="factsJump" href="#facts" hidden>🤯 Jump to the 10 Mind-Blowing Facts ↓</a>
 </div>
 
 <main>
@@ -38,7 +41,7 @@
   </section>
 
   <!-- Ten facts for the current trip, rendered from FACTS in data.js. -->
-  <section class="wide" id="factsSection" hidden>
+  <section class="wide" id="facts" hidden>
     <div class="section-head reveal">
       <h2 class="section-title">10 Mind-Blowing Facts</h2>
       <p class="section-sub" id="factsSub">Things I genuinely did not believe until I checked.</p>

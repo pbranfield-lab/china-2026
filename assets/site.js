@@ -24,6 +24,19 @@ function photoSrc(photo){
   return trip ? `Photographs/${trip.photoDir}/${photo.file}` : `Photographs/${photo.file}`;
 }
 
+/* Thumbnail markup for one PHOTOS entry, shared by the map popout and the
+   gallery. Video entries are flagged with an explicit type:"video" field rather
+   than sniffing the extension. The #t=0.5 fragment makes the browser pull a
+   frame half a second in as the still, so a video thumb doesn't render black
+   without needing a separate poster JPG. */
+function thumbMedia(photo){
+  if(photo.type === "video"){
+    return `<video src="${photoSrc(photo)}#t=0.5" muted playsinline preload="metadata"></video>
+            <span class="play-badge" aria-hidden="true">▶</span>`;
+  }
+  return `<img src="${photoSrc(photo)}" alt="${photo.caption}" loading="lazy" />`;
+}
+
 /* ---------- Nav: mobile toggle + current-page highlight ---------- */
 (function(){
   const toggle = document.getElementById("navToggle");
@@ -34,9 +47,35 @@ function photoSrc(photo){
   }
   const here = location.pathname.split("/").pop() || "index.html";
   document.querySelectorAll(".nav-links a[href]").forEach(a=>{
-    const hrefPath = a.getAttribute("href").split("?")[0] || "index.html";
-    if(hrefPath === here) a.classList.add("current");
-    if(CURRENT_TRIP) a.setAttribute("href", hrefPath + "?trip=" + CURRENT_TRIP.id);
+    const [pathAndQuery, hash] = a.getAttribute("href").split("#");
+    const hrefPath = pathAndQuery.split("?")[0] || "index.html";
+    // Anchor links point within a page, so they'd double-highlight alongside
+    // the page's own nav entry. Only the plain page link gets "current".
+    if(hrefPath === here && !hash) a.classList.add("current");
+  });
+})();
+
+/* ---------- Carry the current trip across every internal link ----------
+   It isn't just the header nav that needs the param. Each page ends with
+   "what to look at next" cards pointing at bare page names, and without the
+   trip on them the reader gets silently dumped back onto TRIPS[0] — the Great
+   Wall gallery's "See them on the map" would open the Forbidden City map.
+
+   Links that already name a trip are left alone, which is what protects the
+   home-page chooser cards from being rewritten to all point at the same trip.
+   Hash is split off BEFORE the query, or "story.html#facts" would be rebuilt
+   as "story.html#facts?trip=..." with the param stuck inside the fragment. */
+(function(){
+  if(!CURRENT_TRIP) return;
+  const PAGES = /^(index|story|family|map|gallery)\.html$/;
+  document.querySelectorAll("a[href]").forEach(a=>{
+    const raw = a.getAttribute("href");
+    if(/^([a-z]+:|\/\/|#)/i.test(raw)) return;          // external, protocol-relative, in-page
+    const [pathAndQuery, hash] = raw.split("#");
+    const [path, query] = pathAndQuery.split("?");
+    if(!PAGES.test(path)) return;
+    if(query && /(^|&)trip=/.test(query)) return;       // already trip-specific
+    a.setAttribute("href", path + "?trip=" + CURRENT_TRIP.id + (hash ? "#" + hash : ""));
   });
 })();
 
@@ -104,7 +143,48 @@ if(CURRENT_TRIP) document.documentElement.setAttribute("data-trip", CURRENT_TRIP
 
   const sub = document.getElementById("factsSub");
   if(sub) sub.textContent = `Ten things about ${CURRENT_TRIP.name} I genuinely did not believe until I checked.`;
-  document.getElementById("factsSection").hidden = false;
+
+  const section = document.getElementById("facts");
+  section.hidden = false;
+
+  /* The section starts hidden, so the browser can't honour a #facts fragment on
+     first paint — there's nothing to scroll to yet. Redo the jump by hand once
+     it's revealed, then again after load: images and the reveal animations
+     change the page height after first paint, and a jump made before that
+     settles lands several hundred pixels off.
+
+     `behavior:"auto"` is deliberate: the stylesheet sets scroll-behavior:smooth,
+     and an animated jump started during load gets cancelled partway, leaving you
+     at the top of the page. An instant jump can't be interrupted. scrollIntoView
+     (rather than scrollTo) is used so #facts's scroll-margin-top keeps the
+     heading clear of the sticky nav. */
+  if(location.hash === "#facts"){
+    /* Landing here from another page is surprisingly awkward to get right: the
+       section is revealed by script (so there's nothing for the browser's own
+       fragment handling to find), and the big CJK webfonts land after load and
+       reflow the long intro above it by several hundred pixels. A single jump
+       at any one moment therefore lands short, long, or not at all depending on
+       what has finished loading.
+
+       So rather than guess the right moment, re-assert the position every frame
+       for a short window and stop the instant the reader takes over. */
+    const jumpToFacts = ()=> section.scrollIntoView({ block:"start", behavior:"auto" });
+    let settled = false;
+    const release = ()=>{ settled = true; };
+    ["wheel","touchstart","keydown"].forEach(e =>
+      window.addEventListener(e, release, { once:true, passive:true }));
+
+    const until = Date.now() + 1200;
+    (function pin(){
+      if(settled) return;
+      jumpToFacts();
+      if(Date.now() < until) requestAnimationFrame(pin);
+    })();
+  }
+
+  /* The jump link lives above the fold; hide it if there's nothing to jump to. */
+  const jump = document.getElementById("factsJump");
+  if(jump) jump.hidden = false;
 })();
 
 /* ---------- Family grid (family page) ---------- */
@@ -141,14 +221,34 @@ let openPhoto = function(){};
   const modalOverlay = document.getElementById("modalOverlay");
   if(!modalOverlay) return;
   const modalImg = document.getElementById("modalImg");
+  const modalVideo = document.getElementById("modalVideo");
   const modalTitle = document.getElementById("modalTitle");
   const modalDetail = document.getElementById("modalDetail");
   const modalLocation = document.getElementById("modalLocation");
 
+  /* Drop the video's source entirely rather than just hiding it — a paused
+     <video> that still holds a src keeps buffering, and leaving one loaded
+     behind a closed overlay is how audio ends up bleeding into the next photo. */
+  function unloadVideo(){
+    if(!modalVideo) return;
+    modalVideo.pause();
+    modalVideo.removeAttribute("src");
+    modalVideo.load();
+    modalVideo.style.display = "none";
+  }
+
   openPhoto = function(photo){
-    modalImg.src = photoSrc(photo);
-    modalImg.alt = photo.caption;
-    modalImg.style.display = "block";
+    if(photo.type === "video" && modalVideo){
+      modalImg.style.display = "none";
+      modalImg.removeAttribute("src");
+      modalVideo.src = photoSrc(photo);
+      modalVideo.style.display = "block";
+    } else {
+      unloadVideo();
+      modalImg.src = photoSrc(photo);
+      modalImg.alt = photo.caption;
+      modalImg.style.display = "block";
+    }
     modalTitle.textContent = photo.caption;
     modalDetail.innerHTML = photo.detail || "";
     if(modalLocation){
@@ -157,7 +257,10 @@ let openPhoto = function(){};
     }
     modalOverlay.classList.add("open");
   };
-  function closePhotoModal(){ modalOverlay.classList.remove("open"); }
+  function closePhotoModal(){
+    modalOverlay.classList.remove("open");
+    unloadVideo();
+  }
   document.getElementById("modalClose").addEventListener("click", closePhotoModal);
   modalOverlay.addEventListener("click", e=>{ if(e.target===modalOverlay) closePhotoModal(); });
   document.addEventListener("keydown", e=>{ if(e.key==="Escape") closePhotoModal(); });
@@ -173,6 +276,48 @@ let openPhoto = function(){};
   }
   const legend = document.getElementById("mapLegend");
   if(legend) legend.textContent = CURRENT_TRIP.mapCredit;
+})();
+
+/* ---------- Home page: rotate the hero image per visit ----------
+   No trip is the site's theme, so the front page shouldn't permanently lead
+   with one trip's photograph. Picks a random trip's `hero` on each load. The
+   stylesheet keeps a hard-coded background as the no-JS fallback; note its URL
+   is relative to assets/, whereas `hero` paths here are relative to the page. */
+(function(){
+  const hero = document.querySelector(".hero.home-hero");
+  if(!hero || typeof TRIPS === "undefined") return;
+  const candidates = TRIPS.filter(t => t.hero);
+  if(!candidates.length) return;
+  const pick = candidates[Math.floor(Math.random() * candidates.length)];
+  hero.style.backgroundImage = `url('${pick.hero}')`;
+  hero.dataset.heroTrip = pick.id;
+})();
+
+/* ---------- Home page: the hero subtitle, counted from TRIPS ----------
+   The site covers a growing number of trips, so the count and the city list are
+   derived rather than written into the markup — otherwise every new trip leaves
+   a stale "two trips" on the front page. Cities are de-duplicated because more
+   than one trip can share a city (the Forbidden City and the Great Wall are
+   both Beijing). */
+(function(){
+  const sub = document.getElementById("heroSub");
+  if(!sub || typeof TRIPS === "undefined" || !TRIPS.length) return;
+
+  const WORDS = ["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten"];
+  const count = WORDS[TRIPS.length] || String(TRIPS.length);
+
+  const cities = [...new Set(TRIPS.map(t => t.city).filter(Boolean))];
+  const cityList = cities.length > 1
+    ? cities.slice(0, -1).join(", ") + " and " + cities[cities.length - 1]
+    : cities[0] || "";
+
+  /* Phrased as "N trips across <cities>" rather than "N trips across China —
+     <cities>", because trips and cities don't match one-to-one: three trips
+     across two cities reads like an error when both numbers are on show. */
+  const trips = TRIPS.length === 1 ? "trip" : "trips";
+  sub.textContent = cityList
+    ? `${count} ${trips} across ${cityList}, told by me, Maisie, aged 11, world's leading expert.`
+    : `${count} ${trips} across China, told by me, Maisie, aged 11, world's leading expert.`;
 })();
 
 /* ---------- Home page: a card per trip ---------- */
@@ -248,7 +393,7 @@ let openPhoto = function(){};
     const photosHtml = photos.length
       ? photos.map(p=>`
           <button class="photo-thumb" data-photo-index="${PHOTOS.indexOf(p)}">
-            <img src="${photoSrc(p)}" alt="${p.caption}" loading="lazy" />
+            ${thumbMedia(p)}
             <div class="cap">${p.caption}</div>
           </button>
         `).join("")
@@ -290,7 +435,7 @@ let openPhoto = function(){};
       const loc = TRIP_LOCATIONS.find(l=>l.id===p.location);
       return `
         <button class="photo-thumb gallery-item" data-photo-id="${p.id}">
-          <img src="${photoSrc(p)}" alt="${p.caption}" loading="lazy" />
+          ${thumbMedia(p)}
           <div class="cap">${loc ? loc.num + '. ' + loc.name : ''}</div>
         </button>
       `;
