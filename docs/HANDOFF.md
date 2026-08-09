@@ -133,8 +133,31 @@ Also `node --check assets/data.js assets/site.js`.
 ## Project shape
 
 Static, no-build, multi-page HTML/CSS/JS. No tests, no bundler. Verify by
-loading pages in a browser. Live on `master` at
-`https://github.com/pbranfield-lab/forbidden-city-maisie`.
+loading pages in a browser. Deployed from `master` via GitHub Pages.
+
+- **Site:** `https://pbranfield-lab.github.io/china-2026/`
+- **Repo:** `https://github.com/pbranfield-lab/china-2026`
+
+### ⚠️ The old name still exists as a separate repo
+
+The project was renamed from `forbidden-city-maisie` on 2026-08-09. Renaming
+redirects the old `github.com` URL and git remotes automatically, but **not the
+old GitHub Pages URL**, which would just 404. So a second public repo now sits
+at `pbranfield-lab/forbidden-city-maisie` whose only content is a redirect page,
+served as both `index.html` and `404.html` — the 404 is what catches deep paths,
+since Pages serves it for anything that isn't a real file. It preserves
+sub-path, query and hash, so old deep links land on the matching page.
+
+Two consequences:
+
+1. **`github.com/pbranfield-lab/forbidden-city-maisie` no longer redirects** to
+   this repo — a repo existing at that name overrides GitHub's automatic
+   redirect. It shows the stub instead. Deleting the stub restores the redirect
+   and breaks the old site URL; that's the trade-off, and it was a deliberate
+   choice to favour the public URL.
+2. **Never push this project to the old URL.** It would go to the stub. The
+   local remote was repointed at rename time — check `git remote -v` says
+   `china-2026` before pushing from a fresh clone or another machine.
 
 ### The TRIPS architecture
 
