@@ -8,7 +8,8 @@ rules below are not optional and are repeated in `CLAUDE.md` for that reason.
 
 - **New photo** — drop it into `Photographs/<photoDir>/`, add an entry to that
   trip's `photos` array in `assets/data/<trip>.js`, with a `location` matching a
-  `LOCATIONS.id` on the same trip. Web-size it first: existing photos are ~1400px
+  `LOCATIONS.id` on the same trip. Photo id prefixes so far: `p*` Forbidden City,
+  `x*` Xi'an, `g*` Great Wall. Web-size it first: existing photos are ~1400px
   on the long edge and 60–250 KB, not raw camera dumps.
 - **New video** — same, but re-encode to **H.264** first (phone video is usually
   HEVC, which most browsers won't play) and add `type:"video"`. No LFS in this
@@ -26,6 +27,23 @@ rules below are not optional and are repeated in `CLAUDE.md` for that reason.
 - **Family portraits** — place in `Photographs/forbidden-city/` and reference via
   `file` in `FAMILY`; picked up automatically on every trip. ⚠️ `file` already
   includes the trip folder — never prepend another one.
+
+## Curating a raw photo batch
+
+1. **Triage with contact sheets** — far cheaper than opening 82 images one by
+   one: scale to thumbs, then
+   `ffmpeg -start_number N -i "%03d.jpg" -vf "tile=4x3:margin=8:padding=6"`.
+   Use `scale=W:H:force_original_aspect_ratio=decrease` + `pad` — plain
+   `scale=W:-2` then `pad` fails on portrait shots. `drawtext` segfaults on this
+   machine (no fontconfig), so number tiles by grid position instead.
+2. **Open every finalist properly with Read before writing about it.** Contact
+   sheets are good enough to group and drop, not to caption — the "ice cream"
+   that was actually a fan was only legible at full size.
+3. **Propose a rename + grouping table and wait for explicit confirmation**
+   before touching disk.
+4. **Resize:** `-vf "scale='if(gt(iw,ih),1400,-2)':'if(gt(iw,ih),-2,1400)'" -q:v 4`
+   (`-q:v 6` for anything still over ~250 KB).
+5. **Deleting raws needs an explicit OK each time.**
 
 ## Source material, not wired into the site
 
