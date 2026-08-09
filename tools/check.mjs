@@ -180,6 +180,27 @@ check("JOURNEY route resolves, chains, and matches the map markers", () => {
   return null;
 });
 
+check("THEN_NOW pairs resolve: trips, files, credits and now-photos", () => {
+  const { TRIPS, PHOTOS, THEN_NOW } = loadData();
+  const ids = new Set(TRIPS.map(t => t.id));
+  for (const p of THEN_NOW.pairs || []){
+    if (!ids.has(p.trip)) return `pair ${p.id} names unknown trip ${p.trip}`;
+    for (const k of ["id","title","aspect","blurb"]) if (!p[k]) return `pair ${p.id || "?"} is missing ${k}`;
+    if (!p.then || !p.then.file || !p.then.year) return `pair ${p.id} has an incomplete then half`;
+    const c = p.then.credit || {};
+    for (const k of ["author","license","licenseUrl","sourceUrl"])
+      if (!c[k]) return `pair ${p.id} then-credit is missing ${k}`;
+    if (!existsSync(join(ROOT, "Photographs", p.then.file)))
+      return `Photographs/${p.then.file} does not exist on disk`;
+    if (!PHOTOS.some(ph => ph.id === p.now)) return `pair ${p.id} now-photo id ${p.now} not found`;
+  }
+  const s = read("story.html");
+  const missing = ["thenNow","thenNowSub","thenNowGrid"].filter(id => !s.includes(`id="${id}"`));
+  if (missing.length) return `story.html missing ids: ${missing.join(", ")}`;
+  if (!/<section class="wide" id="thenNow" hidden>/.test(s)) return "#thenNow is no longer hidden in the markup";
+  return null;
+});
+
 check("TIMELINE eras chain and events land inside them", () => {
   const { TRIPS, TIMELINE } = loadData();
   const ids = new Set(TRIPS.map(t => t.id));

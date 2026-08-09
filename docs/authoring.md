@@ -101,6 +101,23 @@ The three Xi'an `credit` objects still have no source URL recorded (the
 originals' URLs were lost), so their TASL attribution remains incomplete; the
 Xitang and Shanghai ones are recorded above.
 
+## Historic photos (Then & Now)
+
+The `Photographs/historic/` images back the story pages' Then & Now sliders
+(`THEN_NOW` in `assets/data/extras.js`). All are public domain, downscaled and
+recompressed; each carries a full `credit` object so attribution renders under
+the slider (PD gets credited anyway, by the same rule as everything else).
+
+| File | Original title | Author | Date | Source |
+|---|---|---|---|---|
+| `historic/meridian-gate-1899.jpg` | Meridian Gate Beijing Pre 1900 | Unknown photographer | 1899 | [Commons](https://commons.wikimedia.org/wiki/File:Meridian_Gate_Beijing_Pre_1900.jpg) |
+| `historic/great-wall-1907.jpg` | Greatwall large | Herbert Ponting | 1907 | [Commons](https://commons.wikimedia.org/wiki/File:Greatwall_large.jpg) |
+| `historic/bund-1930.jpg` | 1930 Shanghai | US Army Signal Corps | 1930 | [Commons](https://commons.wikimedia.org/wiki/File:1930_Shanghai.jpg) |
+
+⚠️ The Ponting photograph is **not Mutianyu** — it's a different section of
+the wall, and the blurb says so. A new pair must describe only what both
+photos actually show; open them first.
+
 ## Sourced audio
 
 The per-trip ambient loops (`assets/audio/<trip-id>.mp3`, wired up in `AUDIO`

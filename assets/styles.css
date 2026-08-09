@@ -1287,6 +1287,69 @@ footer{position:relative;text-align:center;color:var(--ink-soft);padding:3rem 1.
   font-family:var(--font-body);font-weight:700;font-size:.85rem;color:var(--ink);
 }
 
+/* ---------- Then & Now (story page) ----------
+   The invisible range input covers the whole stage: clicking or dragging
+   anywhere moves the divider, and it's what keyboard users focus. */
+.thennow-grid{display:grid;gap:2.2rem;max-width:760px;margin:0 auto;}
+.thennow-frame{margin:0;}
+.tn-stage{
+  position:relative;
+  overflow:hidden;
+  border:2.5px solid var(--ink);
+  border-radius:var(--radius-panel);
+  box-shadow:var(--pop);
+  background:var(--ink);
+}
+.tn-stage img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+}
+.tn-nowclip{position:absolute;inset:0;}
+.tn-handle{
+  position:absolute;top:0;bottom:0;left:50%;
+  width:0;
+  border-left:3px solid var(--cream);
+  pointer-events:none;
+}
+.tn-handle span{
+  position:absolute;top:50%;left:0;
+  transform:translate(-50%,-50%);
+  width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--cream);
+  border:2.5px solid var(--ink);
+  border-radius:50%;
+  font-size:.95rem;color:var(--ink);
+  box-shadow:2px 3px 0 rgba(48,34,23,.5);
+}
+.tn-tab{
+  position:absolute;top:.6rem;
+  padding:.22rem .6rem;
+  background:var(--ink);color:#FFF6EC;
+  font-family:var(--font-ui);font-weight:800;font-size:.62rem;letter-spacing:.08em;
+  border-radius:var(--radius-pill);
+  pointer-events:none;
+}
+.tn-tab-then{left:.6rem;}
+.tn-tab-now{right:.6rem;}
+.tn-range{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  margin:0;opacity:0;
+  cursor:ew-resize;
+}
+.tn-stage:focus-within{outline:3px solid var(--blue);outline-offset:3px;}
+.tn-blurb{
+  margin-top:.9rem;
+  font-family:var(--font-body);font-weight:600;font-size:.95rem;color:var(--ink);
+}
+.tn-credit{
+  margin-top:.35rem;
+  font-family:var(--font-ui);font-size:.72rem;color:var(--ink-soft);
+}
+.tn-credit a{color:var(--blue);}
+
 /* ---------- Sound toggle ----------
    Injected by site.js on every page, bottom-right (the version stamp owns
    bottom-left). Same pill language as the other labelled controls, kept

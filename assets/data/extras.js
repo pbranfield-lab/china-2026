@@ -107,7 +107,38 @@ const HANZI = [];
 
 const COMPARATORS = {};
 
-const THEN_NOW = [];
+/* Then & Now slider pairs. `then.file` is under Photographs/ and carries a
+   full credit object — public domain still gets visible attribution, and
+   the TASL details live in docs/authoring.md. `now` is a PHOTOS id (never
+   an index). The Ponting pair is deliberately captioned as a different
+   section of wall — the honest comparison is bare-vs-forested mountains,
+   not "same spot". */
+const THEN_NOW = {
+  sub:"Drag the handle thingymajig. Same view, different century.",
+  pairs: [
+    { trip:"forbidden-city", id:"meridian-then", title:"The Meridian Gate", aspect:"2 / 1",
+      then:{ file:"historic/meridian-gate-1899.jpg", year:"1899",
+        credit:{ author:"Unknown photographer", license:"Public domain",
+          licenseUrl:"https://commons.wikimedia.org/wiki/Template:PD-old",
+          sourceUrl:"https://commons.wikimedia.org/wiki/File:Meridian_Gate_Beijing_Pre_1900.jpg" } },
+      now:"p1",
+      blurb:"In 1899 the Meridian Gate had rough grass, a dirt road and like three rickshaws in front of it. Now the queue alone has more people in it than that entire photo." },
+    { trip:"great-wall", id:"wall-then", title:"The Great Wall", aspect:"4 / 5",
+      then:{ file:"historic/great-wall-1907.jpg", year:"1907",
+        credit:{ author:"Herbert Ponting", license:"Public domain",
+          licenseUrl:"https://commons.wikimedia.org/wiki/Template:PD-old",
+          sourceUrl:"https://commons.wikimedia.org/wiki/File:Greatwall_large.jpg" } },
+      now:"g11",
+      blurb:"Different bit of the wall, this one — 1907, mountains completely bare, the tower in ruins, a few people in long robes standing about. Slide across to Mutianyu now and the wall's rebuilt and the same kind of mountains have been totally swallowed by forest." },
+    { trip:"shanghai", id:"bund-then", title:"The Bund", aspect:"16 / 9",
+      then:{ file:"historic/bund-1930.jpg", year:"1930",
+        credit:{ author:"US Army Signal Corps", license:"Public domain",
+          licenseUrl:"https://commons.wikimedia.org/wiki/Template:PD-USGov",
+          sourceUrl:"https://commons.wikimedia.org/wiki/File:1930_Shanghai.jpg" } },
+      now:"s3",
+      blurb:"Same grand Bund buildings, but in 1930 the street was full of trams, old cars and rickshaws, the river was packed with wooden boats, and there was a big winged statue that isn't there any more. Now the whole lot gets floodlit gold at night." }
+  ]
+};
 
 /* Per-trip ambient loops, all CC0 from Freesound, trimmed to 60 s mono at
    48 kbps. CC0 needs no attribution but gets it anyway — the credits render

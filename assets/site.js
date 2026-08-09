@@ -1030,6 +1030,62 @@ let openPhoto = function(){};
   document.getElementById("timeline").hidden = false;
 })();
 
+/* ---------- Then & Now (story page) ----------
+   A historic photograph and one of the family's, stacked in one frame;
+   an invisible full-frame range input drives the divider, which keeps the
+   whole thing keyboard- and touch-accessible for free. The "now" image
+   sits on top clipped from the left, so slider right = more now.
+   Attribution renders under every frame — public domain still gets
+   credited, and a credited "now" photo keeps its credit too. */
+(function(){
+  const grid = document.getElementById("thenNowGrid");
+  if(!grid || typeof THEN_NOW === "undefined" || !CURRENT_TRIP) return;
+  const pairs = (THEN_NOW.pairs || []).filter(p => p.trip === CURRENT_TRIP.id);
+  if(!pairs.length) return;
+
+  const sub = document.getElementById("thenNowSub");
+  if(sub && THEN_NOW.sub) sub.textContent = THEN_NOW.sub;
+
+  const creditLine = (label, c, extra) => c
+    ? `${label}: <a href="${c.sourceUrl || c.licenseUrl}">${c.author}</a>${extra ? ", " + extra : ""} (${c.license})`
+    : `${label}: one of ours`;
+
+  pairs.forEach(pair=>{
+    const nowPhoto = (typeof PHOTOS !== "undefined") && PHOTOS.find(p => p.id === pair.now);
+    if(!nowPhoto) return;
+    const fig = document.createElement("figure");
+    fig.className = "thennow-frame";
+    fig.innerHTML = `
+      <div class="tn-stage" style="aspect-ratio:${pair.aspect}">
+        <img class="tn-then" src="Photographs/${pair.then.file}" alt="${pair.title} in ${pair.then.year}">
+        <div class="tn-nowclip"><img class="tn-now" src="${photoSrc(nowPhoto)}" alt="${nowPhoto.caption}"></div>
+        <div class="tn-handle" aria-hidden="true"><span>⇄</span></div>
+        <span class="tn-tab tn-tab-then" aria-hidden="true">THEN · ${pair.then.year}</span>
+        <span class="tn-tab tn-tab-now" aria-hidden="true">NOW · 2026</span>
+        <input type="range" class="tn-range" min="0" max="100" value="50"
+               aria-label="Compare ${pair.title}: slide right for today, left for ${pair.then.year}">
+      </div>
+      <figcaption>
+        <p class="tn-blurb">${pair.blurb}</p>
+        <p class="tn-credit">${creditLine("Then", pair.then.credit, pair.then.year)} ·
+          ${creditLine("Now", nowPhoto.credit)}</p>
+      </figcaption>`;
+    const range = fig.querySelector(".tn-range");
+    const clip = fig.querySelector(".tn-nowclip");
+    const handle = fig.querySelector(".tn-handle");
+    const set = () => {
+      const p = Number(range.value);
+      clip.style.clipPath = `inset(0 0 0 ${p}%)`;
+      handle.style.left = p + "%";
+    };
+    range.addEventListener("input", set);
+    set();
+    grid.appendChild(fig);
+  });
+
+  if(grid.children.length) document.getElementById("thenNow").hidden = false;
+})();
+
 /* ---------- Home page: "Did you know?" teaser ----------
    One random fact from any trip, straight under the hero, with a dice button
    to shuffle — the hook that pulls a visitor from the front door into a trip.
