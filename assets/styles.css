@@ -1,52 +1,93 @@
 :root{
-  --lacquer:#161110;
-  --lacquer-2:#241a17;
-  --vermillion:#8f2a2c;
-  --vermillion-dark:#6e1119;
-  --vermillion-bright:#a8393a;
-  --gold:#c9a24a;
-  --gold-bright:#e8c876;
-  --gold-dim:#9c8347;
-  --seal-ink:#b2431f;
-  --seal-ink-dark:#7a2c14;
-  --paper:#efe4cc;
-  --paper-dark:#e2d3ab;
-  --ink:#2a221a;
-  --ink-soft:#5c4f3c;
-  --jade:#4f7a63;
-  --font-display:'Noto Serif SC', Georgia, 'Times New Roman', serif;
-  --font-body:'Noto Sans SC', "Segoe UI", system-ui, -apple-system, sans-serif;
-  --radius-panel:3px;
-  --shadow-lift: 0 4px 12px rgba(20,10,8,0.28);
-  --shadow-soft: 0 10px 26px rgba(20,10,8,0.32);
-  --shadow-deep: 0 24px 60px rgba(20,10,8,0.55);
+  /* ---- Cloisonné (景泰蓝) enamel palette ----
+     Jewel enamel fields divided by thin gold wire. The teal trio is the
+     plate gradient; --wire is the hairline that outlines every surface. */
+  --enamel-deep:#062430;
+  --enamel-mid:#0A3644;
+  --enamel-teal:#1D7C86;
+  --enamel-teal-2:#106072;
+  --enamel-teal-3:#0A4757;
+  --wire:#D9B65A;
+  --gold:#F5C542;
+  --gold-2:#C9922E;
+  --gold-deep:#8A6418;
+  --coral:#F2604C;
+  --coral-2:#B7332A;
+  --mint:#8FE3DE;
+  --cream:#F5EDD8;
+  --jade:#2E8B72;
+  --jade-2:#17604F;
+
+  /* Light surfaces, kept for the long-form reading panel only. */
+  --paper:#F7EFDA;
+  --paper-dark:#EBDFC0;
+  --ink:#20323A;
+  --ink-soft:#4C6570;
+
+  /* ---- Legacy aliases -------------------------------------------------
+     Rules further down still name the lacquer-era tokens. Remapping them
+     here re-colours the whole site in one step; the component tasks replace
+     the usages and the final CSS task deletes this block. */
+  --lacquer:#062430;
+  --lacquer-2:#0A3644;
+  --vermillion:#F2604C;
+  --vermillion-dark:#B7332A;
+  --vermillion-bright:#FF7A63;
+  --gold-bright:#FFD86B;
+  --gold-dim:#D9B65A;
+  --seal-ink:#F2604C;
+  --seal-ink-dark:#B7332A;
+
+  --font-display:'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-ui:'Outfit', "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-body:'Nunito', "Segoe UI", system-ui, -apple-system, sans-serif;
+  /* The three new families carry no Chinese glyphs, so every hanzi element
+     names Noto explicitly rather than falling through to a system default. */
+  --font-hanzi:'Noto Serif SC', Georgia, serif;
+  --font-hanzi-sans:'Noto Sans SC', system-ui, sans-serif;
+
+  --radius-panel:14px;
+  --radius-pill:99px;
+  --shadow-lift: 0 6px 16px rgba(3,18,24,0.45);
+  --shadow-soft: 0 12px 26px rgba(3,18,24,0.45);
+  --shadow-deep: 0 34px 70px rgba(3,18,24,0.65);
 
   /* Ornament primitives — self-contained inline SVG so nothing needs
-     duplicating across the five hand-maintained HTML files. */
+     duplicating across the five hand-maintained HTML files.
+     Note every "#" is encoded %23; a literal one truncates the data URI. */
   --texture-paper:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
   --texture-lacquer:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
   /* Key-fret (回纹) molding, drawn once, repeated as a border strip.
      Drawn 1:1 at its rendered size so the meander never squashes. */
-  --fret:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Cpath d='M0 5 H5 V2 H15 V8 H20' fill='none' stroke='%239c8347' stroke-width='1.5'/%3E%3C/svg%3E");
-  --fret-bright:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Cpath d='M0 5 H5 V2 H15 V8 H20' fill='none' stroke='%23c9a24a' stroke-width='1.5'/%3E%3C/svg%3E");
+  --fret:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Cpath d='M0 5 H5 V2 H15 V8 H20' fill='none' stroke='%23D9B65A' stroke-width='1.5'/%3E%3C/svg%3E");
+  --fret-bright:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Cpath d='M0 5 H5 V2 H15 V8 H20' fill='none' stroke='%23F5C542' stroke-width='1.5'/%3E%3C/svg%3E");
   /* Same molding rotated 90° for the vertical runs of a full frame. */
-  --fret-v:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='20' viewBox='0 0 10 20'%3E%3Cpath d='M5 0 V5 H8 V15 H2 V20' fill='none' stroke='%239c8347' stroke-width='1.5'/%3E%3C/svg%3E");
+  --fret-v:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='20' viewBox='0 0 10 20'%3E%3Cpath d='M5 0 V5 H8 V15 H2 V20' fill='none' stroke='%23D9B65A' stroke-width='1.5'/%3E%3C/svg%3E");
+  /* Window lattice (窗棂) — shows through the enamel on every plate. */
+  --lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cg fill='none' stroke='%23F5E3B0' stroke-width='.9' opacity='.5'%3E%3Cpath d='M0 24h48M24 0v48M0 0l24 24M48 0L24 24M0 48l24-24M48 48L24 24'/%3E%3C/g%3E%3C/svg%3E");
+  /* Auspicious clouds (祥云) — the page and hero ground. */
+  --cloud-scroll:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='48' viewBox='0 0 72 48'%3E%3Cg fill='none' stroke='%23D9B65A' stroke-width='1' opacity='.28'%3E%3Cpath d='M4 34c-2-6 3-11 8-9 0-6 7-9 12-5 4-5 12-3 13 3 6 0 9 5 7 11'/%3E%3Cpath d='M40 14c-1-4 2-7 5-6 0-4 5-6 8-3'/%3E%3Ccircle cx='12' cy='31' r='2.6'/%3E%3Ccircle cx='24' cy='27' r='2.6'/%3E%3C/g%3E%3C/svg%3E");
 }
 *{box-sizing:border-box;}
-html{scroll-behavior:smooth;}
+html{scroll-behavior:smooth;font-size:17px;}
 body{
   margin:0;
-  background-color:var(--lacquer);
-  background-image:var(--texture-lacquer);
-  background-blend-mode:overlay;
-  color:var(--ink);
+  background-color:var(--enamel-deep);
+  background-image:var(--cloud-scroll);
+  color:var(--cream);
   font-family:var(--font-body);
-  line-height:1.6;
+  font-size:1rem;
+  line-height:1.62;
 }
-h1,h2,h3,.display{font-family:var(--font-display);}
+h1,h2,h3,.display{font-family:var(--font-display);font-weight:900;}
+button{font-family:var(--font-ui);}
 a{color:inherit;}
 img{max-width:100%;display:block;}
-:focus-visible{outline:3px solid var(--gold-bright);outline-offset:2px;}
+/* The three Latin families carry no CJK, so every hanzi element is pinned. */
+.seal-mini, .seal-title span, .hero-hanzi, .nav-card .hanzi, .panel .chinese{
+  font-family:var(--font-hanzi);
+}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;}
 @media (prefers-reduced-motion: reduce){
   *{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important;scroll-behavior:auto !important;}
 }
