@@ -1337,6 +1337,85 @@ let openPhoto = function(){};
   document.getElementById("scale").hidden = false;
 })();
 
+/* ---------- Passport: visit stamps ----------
+   A trip counts as visited once the reader has been on any of its
+   trip-scoped pages. Index, family, journey and play are trip-agnostic —
+   landing there says nothing about which trip you explored, so they
+   don't stamp. */
+(function(){
+  if(!CURRENT_TRIP) return;
+  const here = location.pathname.split("/").pop() || "index.html";
+  if(!/^(story|map|gallery)\.html$/.test(here)) return;
+  store.patch("visited", { [CURRENT_TRIP.id]: true });
+})();
+
+/* ---------- Maisie's Passport (play page) ----------
+   Renders whatever the store holds: per-trip ARRIVED stamps and quiz
+   bests, plus a totals page. Degrades politely when localStorage is
+   blocked — the probe write tells us whether stamps will survive. */
+(function(){
+  const book = document.getElementById("passportBook");
+  if(!book || typeof TRIPS === "undefined") return;
+
+  let canSave = true;
+  try {
+    localStorage.setItem("china2026:probe", "1");
+    localStorage.removeItem("china2026:probe");
+  } catch(e){ canSave = false; }
+
+  const visited = store.get("visited", {}) || {};
+  const quizBest = store.get("quizBest", {}) || {};
+  const hanziDone = Object.keys(store.get("hanzi", {}) || {}).length;
+  const spotBest = store.get("spotBest", 0);
+  const cats = Object.keys(store.get("cats", {}) || {}).length;
+  const anything = Object.keys(visited).length || Object.keys(quizBest).length
+    || hanziDone || spotBest || cats;
+
+  const note = txt => {
+    const p = document.createElement("p");
+    p.className = "passport-note";
+    p.textContent = txt;
+    book.appendChild(p);
+  };
+  if(!canSave) note("Your browser isn't saving anything right now (private mode, probably), so these stamps will vanish when you leave. Enjoy them while they last.");
+  if(!anything) note("Nothing in here yet. Go explore the site — the stamps sort themselves out.");
+
+  TRIPS.forEach(t=>{
+    const page = document.createElement("article");
+    page.className = "passport-page";
+    const stars = quizBest[t.id];
+    page.innerHTML = `
+      <div class="pp-head">
+        <span class="pp-icon">${t.icon}</span>
+        <div><h3>${t.name}</h3><span class="pp-hanzi">${t.chinese}</span></div>
+      </div>
+      <div class="pp-rows">
+        <span class="pp-row">${visited[t.id] ? "Pages explored" : "Not explored yet"}</span>
+        <span class="pp-row">${stars ? `Quiz best: ${"⭐".repeat(stars)}` : "Quiz not conquered yet"}</span>
+      </div>
+      ${visited[t.id] ? `<span class="pp-stamp stamp-in"><b class="pp-stamp-hanzi">到</b> ARRIVED</span>` : ""}`;
+    book.appendChild(page);
+  });
+
+  const summary = document.createElement("article");
+  summary.className = "passport-page pp-summary";
+  summary.innerHTML = `
+    <div class="pp-head">
+      <span class="pp-icon">🧳</span>
+      <div><h3>The Totals</h3><span class="pp-hanzi">合计</span></div>
+    </div>
+    <p class="pp-caption">Everything you've done on this site, all totted up in one place.</p>
+    <div class="pp-rows">
+      <span class="pp-row">Characters traced: <b>${hanziDone}</b> of ${typeof HANZI !== "undefined" ? HANZI.length : "?"}</span>
+      <span class="pp-row">Spot-It best streak: <b>${spotBest}</b></span>
+      <span class="pp-row">Secrets found: <b>${cats}</b> of ${typeof CATS !== "undefined" && CATS.length ? CATS.length : 7}</span>
+    </div>
+    <p class="pp-tease">Something small is hiding on every single page of this site. Find all seven and something good happens. Not saying what.</p>`;
+  book.appendChild(summary);
+
+  document.getElementById("passport").hidden = false;
+})();
+
 /* ---------- Home page: "Did you know?" teaser ----------
    One random fact from any trip, straight under the hero, with a dice button
    to shuffle — the hook that pulls a visitor from the front door into a trip.
