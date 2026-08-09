@@ -231,48 +231,58 @@ section.tight .section-title::after{width:110px;}
   display:flex;align-items:center;justify-content:space-between;
   gap:1rem;
   padding:.8rem 1.2rem 1rem;
-  background:rgba(22,17,16,0.94);
+  background:linear-gradient(180deg, rgba(10,54,68,.97), rgba(6,36,48,.97));
   backdrop-filter:blur(6px);
-  border-bottom:1px solid var(--gold-dim);
+  border-bottom:1px solid var(--wire);
 }
 .nav-brand{
   display:flex;align-items:center;gap:.55rem;
-  font-family:var(--font-display);
-  color:var(--gold-bright);
+  font-family:var(--font-ui);
+  color:var(--gold);
   text-decoration:none;
-  font-weight:700;
-  font-size:1rem;
+  font-weight:800;
+  font-size:1.02rem;
+  letter-spacing:.01em;
   white-space:nowrap;
 }
 .nav-brand .seal-mini{
-  width:28px;height:28px;
+  width:30px;height:30px;
   display:flex;align-items:center;justify-content:center;
-  font-size:.85rem;color:var(--paper);flex-shrink:0;
+  font-size:.85rem;color:#FFF1EA;flex-shrink:0;
   text-shadow:0 1px 1px rgba(0,0,0,.45);
 }
 .nav-toggle{
   display:none;
-  background:none;border:1px solid var(--gold-dim);border-radius:0;
-  color:var(--gold-bright);font-size:1.2rem;width:40px;height:36px;
+  background:none;border:1.5px solid var(--wire);border-radius:var(--radius-pill);
+  color:var(--gold);font-size:1.2rem;width:44px;height:38px;
   cursor:pointer;
 }
 .nav-links{
-  display:flex;align-items:center;gap:1.4rem;
-  font-size:.88rem;
+  display:flex;align-items:center;gap:.4rem;
+  font-family:var(--font-ui);
+  font-size:.9rem;
 }
 .nav-links a{
-  text-decoration:none;color:#e6d9b8;
-  padding:.3rem 0;
-  border-bottom:2px solid transparent;
-  transition:color .15s, border-color .15s;
-}
-.nav-links a:hover, .nav-links a.current{color:var(--gold-bright);border-color:var(--gold-bright);}
-.nav-links a.nav-cta{
-  color:var(--paper);
-  padding:.5rem 1.1rem;
+  text-decoration:none;color:var(--mint);
+  padding:.35rem .7rem;
+  border-bottom:none;
+  border-radius:var(--radius-pill);
   font-weight:600;
+  transition:color .15s ease, background .15s ease;
 }
-.nav-links a.nav-cta:hover{color:var(--gold-bright);border-color:transparent;}
+.nav-links a:hover{color:var(--cream);background:rgba(245,197,66,.15);}
+.nav-links a.current{
+  color:var(--enamel-mid);font-weight:800;
+  background:linear-gradient(150deg, var(--gold), var(--gold-2));
+  box-shadow:0 0 0 1.5px var(--wire);
+}
+.nav-links a.nav-cta{
+  padding:.5rem 1.05rem;
+}
+/* The CTA already draws a gold pill on its ::before, so the .current fill
+   would stack a second one on top of it. */
+.nav-links a.nav-cta.current{background:none;box-shadow:none;}
+.nav-links a.nav-cta:hover{color:var(--enamel-deep);background:none;}
 
 @media (max-width:760px){
   .nav-toggle{display:block;}
@@ -283,7 +293,7 @@ section.tight .section-title::after{width:110px;}
   .site-nav{backdrop-filter:none;}
   .nav-links{
     position:fixed;inset:0;
-    background:var(--lacquer);
+    background:linear-gradient(180deg, var(--enamel-mid), var(--enamel-deep));
     flex-direction:column;
     align-items:flex-start;
     /* Clears the header rather than matching its exact height: the panel
@@ -310,20 +320,14 @@ section.tight .section-title::after{width:110px;}
   position:relative;
   padding:5rem 1.5rem 3.5rem;
   text-align:center;
-  color:var(--paper);
+  color:var(--cream);
   overflow:hidden;
   background-image:
-    var(--texture-lacquer),
-    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(143,42,44,0.18), transparent 70%),
-    linear-gradient(180deg, var(--lacquer-2) 0%, var(--lacquer) 75%);
-  background-blend-mode:overlay, normal, normal;
+    var(--cloud-scroll),
+    radial-gradient(ellipse 70% 60% at 50% -10%, rgba(29,124,134,.55), transparent 70%),
+    linear-gradient(180deg, var(--enamel-mid) 0%, var(--enamel-deep) 80%);
 }
 .hero.compact{padding:2.2rem 1.5rem 1.8rem;}
-.cloud-layer{position:absolute;inset:0;pointer-events:none;opacity:0.35;}
-.cloud-layer svg{position:absolute;width:160%;max-width:none;}
-.cloud-1{top:6%;left:-30%;animation:drift 70s linear infinite;}
-.cloud-2{top:22%;left:-60%;animation:drift 95s linear infinite reverse;opacity:0.6;}
-@keyframes drift{from{transform:translateX(0);}to{transform:translateX(55%);}}
 
 /* Home hero: one wide Forbidden City photo behind a dark scrim */
 .hero.home-hero{
@@ -335,13 +339,13 @@ section.tight .section-title::after{width:110px;}
 .hero.home-hero::before{
   content:"";position:absolute;inset:0;
   background:
-    linear-gradient(180deg, rgba(22,17,16,.58) 0%, rgba(22,17,16,.85) 100%),
-    radial-gradient(ellipse 70% 60% at 50% 30%, rgba(143,42,44,.12), transparent 70%);
+    linear-gradient(180deg, rgba(6,36,48,.55) 0%, rgba(6,36,48,.88) 100%),
+    radial-gradient(ellipse 70% 60% at 50% 30%, rgba(29,124,134,.22), transparent 70%);
 }
 .hero-hanzi{
   position:relative;z-index:1;
-  font-family:var(--font-display);font-weight:700;
-  color:var(--gold);opacity:.85;
+  font-weight:700;
+  color:var(--gold);opacity:.9;
   font-size:.85rem;letter-spacing:.3em;
   margin-bottom:.3rem;
 }
@@ -367,39 +371,48 @@ section.tight .section-title::after{width:110px;}
 .hero.compact .seal-title span{font-size:1.4rem;}
 .hero .kicker{
   position:relative;z-index:1;
-  letter-spacing:.3em;text-transform:uppercase;font-size:.68rem;
-  color:var(--gold-bright);margin-bottom:.4rem;
+  font-family:var(--font-ui);
+  letter-spacing:.22em;text-transform:uppercase;font-size:.68rem;font-weight:800;
+  color:var(--gold);margin-bottom:.4rem;
 }
 .hero h1{
   position:relative;z-index:1;
-  font-size:clamp(1.7rem, 4.5vw, 2.6rem);
-  margin:0 0 .4rem;color:var(--gold-bright);
-  text-shadow:0 2px 20px rgba(0,0,0,.6);
+  font-family:var(--font-display);font-weight:900;
+  font-size:clamp(1.9rem, 5vw, 2.9rem);
+  margin:0 0 .45rem;color:var(--cream);
+  text-shadow:0 2px 0 rgba(0,0,0,.45), 0 0 34px rgba(43,179,176,.45);
 }
-.hero.compact h1{font-size:clamp(1.4rem, 3.8vw, 1.9rem);}
+.hero.compact h1{font-size:clamp(1.5rem, 4vw, 2.05rem);}
 .hero p.sub{
   position:relative;z-index:1;
-  max-width:560px;margin:0 auto;font-size:.95rem;color:#f1e5c8;
+  max-width:580px;margin:0 auto;font-size:.98rem;color:var(--mint);
 }
-.hero.home-hero p.sub{font-size:.88rem;}
+.hero.home-hero p.sub{font-size:.92rem;}
 .hero .byline{
   position:relative;z-index:1;
-  margin-top:.8rem;font-size:.78rem;color:var(--gold);font-style:italic;
+  margin-top:.8rem;font-size:.8rem;color:var(--gold);font-style:italic;
 }
 /* Jump link to the facts section. The facts sit below a long intro, so without
    a signpost above the fold nobody scrolls far enough to find them. */
 .hero-jump{
   position:relative;z-index:1;
-  display:inline-block;margin-top:1rem;
-  padding:.5rem 1.1rem;
-  font-family:var(--font-body);font-size:.84rem;font-weight:600;
-  color:var(--lacquer);text-decoration:none;
-  background:linear-gradient(150deg, var(--gold-bright), var(--gold));
-  border:1px solid var(--gold-dim);border-radius:var(--radius-panel);
-  box-shadow:var(--shadow-lift);
+  display:inline-block;margin-top:1.1rem;
+  padding:.6rem 1.3rem;
+  font-family:var(--font-ui);font-size:.88rem;font-weight:800;
+  color:var(--enamel-mid);text-decoration:none;
+  background:linear-gradient(150deg, var(--gold), var(--gold-2));
+  border:0;border-radius:var(--radius-pill);
+  box-shadow:0 0 0 1.5px var(--wire), 0 6px 0 var(--gold-deep), 0 10px 20px rgba(0,0,0,.4);
   transition:transform .15s ease, box-shadow .15s ease;
 }
-.hero-jump:hover{transform:translateY(-2px);box-shadow:var(--shadow-soft);}
+.hero-jump:hover{
+  transform:translateY(-3px);
+  box-shadow:0 0 0 1.5px var(--cream), 0 9px 0 var(--gold-deep), 0 14px 26px rgba(0,0,0,.5);
+}
+.hero-jump:active{
+  transform:translateY(3px);
+  box-shadow:0 0 0 1.5px var(--wire), 0 2px 0 var(--gold-deep);
+}
 .hero-jump[hidden]{display:none;}
 /* The site nav is sticky, so an un-offset anchor jump parks the heading behind it. */
 #facts{scroll-margin-top:78px;}
@@ -439,16 +452,20 @@ section.tight .section-title::after{width:110px;}
 .nav-card.featured .hanzi{color:var(--gold-bright);}
 
 /* ---------- Sections ---------- */
-main{background:var(--lacquer);}
+main{background:var(--enamel-deep);}
 section{max-width:920px;margin:0 auto;padding:4rem 1.5rem;}
 section.wide{max-width:1140px;}
 section.tight{padding:1.2rem 1.5rem 2rem;}
 .section-head{text-align:center;margin-bottom:1.1rem;}
 section.tight .section-head{margin-bottom:.8rem;}
-.section-title{color:var(--gold-bright);font-size:1.85rem;margin:0 0 .7rem;}
-section.tight .section-title{font-size:1.3rem;margin-bottom:.4rem;}
-.section-sub{color:#c9b98f;margin-top:.9rem;font-style:italic;font-size:.95rem;}
-section.tight .section-sub{margin-top:.5rem;font-size:.82rem;}
+.section-title{
+  font-family:var(--font-display);font-weight:900;
+  color:var(--cream);font-size:2rem;margin:0 0 .7rem;
+  text-shadow:0 2px 0 rgba(0,0,0,.35);
+}
+section.tight .section-title{font-size:1.35rem;margin-bottom:.4rem;}
+.section-sub{color:var(--mint);margin-top:.9rem;font-style:normal;font-size:.95rem;}
+section.tight .section-sub{margin-top:.5rem;font-size:.84rem;}
 
 /* ---------- Scroll panel (signature element) ---------- */
 .scroll-panel{position:relative;margin:0 auto;max-width:780px;}
@@ -772,7 +789,7 @@ section.tight .section-sub{margin-top:.5rem;font-size:.82rem;}
 }
 .modal-close:hover{background:var(--vermillion-bright);border-color:var(--gold-bright);}
 
-footer{position:relative;text-align:center;color:var(--gold);opacity:.75;padding:3rem 1.5rem 4rem;font-size:.9rem;font-style:italic;}
+footer{position:relative;text-align:center;color:var(--mint);opacity:.8;padding:3rem 1.5rem 4rem;font-size:.9rem;font-style:italic;}
 
 /* ---------- Version stamp ----------
    z-index stays below every overlay (mobile nav 79, nav 80, location
@@ -782,10 +799,10 @@ footer{position:relative;text-align:center;color:var(--gold);opacity:.75;padding
   position:fixed;
   left:.55rem;bottom:.45rem;
   z-index:5;
-  font-family:var(--font-body);
+  font-family:var(--font-ui);
   font-size:.62rem;
   letter-spacing:.06em;
-  color:var(--gold);
+  color:var(--mint);
   opacity:.38;
   pointer-events:none;
   user-select:none;
