@@ -95,10 +95,11 @@ img{max-width:100%;display:block;}
 /* ============================================================
    ORNAMENT PRIMITIVES
    Shared period detailing, applied by grouping existing selectors
-   so no page markup has to change. Three techniques:
+   so no page markup has to change. Four techniques:
      1. fret trim   — key-fret (回纹) molding used as a border strip
-     2. corner brackets — metal mounts at the corners of panels
+     2. enamel plate — the cloisonné (景泰蓝) surface every raised element shares
      3. seal stamp  — carved-seal ink impression (印泥), not a flat chip
+     4. pill controls — one shape language for every labelled control
    ============================================================ */
 
 /* --- 1. Fret trim: a repeating molding line, not a one-off divider --- */
@@ -127,76 +128,102 @@ footer::before{top:0;}
 }
 section.tight .section-title::after{width:110px;}
 
-/* --- 2. Corner brackets: four small mounts, one pseudo-element --- */
-.nav-card::after, .family-card::after, .modal::after,
-.location-card::after, .map-case::after{
+/* --- 2. Enamel plate (景泰蓝): one material for every raised surface ---
+   A gradient enamel field, a hairline gold wire, a dark setting around it,
+   a glaze highlight along the top and a domed falloff at the bottom.
+   The corner-bracket mounts this replaces were a lacquer-era device; the
+   wire outline now does that job on every edge rather than four corners. */
+.enamel,
+.nav-card, .family-card, .location-card, .modal,
+.bonus-feature, .fact-tile, .fact-pop{
+  position:relative;
+  border:0;
+  border-radius:var(--radius-panel);
+  background:linear-gradient(158deg,
+    var(--enamel-teal) 0%, var(--enamel-teal-2) 45%, var(--enamel-teal-3) 100%);
+  box-shadow:
+    0 0 0 1.5px var(--wire),
+    0 0 0 5px rgba(6,36,48,.5),
+    0 12px 26px rgba(0,0,0,.45),
+    inset 0 1px 0 rgba(255,255,255,.32),
+    inset 0 -16px 30px rgba(0,0,0,.26);
+  color:var(--cream);
+}
+/* The lattice shows through the enamel rather than sitting behind it. */
+.enamel::before,
+.nav-card::before, .family-card::before, .location-card::before, .modal::before,
+.bonus-feature::before, .fact-tile::before, .fact-pop::before{
   content:"";
   position:absolute;inset:0;
+  border-radius:inherit;
+  background-image:var(--lattice);
+  opacity:.36;
   pointer-events:none;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M0 12 V0 H12' fill='none' stroke='%239c8347' stroke-width='1.5'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M0 0 H12 V12' fill='none' stroke='%239c8347' stroke-width='1.5'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M0 0 V12 H12' fill='none' stroke='%239c8347' stroke-width='1.5'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M12 0 V12 H0' fill='none' stroke='%239c8347' stroke-width='1.5'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;
-  background-size:12px 12px;
-  background-position:
-    7px 7px,
-    calc(100% - 7px) 7px,
-    7px calc(100% - 7px),
-    calc(100% - 7px) calc(100% - 7px);
-  opacity:.65;
-  transition:opacity .2s ease;
+}
+/* That overlay is absolutely positioned, so it paints above ordinary in-flow
+   children — including photographs. Lift the content back over it.
+   .location-close is sticky (which is already positioned) and is excluded so
+   its stickiness survives. */
+.enamel > *,
+.nav-card > *, .family-card > *, .modal > *,
+.bonus-feature > *, .fact-tile > *, .fact-pop > *,
+.location-card > .panel, .location-card > .william-toggle{
+  position:relative;
 }
 
-/* --- 3. Seal stamp: carved edge, mottled ink, soft bleed --- */
-.seal-mini, .seal-title, .pin{
+/* --- 3. Seal stamp: carved edge, mottled ink, soft bleed ---
+   Map pins are no longer seals — they became enamel discs — so they are not
+   in this group. See the map section. */
+.seal-mini, .seal-title{
   position:relative;
   border:none;
   border-radius:0;
   background:
-    radial-gradient(ellipse at 30% 25%, rgba(255,236,214,.20), transparent 58%),
-    radial-gradient(ellipse at 74% 84%, rgba(122,44,20,.42), transparent 62%),
-    linear-gradient(150deg, #c14e23 0%, var(--seal-ink) 62%, var(--seal-ink-dark) 100%);
+    radial-gradient(ellipse at 30% 25%, rgba(255,236,214,.22), transparent 58%),
+    radial-gradient(ellipse at 74% 84%, rgba(183,51,42,.45), transparent 62%),
+    linear-gradient(150deg, #FF7A63 0%, var(--coral) 62%, var(--coral-2) 100%);
   clip-path:polygon(2% 5%, 96% 0%, 100% 95%, 95% 100%, 5% 97%, 0% 6%);
   /* drop-shadow follows the carved silhouette; box-shadow would be clipped.
      First layer is the ink bleed, second is the physical shadow. */
   filter:
-    drop-shadow(0 0 2px rgba(178,67,31,.55))
-    drop-shadow(0 3px 6px rgba(20,10,8,.42));
+    drop-shadow(0 0 3px rgba(242,96,76,.55))
+    drop-shadow(0 3px 6px rgba(3,18,24,.5));
 }
 
-/* --- Plaque buttons (匾额): one shape language for every labelled control.
-   The chamfer lives on a pseudo-element so the real control keeps a
-   rectangular hit box and an unclipped focus ring. --- */
+/* --- 4. Pill controls: one shape language for every labelled control.
+   The fill lives on a pseudo-element so the real control keeps a rectangular
+   hit box and an unclipped focus ring. --- */
 .nav-links a.nav-cta, .location-close, .gallery-filter button{
   position:relative;
   background:none;
   border:none;
-  border-radius:0;
+  border-radius:var(--radius-pill);
   isolation:auto;
+  font-family:var(--font-ui);
+  font-weight:600;
 }
 .nav-links a.nav-cta::before, .location-close::before, .gallery-filter button::before{
   content:"";
   position:absolute;inset:0;
   z-index:-1;
-  background:linear-gradient(180deg, var(--paper), var(--paper-dark));
-  box-shadow:inset 0 0 0 1px var(--gold-dim), inset 0 0 0 4px rgba(255,255,255,.18);
-  clip-path:polygon(
-    6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px),
-    calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px);
+  border-radius:var(--radius-pill);
+  background:linear-gradient(158deg, rgba(245,237,216,.16), rgba(6,36,48,.4));
+  box-shadow:0 0 0 1.5px var(--wire), inset 0 1px 0 rgba(255,255,255,.25);
   transition:box-shadow .18s ease, background .18s ease;
 }
 /* Filled (emphasis) variant */
 .nav-links a.nav-cta::before, .gallery-filter button.active::before{
-  background:linear-gradient(180deg, var(--vermillion), var(--vermillion-dark));
-  box-shadow:inset 0 0 0 1px var(--gold-dim), inset 0 0 0 4px rgba(232,200,118,.14);
+  background:linear-gradient(150deg, var(--gold), var(--gold-2));
+  box-shadow:0 0 0 1.5px var(--wire), inset 0 1px 0 rgba(255,255,255,.45);
 }
-/* Pressed, not lit up — a carved object being pushed in */
 .nav-links a.nav-cta:hover::before, .location-close:hover::before,
 .gallery-filter button:hover::before{
-  box-shadow:inset 0 0 0 1px var(--gold-bright), inset 0 2px 6px rgba(0,0,0,.32);
+  box-shadow:0 0 0 1.5px var(--cream), inset 0 1px 0 rgba(255,255,255,.5);
 }
+.location-close{color:var(--cream);}
+.gallery-filter button{color:var(--mint);}
+.gallery-filter button.active{color:var(--enamel-mid);font-weight:800;}
+.nav-links a.nav-cta{color:var(--enamel-mid);font-weight:800;}
 
 /* ---------- Site nav ---------- */
 .site-nav{
@@ -398,7 +425,6 @@ section.tight .section-title::after{width:110px;}
   border:1px solid var(--gold-dim);
   text-align:center;
 }
-.nav-card:hover::after, .nav-card:focus-visible::after{opacity:1;}
 .nav-card .icon{font-size:1.7rem;margin-bottom:.3rem;}
 .nav-card .hanzi{display:block;font-family:var(--font-display);font-size:.72rem;color:var(--gold);opacity:.8;margin-bottom:.15rem;letter-spacing:.1em;}
 .nav-card h3{margin:0 0 .3rem;color:var(--vermillion-dark);font-size:.95rem;}
@@ -408,7 +434,6 @@ section.tight .section-title::after{width:110px;}
   background-blend-mode:overlay, normal;
   border-color:var(--gold);
 }
-.nav-card.featured::after{opacity:.85;}
 .nav-card.featured h3{color:var(--paper);}
 .nav-card.featured p{color:#f1dfc4;}
 .nav-card.featured .hanzi{color:var(--gold-bright);}
