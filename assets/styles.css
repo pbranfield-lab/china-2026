@@ -83,10 +83,11 @@ img{max-width:100%;display:block;}
 /* ============================================================
    ORNAMENT PRIMITIVES
    Shared period detailing, applied by grouping existing selectors
-   so no page markup has to change. Three techniques:
+   so no page markup has to change. Four techniques:
      1. fret trim   — key-fret (回纹) molding used as a border strip
-     2. corner brackets — metal mounts at the corners of panels
+     2. enamel plate — the cloisonné (景泰蓝) surface every raised element shares
      3. seal stamp  — carved-seal ink impression (印泥), not a flat chip
+     4. pill controls — one shape language for every labelled control
    ============================================================ */
 
 /* --- 1. Fret trim: a repeating molding line, not a one-off divider --- */
