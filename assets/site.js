@@ -1283,6 +1283,60 @@ let openPhoto = function(){};
   document.getElementById("spotit").hidden = false;
 })();
 
+/* ---------- Scale-o-matic (story page) ----------
+   Verified trip numbers translated into the reader's world. Cards are
+   declarative data (COMPARATORS in extras.js — no functions, check.mjs
+   evaluates that file); the three ops live here. Inputs persist in the
+   shared store under one key each, so "your height" typed on one trip is
+   already filled in on the next. */
+(function(){
+  const grid = document.getElementById("scaleGrid");
+  if(!grid || typeof COMPARATORS === "undefined" || !CURRENT_TRIP) return;
+  const list = COMPARATORS[CURRENT_TRIP.id];
+  if(!list || !list.length) return;
+
+  const sub = document.getElementById("scaleSub");
+  if(sub && COMPARATORS.sub) sub.textContent = COMPARATORS.sub;
+
+  const fmt = n => !isFinite(n) ? "—"
+    : n >= 20 ? Math.round(n).toLocaleString("en-GB")
+    : (Math.round(n * 10) / 10).toLocaleString("en-GB");
+  const compute = (c, v) =>
+    c.op === "inverse"   ? v / c.unitValue :
+    c.op === "plusYears" ? Math.round(v + c.unitValue / 365.25) :
+                           c.unitValue / v;
+
+  list.forEach(c=>{
+    const el = document.createElement("article");
+    el.className = "scale-card";
+    const saved = (store.get("inputs", {}) || {})[c.input.key];
+    const v0 = (saved !== undefined) ? saved : c.input.def;
+    el.innerHTML = `
+      <h3>${c.title}</h3>
+      <label class="scale-label">${c.input.label}
+        <input class="scale-input" type="number" inputmode="decimal"
+               value="${v0}" min="${c.input.min}" max="${c.input.max}" step="${c.input.step}">
+      </label>
+      <p class="scale-line" aria-live="polite"></p>
+      <p class="scale-src">${c.unitLabel}</p>`;
+    const input = el.querySelector(".scale-input");
+    const line = el.querySelector(".scale-line");
+    const render = ()=>{
+      const v = Number(input.value);
+      if(!v || v <= 0){ line.textContent = "Type a number and I'll do the maths."; return; }
+      line.innerHTML = c.line
+        .replace("{n}", `<b>${fmt(compute(c, v))}</b>`)
+        .replace("{v}", String(v));
+      store.patch("inputs", { [c.input.key]: v });
+    };
+    input.addEventListener("input", render);
+    render();
+    grid.appendChild(el);
+  });
+
+  document.getElementById("scale").hidden = false;
+})();
+
 /* ---------- Home page: "Did you know?" teaser ----------
    One random fact from any trip, straight under the hero, with a dice button
    to shuffle — the hook that pulls a visitor from the front door into a trip.

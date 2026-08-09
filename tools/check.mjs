@@ -180,6 +180,29 @@ check("JOURNEY route resolves, chains, and matches the map markers", () => {
   return null;
 });
 
+check("COMPARATORS are declarative, resolve to trips, and template {n}", () => {
+  const { TRIPS, COMPARATORS } = loadData();
+  const ids = new Set(TRIPS.map(t => t.id));
+  const OPS = new Set(["divide", "inverse", "plusYears"]);
+  for (const [key, list] of Object.entries(COMPARATORS)){
+    if (key === "sub") continue;
+    if (!ids.has(key)) return `COMPARATORS has no matching trip: ${key}`;
+    for (const c of list){
+      for (const k of ["id","title","unitLabel","line"]) if (!c[k]) return `${key}/${c.id || "?"} is missing ${k}`;
+      if (typeof c.unitValue !== "number") return `${key}/${c.id} unitValue is not a number`;
+      if (c.op && !OPS.has(c.op)) return `${key}/${c.id} has unknown op ${c.op}`;
+      if (!c.line.includes("{n}")) return `${key}/${c.id} line has no {n} slot`;
+      for (const k of ["key","label","def","min","max","step"])
+        if (c.input?.[k] === undefined) return `${key}/${c.id} input is missing ${k}`;
+    }
+  }
+  const s = read("story.html");
+  const missing = ["scale","scaleSub","scaleGrid"].filter(id => !s.includes(`id="${id}"`));
+  if (missing.length) return `story.html missing ids: ${missing.join(", ")}`;
+  if (!/<section class="wide" id="scale" hidden>/.test(s)) return "#scale is no longer hidden in the markup";
+  return null;
+});
+
 check("HANZI entries have data files, fields, and the vendor script", () => {
   const { TRIPS, HANZI } = loadData();
   const ids = new Set(TRIPS.map(t => t.id));

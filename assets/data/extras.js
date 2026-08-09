@@ -121,7 +121,65 @@ const HANZI = [
   { char:"海", pinyin:"hǎi",   meaning:"sea",           trip:"shanghai",       word:"上海",   wordMeaning:"Shanghai" }
 ];
 
-const COMPARATORS = {};
+/* Scale-o-matic cards. Declarative only — check.mjs evaluates this file,
+   so no functions; the three ops (divide, inverse, plusYears) live in
+   site.js. Every unitValue mirrors a number already published in that
+   trip's FACTS, so there is exactly one copy of the truth to verify.
+   input.key is shared across cards site-wide ("heightCm" typed at the
+   Great Wall is pre-filled in Shanghai). */
+const COMPARATORS = {
+  sub: "Type in your numbers and the trip gets measured in you.",
+  "forbidden-city": [
+    { id:"rooms-vs-school", title:"Palace vs Your School",
+      unitValue:8707, unitLabel:"Real number: 8,707 rooms — same as the facts above",
+      input:{ key:"schoolRooms", label:"Rooms in your school", def:60, min:1, max:5000, step:1 },
+      line:"The Forbidden City has 8,707 rooms, which is {n} of your entire school. Imagine the fire drills." },
+    { id:"room-a-night", title:"One Room a Night", op:"plusYears",
+      unitValue:8707, unitLabel:"Real number: 8,707 rooms, one night each",
+      input:{ key:"age", label:"Your age", def:11, min:4, max:120, step:1 },
+      line:"Sleep in a different room every single night and you'd finish aged {n}. Hope you like moving beds." }
+  ],
+  "great-wall": [
+    { id:"walk-the-wall", title:"Walk the Whole Wall",
+      unitValue:21196, unitLabel:"Real number: 21,196 km of wall in total",
+      input:{ key:"walkKm", label:"How far you walk to school (km)", def:1, min:0.1, max:50, step:0.1 },
+      line:"At your usual {v} km a day, all 21,196 km of wall would take you {n} days. Pack snacks." },
+    { id:"wall-vs-you", title:"The Wall vs You",
+      unitValue:800, unitLabel:"Real number: up to 8 m high at Mutianyu",
+      input:{ key:"heightCm", label:"Your height (cm)", def:145, min:50, max:250, step:1 },
+      line:"At Mutianyu the wall goes up to 8 m high — that's {n} of you, stacked up." }
+  ],
+  "xian": [
+    { id:"army-vs-school", title:"Army vs Your School",
+      unitValue:8000, unitLabel:"Real number: 8,000 clay soldiers",
+      input:{ key:"schoolPeople", label:"People in your school", def:500, min:10, max:10000, step:10 },
+      line:"8,000 clay soldiers is enough to fill your school {n} times over, and they'd all behave better than your class." },
+    { id:"tomb-years", title:"38 Years of Digging",
+      unitValue:38, unitLabel:"Real number: 38 years to build the tomb",
+      input:{ key:"age", label:"Your age", def:11, min:4, max:120, step:1 },
+      line:"The First Emperor's tomb took 38 years to build, which is {n} of your entire life so far. For one grave." }
+  ],
+  "xitang": [
+    { id:"corridor-vs-corridor", title:"Corridor vs Corridor",
+      unitValue:1000, unitLabel:"Real number: 1,000 m of covered corridor",
+      input:{ key:"corridorM", label:"Your school's longest corridor (m)", def:30, min:5, max:500, step:5 },
+      line:"Xitang's covered corridor runs 1,000 m, which is {n} of your school's longest corridor joined up." },
+    { id:"lane-vs-armspan", title:"Too Wide for Xitang", op:"inverse",
+      unitValue:80, unitLabel:"Real number: the narrowest lane is 80 cm",
+      input:{ key:"armSpanCm", label:"Your arm span (cm)", def:140, min:50, max:250, step:1 },
+      line:"Xitang's narrowest lane is 80 cm across, so with your arms out you're {n} times wider than the whole street." }
+  ],
+  "shanghai": [
+    { id:"tower-of-you", title:"A Tower Made of You",
+      unitValue:63200, unitLabel:"Real number: Shanghai Tower is 632 m",
+      input:{ key:"heightCm", label:"Your height (cm)", def:145, min:50, max:250, step:1 },
+      line:"Shanghai Tower is 632 m tall — that's {n} of you balanced on top of each other. Don't wobble." },
+    { id:"you-vs-maglev", title:"You vs the Maglev",
+      unitValue:431, unitLabel:"Real number: the Maglev tops 431 km/h",
+      input:{ key:"runKmh", label:"Your fastest sprint (km/h)", def:12, min:1, max:45, step:1 },
+      line:"Flat out you do {v} km/h, and the Maglev does 431, so it's {n} times faster than your absolute best. Sorry." }
+  ]
+};
 
 /* Then & Now slider pairs. `then.file` is under Photographs/ and carries a
    full credit object — public domain still gets visible attribution, and

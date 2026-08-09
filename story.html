@@ -88,6 +88,18 @@
     <div class="quiz-card reveal" id="quizCard"></div>
   </section>
 
+  <!-- Scale-o-matic: verified trip numbers translated into the reader's own
+       world (their school, their height, their speed). Rendered from
+       COMPARATORS in extras.js; hidden unless the current trip has cards.
+       Inputs persist site-wide via the shared store. -->
+  <section class="wide" id="scale" hidden>
+    <div class="section-head reveal">
+      <h2 class="section-title" id="scaleTitle">The Scale-o-matic</h2>
+      <p class="section-sub" id="scaleSub"></p>
+    </div>
+    <div class="scale-grid reveal" id="scaleGrid"></div>
+  </section>
+
   <!-- Then & Now: a public-domain historic photograph against one of ours,
        revealed by a drag slider. Rendered from THEN_NOW in extras.js and
        hidden unless the current trip has a pair. -->
