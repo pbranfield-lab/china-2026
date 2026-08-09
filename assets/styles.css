@@ -1,92 +1,88 @@
 :root{
-  /* ---- Cloisonné (景泰蓝) enamel palette ----
-     Jewel enamel fields divided by thin gold wire. The teal trio is the
-     plate gradient; --wire is the hairline that outlines every surface. */
-  --enamel-deep:#062430;
-  --enamel-mid:#0A3644;
-  --enamel-teal:#1D7C86;
-  --enamel-teal-2:#106072;
-  --enamel-teal-3:#0A4757;
-  --wire:#D9B65A;
-  --gold:#F5C542;
-  --gold-2:#C9922E;
-  --gold-deep:#8A6418;
-  --coral:#F2604C;
-  --coral-2:#B7332A;
-  --mint:#8FE3DE;
-  --cream:#F5EDD8;
-  /* Darker than the spec's first pass: at #2E8B72 the mint label text on a jade
-     fact tile measured 2.81:1, well under AA. See the jade field below. */
-  --jade:#1B5949;
-  --jade-2:#123F34;
+  /* ---- "Maisie's zine" print palette ----
+     Bright Chinese pop-print: 中国红 vermilion, gold and jade inks on warm
+     rice paper, everything outlined in warm ink like a lianhuanhua (连环画)
+     comic page. --cream is the sticker/card fill; --paper is the page. */
+  --paper:#FAEED6;
+  --paper-dark:#F1E0BE;
+  --cream:#FFFCF3;
+  --ink:#302217;
+  --ink-soft:#77614C;
+  --red:#C93A2B;
+  --red-deep:#8E2116;
+  --red-bright:#E8552F;
+  --gold:#F0A421;
+  --gold-deep:#B87709;
+  --jade:#1E8163;
+  --jade-deep:#0F5B43;
+  --blue:#2A6496;
+  --blue-deep:#173F63;
 
-  /* Light surfaces, kept for the long-form reading panel only. */
-  --paper:#F7EFDA;
-  --paper-dark:#EBDFC0;
-  --ink:#20323A;
-  --ink-soft:#4C6570;
-
-  --font-display:'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-display:'Lilita One', 'Arial Rounded MT Bold', 'Arial Black', sans-serif;
   --font-ui:'Outfit', "Segoe UI", system-ui, -apple-system, sans-serif;
   --font-body:'Nunito', "Segoe UI", system-ui, -apple-system, sans-serif;
-  /* The three new families carry no Chinese glyphs, so every hanzi element
+  /* The Latin families carry no Chinese glyphs, so every hanzi element
      names Noto explicitly rather than falling through to a system default. */
   --font-hanzi:'Noto Serif SC', Georgia, serif;
   --font-hanzi-sans:'Noto Sans SC', system-ui, sans-serif;
 
-  --radius-panel:14px;
+  --radius-panel:16px;
   --radius-pill:99px;
-  --shadow-lift: 0 6px 16px rgba(3,18,24,0.45);
-  --shadow-soft: 0 12px 26px rgba(3,18,24,0.45);
-  --shadow-deep: 0 34px 70px rgba(3,18,24,0.65);
+
+  /* The sticker shadow: hard offset print shadows, not soft blurs.
+     --pop is the resting state, --pop-big the hover lift. */
+  --pop:5px 6px 0 rgba(48,34,23,.82);
+  --pop-big:8px 11px 0 rgba(48,34,23,.82);
+  --pop-soft:4px 5px 0 rgba(48,34,23,.28);
+
+  /* Washi-tape strip for the polaroid photo frames. */
+  --tape:linear-gradient(100deg, rgba(201,58,43,.72), rgba(240,164,33,.72));
 
   /* Ornament primitives — self-contained inline SVG so nothing needs
      duplicating across the five hand-maintained HTML files.
      Note every "#" is encoded %23; a literal one truncates the data URI. */
-  --texture-paper:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-  --texture-lacquer:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  --texture-paper:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.28'/%3E%3C/svg%3E");
   /* Key-fret (回纹) molding, drawn once, repeated as a border strip.
      Drawn 1:1 at its rendered size so the meander never squashes. */
-  --fret:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Cpath d='M0 5 H5 V2 H15 V8 H20' fill='none' stroke='%23D9B65A' stroke-width='1.5'/%3E%3C/svg%3E");
-  --fret-bright:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Cpath d='M0 5 H5 V2 H15 V8 H20' fill='none' stroke='%23F5C542' stroke-width='1.5'/%3E%3C/svg%3E");
+  --fret:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Cpath d='M0 5 H5 V2 H15 V8 H20' fill='none' stroke='%23C93A2B' stroke-width='1.5'/%3E%3C/svg%3E");
+  --fret-bright:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Cpath d='M0 5 H5 V2 H15 V8 H20' fill='none' stroke='%23F0A421' stroke-width='1.5'/%3E%3C/svg%3E");
   /* Same molding rotated 90° for the vertical runs of a full frame. */
-  --fret-v:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='20' viewBox='0 0 10 20'%3E%3Cpath d='M5 0 V5 H8 V15 H2 V20' fill='none' stroke='%23D9B65A' stroke-width='1.5'/%3E%3C/svg%3E");
-  /* Window lattice (窗棂) — shows through the enamel on every plate. */
-  --lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cg fill='none' stroke='%23F5E3B0' stroke-width='.9' opacity='.5'%3E%3Cpath d='M0 24h48M24 0v48M0 0l24 24M48 0L24 24M0 48l24-24M48 48L24 24'/%3E%3C/g%3E%3C/svg%3E");
-  /* Auspicious clouds (祥云) — the page and hero ground. */
-  --cloud-scroll:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='48' viewBox='0 0 72 48'%3E%3Cg fill='none' stroke='%23D9B65A' stroke-width='1' opacity='.28'%3E%3Cpath d='M4 34c-2-6 3-11 8-9 0-6 7-9 12-5 4-5 12-3 13 3 6 0 9 5 7 11'/%3E%3Cpath d='M40 14c-1-4 2-7 5-6 0-4 5-6 8-3'/%3E%3Ccircle cx='12' cy='31' r='2.6'/%3E%3Ccircle cx='24' cy='27' r='2.6'/%3E%3C/g%3E%3C/svg%3E");
+  --fret-v:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='20' viewBox='0 0 10 20'%3E%3Cpath d='M5 0 V5 H8 V15 H2 V20' fill='none' stroke='%23C93A2B' stroke-width='1.5'/%3E%3C/svg%3E");
+  /* Auspicious clouds (祥云) — the page ground, gold ink on rice paper. */
+  --cloud-scroll:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='48' viewBox='0 0 72 48'%3E%3Cg fill='none' stroke='%23D8A857' stroke-width='1' opacity='.30'%3E%3Cpath d='M4 34c-2-6 3-11 8-9 0-6 7-9 12-5 4-5 12-3 13 3 6 0 9 5 7 11'/%3E%3Cpath d='M40 14c-1-4 2-7 5-6 0-4 5-6 8-3'/%3E%3Ccircle cx='12' cy='31' r='2.6'/%3E%3Ccircle cx='24' cy='27' r='2.6'/%3E%3C/g%3E%3C/svg%3E");
 }
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;font-size:17px;}
 body{
   margin:0;
-  background-color:var(--enamel-deep);
+  background-color:var(--paper);
   background-image:var(--cloud-scroll);
-  color:var(--cream);
+  color:var(--ink);
   font-family:var(--font-body);
   font-size:1rem;
   line-height:1.62;
 }
-h1,h2,h3,.display{font-family:var(--font-display);font-weight:900;}
+h1,h2,h3,.display{font-family:var(--font-display);font-weight:400;letter-spacing:.01em;}
 button{font-family:var(--font-ui);}
 a{color:inherit;}
 img{max-width:100%;display:block;}
-/* The three Latin families carry no CJK, so every hanzi element is pinned. */
+/* The Latin families carry no CJK, so every hanzi element is pinned. */
 .seal-mini, .seal-title span, .hero-hanzi, .nav-card .hanzi, .panel .chinese{
   font-family:var(--font-hanzi);
 }
-:focus-visible{outline:3px solid var(--gold);outline-offset:3px;}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;}
 @media (prefers-reduced-motion: reduce){
   *{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important;scroll-behavior:auto !important;}
 }
 
 /* ============================================================
    ORNAMENT PRIMITIVES
-   Shared period detailing, applied by grouping existing selectors
+   Shared zine detailing, applied by grouping existing selectors
    so no page markup has to change. Four techniques:
-     1. fret trim   — key-fret (回纹) molding used as a border strip
-     2. enamel plate — the cloisonné (景泰蓝) surface every raised element shares
-     3. seal stamp  — carved-seal ink impression (印泥), not a flat chip
+     1. fret trim — key-fret (回纹) molding used as a border strip
+     2. sticker panel — the outlined, hard-shadowed card every raised
+        surface shares, like a sticker pressed onto the paper
+     3. seal stamp — carved-seal ink impression (印泥), not a flat chip
      4. pill controls — one shape language for every labelled control
    ============================================================ */
 
@@ -98,7 +94,7 @@ img{max-width:100%;display:block;}
   background-image:var(--fret);
   background-repeat:repeat-x;
   background-size:20px 10px;
-  opacity:.7;
+  opacity:.55;
   pointer-events:none;
 }
 .site-nav::after, .hero::after{bottom:0;}
@@ -109,49 +105,32 @@ footer::before{top:0;}
   content:"";
   display:block;
   width:160px;height:10px;margin:.7rem auto 0;
-  background-image:var(--fret-bright);
+  background-image:var(--fret);
   background-repeat:repeat-x;
   background-size:20px 10px;
-  opacity:.8;
+  opacity:.75;
 }
 section.tight .section-title::after{width:110px;}
 
-/* --- 2. Enamel plate (景泰蓝): one material for every raised surface ---
-   A gradient enamel field, a hairline gold wire, a dark setting around it,
-   a glaze highlight along the top and a domed falloff at the bottom.
-   The corner-bracket mounts this replaces were a lacquer-era device; the
-   wire outline now does that job on every edge rather than four corners. */
+/* --- 2. Sticker panel: one material for every raised surface ---
+   A cream card with a faint paper grain, a thick warm-ink outline and a
+   hard offset shadow — printed and stuck down, not floating. */
 .enamel,
 .nav-card, .family-card, .location-card, .modal,
 .bonus-feature, .fact-tile, .fact-pop{
   position:relative;
-  border:0;
+  border:2.5px solid var(--ink);
   border-radius:var(--radius-panel);
-  background:linear-gradient(158deg,
-    var(--enamel-teal) 0%, var(--enamel-teal-2) 45%, var(--enamel-teal-3) 100%);
-  box-shadow:
-    0 0 0 1.5px var(--wire),
-    0 0 0 5px rgba(6,36,48,.5),
-    0 12px 26px rgba(0,0,0,.45),
-    inset 0 1px 0 rgba(255,255,255,.32),
-    inset 0 -16px 30px rgba(0,0,0,.26);
-  color:var(--cream);
+  background-color:var(--cream);
+  background-image:var(--texture-paper);
+  box-shadow:var(--pop);
+  color:var(--ink);
 }
-/* The lattice shows through the enamel rather than sitting behind it. */
-.enamel::before,
-.nav-card::before, .family-card::before, .location-card::before, .modal::before,
-.bonus-feature::before, .fact-tile::before, .fact-pop::before{
-  content:"";
-  position:absolute;inset:0;
-  border-radius:inherit;
-  background-image:var(--lattice);
-  opacity:.36;
-  pointer-events:none;
-}
-/* That overlay is absolutely positioned, so it paints above ordinary in-flow
-   children — including photographs. Lift the content back over it.
-   .location-close is sticky (which is already positioned) and is excluded so
-   its stickiness survives. */
+/* Kept as a grouped hook even though the sticker skin has no overlay layer:
+   children of these panels stack predictably above any ::before decoration
+   (the popout keyline, tape strips) without per-component fixes.
+   .location-close is sticky (already positioned) and is excluded so its
+   stickiness survives. */
 .enamel > *,
 .nav-card > *, .family-card > *, .modal > *,
 .bonus-feature > *, .fact-tile > *, .fact-pop > *,
@@ -159,23 +138,21 @@ section.tight .section-title::after{width:110px;}
   position:relative;
 }
 
-/* --- 3. Seal stamp: carved edge, mottled ink, soft bleed ---
-   Map pins are no longer seals — they became enamel discs — so they are not
-   in this group. See the map section. */
+/* --- 3. Seal stamp: carved edge, mottled ink, soft bleed --- */
 .seal-mini, .seal-title{
   position:relative;
   border:none;
   border-radius:0;
   background:
     radial-gradient(ellipse at 30% 25%, rgba(255,236,214,.22), transparent 58%),
-    radial-gradient(ellipse at 74% 84%, rgba(183,51,42,.45), transparent 62%),
-    linear-gradient(150deg, #FF7A63 0%, var(--coral) 62%, var(--coral-2) 100%);
+    radial-gradient(ellipse at 74% 84%, rgba(142,33,22,.5), transparent 62%),
+    linear-gradient(150deg, var(--red-bright) 0%, var(--red) 62%, var(--red-deep) 100%);
   clip-path:polygon(2% 5%, 96% 0%, 100% 95%, 95% 100%, 5% 97%, 0% 6%);
   /* drop-shadow follows the carved silhouette; box-shadow would be clipped.
      First layer is the ink bleed, second is the physical shadow. */
   filter:
-    drop-shadow(0 0 3px rgba(242,96,76,.55))
-    drop-shadow(0 3px 6px rgba(3,18,24,.5));
+    drop-shadow(0 0 3px rgba(201,58,43,.5))
+    drop-shadow(3px 4px 0 rgba(48,34,23,.35));
 }
 
 /* --- 4. Pill controls: one shape language for every labelled control.
@@ -195,23 +172,23 @@ section.tight .section-title::after{width:110px;}
   position:absolute;inset:0;
   z-index:-1;
   border-radius:var(--radius-pill);
-  background:linear-gradient(158deg, rgba(245,237,216,.16), rgba(6,36,48,.4));
-  box-shadow:0 0 0 1.5px var(--wire), inset 0 1px 0 rgba(255,255,255,.25);
-  transition:box-shadow .18s ease, background .18s ease;
+  background:var(--cream);
+  box-shadow:0 0 0 2px var(--ink), 3px 3px 0 rgba(48,34,23,.5);
+  transition:box-shadow .18s ease, background .18s ease, transform .18s ease;
 }
 /* Filled (emphasis) variant */
 .nav-links a.nav-cta::before, .gallery-filter button.active::before{
-  background:linear-gradient(150deg, var(--gold), var(--gold-2));
-  box-shadow:0 0 0 1.5px var(--wire), inset 0 1px 0 rgba(255,255,255,.45);
+  background:linear-gradient(150deg, var(--red-bright), var(--red));
 }
 .nav-links a.nav-cta:hover::before, .location-close:hover::before,
 .gallery-filter button:hover::before{
-  box-shadow:0 0 0 1.5px var(--cream), inset 0 1px 0 rgba(255,255,255,.5);
+  box-shadow:0 0 0 2px var(--ink), 5px 5px 0 rgba(48,34,23,.5);
+  transform:translate(-1px,-1px);
 }
-.location-close{color:var(--cream);}
-.gallery-filter button{color:var(--mint);}
-.gallery-filter button.active{color:var(--enamel-mid);font-weight:800;}
-.nav-links a.nav-cta{color:var(--enamel-mid);font-weight:800;}
+.location-close{color:var(--ink);}
+.gallery-filter button{color:var(--ink);}
+.gallery-filter button.active{color:#FFF6EC;font-weight:800;}
+.nav-links a.nav-cta{color:#FFF6EC;font-weight:800;}
 
 /* ---------- Site nav ---------- */
 .site-nav{
@@ -219,14 +196,14 @@ section.tight .section-title::after{width:110px;}
   display:flex;align-items:center;justify-content:space-between;
   gap:1rem;
   padding:.8rem 1.2rem 1rem;
-  background:linear-gradient(180deg, rgba(10,54,68,.97), rgba(6,36,48,.97));
+  background:rgba(255,252,243,.96);
   backdrop-filter:blur(6px);
-  border-bottom:1px solid var(--wire);
+  border-bottom:2.5px solid var(--ink);
 }
 .nav-brand{
   display:flex;align-items:center;gap:.55rem;
   font-family:var(--font-ui);
-  color:var(--gold);
+  color:var(--red);
   text-decoration:none;
   font-weight:800;
   font-size:1.02rem;
@@ -241,9 +218,10 @@ section.tight .section-title::after{width:110px;}
 }
 .nav-toggle{
   display:none;
-  background:none;border:1.5px solid var(--wire);border-radius:var(--radius-pill);
-  color:var(--gold);font-size:1.2rem;width:44px;height:38px;
+  background:var(--cream);border:2px solid var(--ink);border-radius:var(--radius-pill);
+  color:var(--ink);font-size:1.2rem;width:44px;height:38px;
   cursor:pointer;
+  box-shadow:2px 2px 0 rgba(48,34,23,.5);
 }
 .nav-links{
   display:flex;align-items:center;gap:.4rem;
@@ -251,37 +229,38 @@ section.tight .section-title::after{width:110px;}
   font-size:.9rem;
 }
 .nav-links a{
-  text-decoration:none;color:var(--mint);
+  text-decoration:none;color:var(--ink);
   padding:.35rem .7rem;
   border-bottom:none;
   border-radius:var(--radius-pill);
   font-weight:600;
   transition:color .15s ease, background .15s ease;
 }
-.nav-links a:hover{color:var(--cream);background:rgba(245,197,66,.15);}
+.nav-links a:hover{color:var(--red-deep);background:rgba(240,164,33,.28);}
 .nav-links a.current{
-  color:var(--enamel-mid);font-weight:800;
-  background:linear-gradient(150deg, var(--gold), var(--gold-2));
-  box-shadow:0 0 0 1.5px var(--wire);
+  color:#FFF6EC;font-weight:800;
+  background:var(--red);
+  box-shadow:0 0 0 2px var(--ink);
 }
 .nav-links a.nav-cta{
   padding:.5rem 1.05rem;
 }
-/* The CTA already draws a gold pill on its ::before, so the .current fill
+/* The CTA already draws a red pill on its ::before, so the .current fill
    would stack a second one on top of it. */
 .nav-links a.nav-cta.current{background:none;box-shadow:none;}
-.nav-links a.nav-cta:hover{color:var(--enamel-deep);background:none;}
+.nav-links a.nav-cta:hover{color:#FFF6EC;background:none;}
 
 @media (max-width:760px){
   .nav-toggle{display:block;}
   /* backdrop-filter makes .site-nav the containing block for any
      position:fixed descendant, which trapped the menu panel below inside
      the header instead of letting it fill the viewport. Not needed here —
-     the bar is 94% opaque, so the blur is imperceptible anyway. */
+     the bar is 96% opaque, so the blur is imperceptible anyway. */
   .site-nav{backdrop-filter:none;}
   .nav-links{
     position:fixed;inset:0;
-    background:linear-gradient(180deg, var(--enamel-mid), var(--enamel-deep));
+    background:var(--paper);
+    background-image:var(--cloud-scroll);
     flex-direction:column;
     align-items:flex-start;
     /* Clears the header rather than matching its exact height: the panel
@@ -308,52 +287,65 @@ section.tight .section-title::after{width:110px;}
   position:relative;
   padding:5rem 1.5rem 3.5rem;
   text-align:center;
-  color:var(--cream);
+  color:var(--ink);
   overflow:hidden;
+  background-color:var(--paper);
   background-image:
     var(--cloud-scroll),
-    radial-gradient(ellipse 70% 60% at 50% -10%, rgba(29,124,134,.55), transparent 70%),
-    linear-gradient(180deg, var(--enamel-mid) 0%, var(--enamel-deep) 80%);
+    radial-gradient(ellipse 70% 60% at 50% -10%, rgba(240,164,33,.30), transparent 70%);
 }
 .hero.compact{padding:2.2rem 1.5rem 1.8rem;}
 
-/* Home hero: one wide Forbidden City photo behind a dark scrim */
+/* Home hero: one wide photo, framed like a giant postcard print */
 .hero.home-hero{
   padding:1.6rem 1rem 1.5rem;min-height:0;
   background-image:url('forbidden-city-hero.jpg');
   background-size:cover;
   background-position:center 60%;
+  border-bottom:2.5px solid var(--ink);
 }
 .hero.home-hero::before{
   content:"";position:absolute;inset:0;
-  background:
-    linear-gradient(180deg, rgba(6,36,48,.55) 0%, rgba(6,36,48,.88) 100%),
-    radial-gradient(ellipse 70% 60% at 50% 30%, rgba(29,124,134,.22), transparent 70%);
+  background:linear-gradient(180deg, rgba(48,34,23,.18) 0%, rgba(48,34,23,.5) 100%);
 }
 .hero-hanzi{
   position:relative;z-index:1;
+  display:inline-block;
   font-weight:700;
-  color:var(--gold);opacity:.9;
+  color:var(--red-deep);
+  background:rgba(255,252,243,.92);
+  border:2px solid var(--ink);
+  border-radius:var(--radius-pill);
+  padding:.15rem .9rem;
   font-size:.85rem;letter-spacing:.3em;
-  margin-bottom:.3rem;
+  margin-bottom:.4rem;
+  box-shadow:2px 3px 0 rgba(48,34,23,.5);
 }
 .hero.home-hero .seal-title{width:56px;height:56px;margin-bottom:.5rem;}
 .hero.home-hero .seal-title span{font-size:1.15rem;}
-.hero.home-hero h1{font-size:clamp(1.3rem, 3.6vw, 1.8rem);}
-.hero.home-hero .byline{margin-top:.6rem;font-size:.72rem;}
-
+.hero.home-hero h1{
+  font-size:clamp(1.4rem, 3.8vw, 2rem);
+  color:var(--ink);text-shadow:none;
+  background:var(--cream);
+  border:2.5px solid var(--ink);
+  border-radius:12px;
+  padding:.15em .6em .2em;
+  transform:rotate(-1.4deg);
+  box-shadow:5px 6px 0 rgba(201,58,43,.85);
+}
+.hero.home-hero .byline{margin-top:.7rem;font-size:.72rem;}
 .seal-title{
   z-index:1;
   width:118px;height:118px;
   margin:0 auto 1.4rem;
   display:flex;align-items:center;justify-content:center;
   transform:rotate(-2deg);
-  box-shadow:inset 0 0 0 2px rgba(232,200,118,0.22);
+  box-shadow:inset 0 0 0 2px rgba(255,236,214,.3);
 }
 .hero.compact .seal-title{width:64px;height:64px;margin-bottom:.6rem;}
 .seal-title span{
-  font-family:var(--font-display);
-  font-size:2.6rem;font-weight:900;color:var(--paper);
+  font-family:var(--font-hanzi);
+  font-size:2.6rem;font-weight:900;color:#FFF1EA;
   writing-mode:vertical-rl;letter-spacing:.15em;
 }
 .hero.compact .seal-title span{font-size:1.4rem;}
@@ -361,24 +353,44 @@ section.tight .section-title::after{width:110px;}
   position:relative;z-index:1;
   font-family:var(--font-ui);
   letter-spacing:.22em;text-transform:uppercase;font-size:.68rem;font-weight:800;
-  color:var(--gold);margin-bottom:.4rem;
+  color:var(--red);margin-bottom:.4rem;
 }
 .hero h1{
   position:relative;z-index:1;
-  font-family:var(--font-display);font-weight:900;
-  font-size:clamp(1.9rem, 5vw, 2.9rem);
-  margin:0 0 .45rem;color:var(--cream);
-  text-shadow:0 2px 0 rgba(0,0,0,.45), 0 0 34px rgba(43,179,176,.45);
+  display:inline-block;
+  font-family:var(--font-display);font-weight:400;
+  font-size:clamp(2.1rem, 5.6vw, 3.2rem);
+  margin:0 0 .45rem;color:var(--ink);
+  text-shadow:3px 3px 0 rgba(240,164,33,.55);
 }
-.hero.compact h1{font-size:clamp(1.5rem, 4vw, 2.05rem);}
+.hero.compact h1{font-size:clamp(1.7rem, 4.4vw, 2.3rem);}
 .hero p.sub{
   position:relative;z-index:1;
-  max-width:580px;margin:0 auto;font-size:.98rem;color:var(--mint);
+  max-width:580px;margin:0 auto;font-size:.98rem;color:var(--ink-soft);font-weight:600;
 }
-.hero.home-hero p.sub{font-size:.92rem;}
+.hero.home-hero p.sub{
+  display:inline-block;max-width:580px;
+  font-size:.9rem;color:var(--ink);
+  background:rgba(255,252,243,.94);
+  border:2px solid var(--ink);
+  border-radius:10px;
+  padding:.3rem .8rem;
+  transform:rotate(.6deg);
+  box-shadow:3px 4px 0 rgba(48,34,23,.5);
+}
 .hero .byline{
   position:relative;z-index:1;
-  margin-top:.8rem;font-size:.8rem;color:var(--gold);font-style:italic;
+  margin-top:.8rem;font-size:.8rem;color:var(--red-deep);font-style:italic;font-weight:700;
+}
+.hero.home-hero .byline{
+  display:inline-block;
+  color:var(--ink);font-style:normal;
+  background:rgba(240,164,33,.95);
+  border:2px solid var(--ink);
+  border-radius:var(--radius-pill);
+  padding:.2rem .9rem;
+  transform:rotate(-.7deg);
+  box-shadow:3px 4px 0 rgba(48,34,23,.5);
 }
 /* Jump link to the facts section. The facts sit below a long intro, so without
    a signpost above the fold nobody scrolls far enough to find them. */
@@ -387,19 +399,20 @@ section.tight .section-title::after{width:110px;}
   display:inline-block;margin-top:1.1rem;
   padding:.6rem 1.3rem;
   font-family:var(--font-ui);font-size:.88rem;font-weight:800;
-  color:var(--enamel-mid);text-decoration:none;
-  background:linear-gradient(150deg, var(--gold), var(--gold-2));
-  border:0;border-radius:var(--radius-pill);
-  box-shadow:0 0 0 1.5px var(--wire), 0 6px 0 var(--gold-deep), 0 10px 20px rgba(0,0,0,.4);
+  color:#FFF6EC;text-decoration:none;
+  background:linear-gradient(150deg, var(--red-bright), var(--red));
+  border:2.5px solid var(--ink);border-radius:var(--radius-pill);
+  transform:rotate(-1deg);
+  box-shadow:4px 5px 0 rgba(48,34,23,.82);
   transition:transform .15s ease, box-shadow .15s ease;
 }
 .hero-jump:hover{
-  transform:translateY(-3px);
-  box-shadow:0 0 0 1.5px var(--cream), 0 9px 0 var(--gold-deep), 0 14px 26px rgba(0,0,0,.5);
+  transform:rotate(0deg) translate(-2px,-3px);
+  box-shadow:7px 9px 0 rgba(48,34,23,.82);
 }
 .hero-jump:active{
-  transform:translateY(3px);
-  box-shadow:0 0 0 1.5px var(--wire), 0 2px 0 var(--gold-deep);
+  transform:translate(3px,4px);
+  box-shadow:1px 1px 0 rgba(48,34,23,.82);
 }
 .hero-jump[hidden]{display:none;}
 /* The site nav is sticky, so an un-offset anchor jump parks the heading behind it. */
@@ -409,7 +422,7 @@ section.tight .section-title::after{width:110px;}
 .nav-cards{
   display:grid;
   grid-template-columns:repeat(4, 1fr);
-  gap:.9rem;
+  gap:1.1rem;
   max-width:1000px;margin:0 auto;
   padding:0 1.5rem;
 }
@@ -420,115 +433,113 @@ section.tight .section-title::after{width:110px;}
   text-align:center;
   transition:transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .22s ease;
 }
+/* Stickers never land perfectly straight. Hover peels them upright. */
+.nav-card:nth-child(odd){transform:rotate(-1.2deg);}
+.nav-card:nth-child(even){transform:rotate(1deg);}
 .nav-card:hover, .nav-card:focus-visible{
-  transform:translateY(-6px) rotate(-1.2deg) scale(1.03);
-  box-shadow:
-    0 0 0 1.5px var(--gold),
-    0 0 0 5px rgba(6,36,48,.5),
-    0 20px 38px rgba(0,0,0,.55),
-    inset 0 1px 0 rgba(255,255,255,.4);
+  transform:translateY(-6px) rotate(0deg) scale(1.03);
+  box-shadow:var(--pop-big);
 }
-.nav-card .icon{font-size:2rem;margin-bottom:.35rem;}
-.nav-card .hanzi{display:block;font-size:.74rem;color:var(--gold);opacity:.9;margin-bottom:.2rem;letter-spacing:.12em;}
-.nav-card h3{margin:0 0 .35rem;color:var(--cream);font-size:1.05rem;}
-.nav-card p{margin:0;font-family:var(--font-body);font-size:.8rem;color:var(--mint);line-height:1.45;}
-/* The featured card takes the coral enamel field instead of the teal one. */
+.nav-card .icon{font-size:2.2rem;margin-bottom:.35rem;}
+.nav-card .hanzi{display:block;font-size:.78rem;color:var(--red);margin-bottom:.2rem;letter-spacing:.12em;font-weight:700;}
+.nav-card h3{margin:0 0 .35rem;color:var(--ink);font-size:1.12rem;}
+.nav-card p{margin:0;font-family:var(--font-body);font-size:.8rem;color:var(--ink-soft);line-height:1.45;font-weight:600;}
+/* The featured card is the red sticker in the sheet. */
 .nav-card.featured{
-  background:linear-gradient(158deg, var(--coral) 0%, #C93B2E 55%, var(--coral-2) 100%);
+  background-color:var(--red);
+  background-image:var(--texture-paper);
+  box-shadow:5px 6px 0 rgba(142,33,22,.55);
 }
-.nav-card.featured h3{color:#FFF3E4;}
-.nav-card.featured p{color:#FFD8CE;}
-.nav-card.featured .hanzi{color:#FFE07A;}
+.nav-card.featured h3{color:#FFF6EC;}
+.nav-card.featured p{color:#FFE3D8;}
+.nav-card.featured .hanzi{color:#FFD98A;}
 
 /* ---------- Sections ---------- */
-main{background:var(--enamel-deep);}
+main{background:transparent;}
 section{max-width:920px;margin:0 auto;padding:4rem 1.5rem;}
 section.wide{max-width:1140px;}
 section.tight{padding:1.2rem 1.5rem 2rem;}
 .section-head{text-align:center;margin-bottom:1.1rem;}
 section.tight .section-head{margin-bottom:.8rem;}
 .section-title{
-  font-family:var(--font-display);font-weight:900;
-  color:var(--cream);font-size:2rem;margin:0 0 .7rem;
-  text-shadow:0 2px 0 rgba(0,0,0,.35);
+  font-family:var(--font-display);font-weight:400;
+  color:var(--ink);font-size:2.2rem;margin:0 0 .7rem;
+  text-shadow:3px 3px 0 rgba(240,164,33,.5);
 }
-section.tight .section-title{font-size:1.35rem;margin-bottom:.4rem;}
-.section-sub{color:var(--mint);margin-top:.9rem;font-style:normal;font-size:.95rem;}
+section.tight .section-title{font-size:1.4rem;margin-bottom:.4rem;}
+.section-sub{color:var(--ink-soft);margin-top:.9rem;font-style:normal;font-size:.95rem;font-weight:600;}
 section.tight .section-sub{margin-top:.5rem;font-size:.84rem;}
 
-/* ---------- Scroll panel (signature element) ----------
-   Deliberately the one light surface left: this is the only block with enough
-   continuous prose to punish light-on-dark. It is mounted in gold wire so it
-   still reads as part of the enamel system. */
+/* ---------- Scroll panel ----------
+   Maisie's diary still reads off a hand scroll — now a red lacquer one
+   unrolled across the paper, with the same sticker outline as everything. */
 .scroll-panel{position:relative;margin:0 auto;max-width:780px;}
 .scroll-rod{
   height:20px;border-radius:10px;
-  background:linear-gradient(180deg, var(--enamel-teal), var(--enamel-teal-3));
+  background:linear-gradient(180deg, var(--red-bright), var(--red-deep));
+  border:2px solid var(--ink);
   box-shadow:
-    0 0 0 1.5px var(--wire),
-    inset 0 2px 3px rgba(255,255,255,0.25),
-    inset 0 -2px 4px rgba(0,0,0,0.4);
+    3px 3px 0 rgba(48,34,23,.4),
+    inset 0 2px 3px rgba(255,255,255,.3);
   position:relative;z-index:2;
 }
 .scroll-rod::before, .scroll-rod::after{
   content:"";position:absolute;top:-6px;
   width:26px;height:32px;border-radius:9px;
-  background:radial-gradient(circle at 35% 30%, #FFE08A, var(--gold) 55%, var(--gold-2) 100%);
-  box-shadow:0 0 0 1.5px var(--wire), var(--shadow-lift);
+  background:radial-gradient(circle at 35% 30%, #FFD98A, var(--gold) 55%, var(--gold-deep) 100%);
+  border:2px solid var(--ink);
+  box-shadow:2px 3px 0 rgba(48,34,23,.4);
 }
 .scroll-rod::before{left:-14px;}
 .scroll-rod::after{right:-14px;}
 .scroll-body{
-  background-color:var(--paper);
-  background-image:
-    var(--texture-paper),
-    linear-gradient(180deg, var(--paper) 0%, var(--paper-dark) 100%);
-  background-blend-mode:multiply, normal;
-  box-shadow:0 0 0 1.5px var(--wire), 0 0 0 5px rgba(6,36,48,.5), var(--shadow-soft);
+  background-color:var(--cream);
+  background-image:var(--texture-paper);
+  border-left:2.5px solid var(--ink);
+  border-right:2.5px solid var(--ink);
+  box-shadow:var(--pop-soft);
   color:var(--ink);
   font-size:1.06rem;
   padding:2.4rem 2.6rem;position:relative;
 }
 .scroll-body::before{
   content:"";position:absolute;left:0;right:0;top:0;height:14px;
-  background:linear-gradient(180deg, rgba(0,0,0,0.14), transparent);
+  background:linear-gradient(180deg, rgba(48,34,23,.12), transparent);
 }
 .diary p{margin:0 0 1em;}
 .diary p:last-child{margin-bottom:0;}
-.diary strong{color:var(--coral-2);}
+.diary strong{color:var(--red-deep);}
 
-/* ---------- Family: enamel cards with medallion portraits ---------- */
+/* ---------- Family: sticker cards with medallion portraits ---------- */
 .family-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(210px,1fr));gap:1.7rem;}
 .family-card{
   padding:1.8rem 1.4rem 1.6rem;
   text-align:center;
   transition:transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .22s ease;
 }
+.family-card:nth-child(odd){transform:rotate(-1deg);}
+.family-card:nth-child(even){transform:rotate(.9deg);}
 .family-card:hover{
-  transform:translateY(-5px) rotate(-1deg) scale(1.02);
-  box-shadow:
-    0 0 0 1.5px var(--gold),
-    0 0 0 5px rgba(6,36,48,.5),
-    0 20px 38px rgba(0,0,0,.55),
-    inset 0 1px 0 rgba(255,255,255,.4);
+  transform:translateY(-5px) rotate(0deg) scale(1.02);
+  box-shadow:var(--pop-big);
 }
 /* A gold-ringed medallion, matching Maisie's avatar in the facts popout. */
 .seal-avatar{
   width:96px;height:96px;margin:0 auto 1rem;
   border:0;border-radius:50%;
-  background:linear-gradient(150deg, var(--coral), var(--coral-2));
-  box-shadow:0 0 0 2px var(--wire), 0 0 0 6px rgba(6,36,48,.55), var(--shadow-lift);
+  background:linear-gradient(150deg, var(--red-bright), var(--red-deep));
+  box-shadow:0 0 0 3px var(--gold), 0 0 0 5.5px var(--ink), 3px 4px 0 rgba(48,34,23,.35);
   display:flex;align-items:center;justify-content:center;
   font-size:2.4rem;color:#FFF1EA;overflow:hidden;
 }
 .seal-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
-.family-card h3{margin:.2rem 0 0;color:var(--cream);font-size:1.2rem;}
+.family-card h3{margin:.2rem 0 0;color:var(--ink);font-size:1.25rem;}
 .family-role{
   font-family:var(--font-ui);
   font-size:.68rem;text-transform:uppercase;letter-spacing:.14em;
-  color:var(--gold);font-weight:800;margin:.35rem 0 .75rem;
+  color:var(--red);font-weight:800;margin:.35rem 0 .75rem;
 }
-.family-card p{font-family:var(--font-body);font-size:.9rem;color:var(--mint);margin:0;}
+.family-card p{font-family:var(--font-body);font-size:.9rem;color:var(--ink-soft);margin:0;font-weight:600;}
 
 /* ---------- Map: the big immersive stage ---------- */
 .map-section{min-height:88vh;display:flex;flex-direction:column;justify-content:center;padding-top:1.5rem;padding-bottom:1.5rem;}
@@ -536,14 +547,14 @@ section.tight .section-sub{margin-top:.5rem;font-size:.84rem;}
 .map-case{
   position:relative;
   width:100%;max-width:760px;
-  background:linear-gradient(158deg,
-    var(--enamel-teal) 0%, var(--enamel-teal-2) 45%, var(--enamel-teal-3) 100%);
-  border:0;border-radius:var(--radius-panel);padding:24px;
-  box-shadow:0 0 0 1.5px var(--wire), 0 0 0 5px rgba(6,36,48,.5), var(--shadow-deep);
+  background-color:var(--cream);
+  background-image:var(--texture-paper);
+  border:2.5px solid var(--ink);border-radius:var(--radius-panel);padding:24px;
+  box-shadow:var(--pop);
   transition:filter .55s ease, transform .55s ease, opacity .4s ease;
 }
 /* Full-perimeter key-fret molding — the largest plain surface on the site,
-   so it carries the ornament rather than a bare gold rule. */
+   so it carries the ornament rather than a bare rule. */
 .map-case::before{
   content:"";
   position:absolute;inset:7px;
@@ -552,25 +563,26 @@ section.tight .section-sub{margin-top:.5rem;font-size:.84rem;}
   background-repeat:repeat-x, repeat-x, repeat-y, repeat-y;
   background-size:20px 10px, 20px 10px, 10px 20px, 10px 20px;
   background-position:left top, left bottom, left top, right top;
-  opacity:.6;
+  opacity:.5;
 }
-.map-case.dimmed{filter:blur(7px) brightness(.4) saturate(.6);transform:scale(.93);pointer-events:none;}
-/* A cream mat and a wire around it, drawn with box-shadow spread rather than
-   padding: #pinLayer places pins as percentages of .map-inner, so padding here
-   would push every pin off its landmark. box-shadow takes no layout space. */
+.map-case.dimmed{filter:blur(7px) brightness(.75) saturate(.6);transform:scale(.93);pointer-events:none;}
+/* A paper mat and an ink keyline around it, drawn with box-shadow spread
+   rather than padding: #pinLayer places pins as percentages of .map-inner,
+   so padding here would push every pin off its landmark. box-shadow takes
+   no layout space. */
 .map-inner{
-  position:relative;background:var(--paper);
+  position:relative;background:var(--cream);
   border:0;border-radius:4px;overflow:hidden;
-  box-shadow:0 0 0 8px var(--paper), 0 0 0 9.5px var(--wire);
+  box-shadow:0 0 0 8px var(--cream), 0 0 0 10px var(--ink);
 }
 .map-inner img{width:100%;display:block;}
-/* An enamel disc with a gold wire, not a map-app marker: no glow, no pulse. */
+/* A red seal disc with a paper ring — a stamp pressed onto the plan. */
 .pin{
   position:absolute;transform:translate(-50%,-50%);
   width:32px;height:32px;
   border:0;border-radius:50%;padding:0;
-  background:linear-gradient(150deg, var(--coral), var(--coral-2));
-  box-shadow:0 0 0 2px var(--wire), 0 4px 10px rgba(0,0,0,.5);
+  background:linear-gradient(150deg, var(--red-bright), var(--red-deep));
+  box-shadow:0 0 0 2.5px var(--cream), 0 0 0 4px var(--ink), 2px 3px 0 rgba(48,34,23,.4);
   color:#FFF1EA;
   font-family:var(--font-ui);font-weight:800;font-size:.85rem;
   display:flex;align-items:center;justify-content:center;
@@ -599,27 +611,27 @@ section.tight .section-sub{margin-top:.5rem;font-size:.84rem;}
 /* The panorama has no meaningful north, so the compass would be a lie. */
 :root[data-trip="great-wall"] .compass{display:none;}
 .pin:hover, .pin.active{
-  background:linear-gradient(150deg, var(--gold), var(--gold-2));
-  color:var(--enamel-mid);
+  background:linear-gradient(150deg, #FFC85E, var(--gold));
+  color:var(--ink);
   text-shadow:none;
   transform:translate(-50%,-50%) scale(1.16);
-  box-shadow:0 0 0 2px var(--cream), 0 6px 14px rgba(0,0,0,.55);
+  box-shadow:0 0 0 2.5px var(--cream), 0 0 0 4px var(--ink), 3px 5px 0 rgba(48,34,23,.45);
 }
 .compass{
   position:absolute;top:10px;right:10px;width:38px;height:38px;border-radius:50%;
-  background:linear-gradient(150deg, var(--gold), var(--gold-2));
-  border:0;
-  box-shadow:0 0 0 1.5px var(--wire), inset 0 1px 0 rgba(255,255,255,.45);
+  background:linear-gradient(150deg, #FFC85E, var(--gold));
+  border:2px solid var(--ink);
+  box-shadow:2px 2px 0 rgba(48,34,23,.4);
   display:flex;align-items:center;justify-content:center;
-  font-family:var(--font-ui);font-weight:800;color:var(--enamel-mid);font-size:.72rem;
+  font-family:var(--font-ui);font-weight:800;color:var(--ink);font-size:.72rem;
 }
-.map-legend{font-family:var(--font-ui);font-size:.76rem;color:var(--mint);margin-top:.9rem;text-align:center;opacity:.85;}
+.map-legend{font-family:var(--font-ui);font-size:.76rem;color:var(--ink-soft);margin-top:.9rem;text-align:center;}
 
 /* ---------- Location popout: the map recedes, this rises into focus ---------- */
 .location-overlay{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:1.5rem;pointer-events:none;}
-.location-backdrop{position:absolute;inset:0;background:rgba(4,22,30,0);transition:background .5s ease;}
+.location-backdrop{position:absolute;inset:0;background:rgba(48,34,23,0);transition:background .5s ease;}
 .location-overlay.open{pointer-events:auto;}
-.location-overlay.open .location-backdrop{background:rgba(4,22,30,.78);backdrop-filter:blur(5px);}
+.location-overlay.open .location-backdrop{background:rgba(48,34,23,.55);backdrop-filter:blur(5px);}
 .location-card{
   width:100%;max-width:640px;max-height:86vh;overflow-y:auto;
   padding:2rem 2.1rem 2.2rem;
@@ -633,45 +645,70 @@ section.tight .section-sub{margin-top:.5rem;font-size:.84rem;}
   cursor:pointer;display:inline-flex;align-items:center;gap:.4rem;
 }
 .panel{min-height:180px;clear:both;}
-.panel .placeholder{color:var(--mint);font-style:italic;text-align:center;padding:3rem 1rem;}
-.panel h2{font-family:var(--font-display);font-weight:900;color:var(--cream);margin:0 0 .1rem;font-size:1.5rem;}
-.panel .chinese{color:var(--gold);opacity:.9;font-size:.95rem;margin-bottom:1rem;}
-.panel .story{font-family:var(--font-body);color:#E7F4F2;}
+.panel .placeholder{color:var(--ink-soft);font-style:italic;text-align:center;padding:3rem 1rem;}
+.panel h2{font-family:var(--font-display);font-weight:400;color:var(--ink);margin:0 0 .1rem;font-size:1.6rem;}
+.panel .chinese{color:var(--red);font-size:.95rem;margin-bottom:1rem;font-weight:700;}
+.panel .story{font-family:var(--font-body);color:var(--ink);}
 .panel .story p{margin:0 0 .9em;}
 .william-toggle{
   display:flex;align-items:center;gap:.5rem;
-  font-family:var(--font-ui);font-size:.78rem;color:var(--mint);
-  justify-content:flex-end;margin:0 0 .8rem;clear:both;
+  font-family:var(--font-ui);font-size:.78rem;color:var(--ink-soft);
+  justify-content:flex-end;margin:0 0 .8rem;clear:both;font-weight:600;
 }
-/* William gets the coral enamel inset — same plate as the facts quotes. */
+/* William's commentary is a comic speech bubble butting in from the corner. */
 .william-box{
-  margin-top:1.1rem;
-  background:linear-gradient(160deg, var(--coral), #A82C24);
-  border:0;border-radius:13px;
-  box-shadow:0 0 0 1.5px var(--wire), inset 0 1px 0 rgba(255,255,255,.3);
+  position:relative;
+  margin-top:1.4rem;
+  background:#FFE9B8;
+  border:2.5px solid var(--ink);border-radius:13px;
+  box-shadow:3px 4px 0 rgba(48,34,23,.4);
   padding:.9rem 1.05rem;
-  font-family:var(--font-body);font-size:.9rem;color:#FFF1EA;
+  font-family:var(--font-body);font-size:.9rem;color:var(--ink);font-weight:600;
 }
-.william-box b{color:#FFE07A;}
+.william-box::before{
+  content:"";
+  position:absolute;top:-14px;right:32px;
+  width:20px;height:20px;
+  background:#FFE9B8;
+  border-left:2.5px solid var(--ink);
+  border-top:2.5px solid var(--ink);
+  transform:skewX(35deg) rotate(45deg);
+}
+.william-box b{color:var(--red-deep);}
 
-/* ---------- Photo thumbs (used in popout + gallery page) ---------- */
-.photo-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(130px,1fr));gap:1.1rem;margin-top:1.5rem;}
+/* ---------- Photo thumbs (used in popout + gallery page) ----------
+   Polaroid prints taped into the journal: white border, washi-tape strip,
+   a slightly different tilt every time. */
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(130px,1fr));gap:1.3rem;margin-top:1.7rem;}
 .photo-thumb{
   position:relative;cursor:pointer;overflow:visible;
-  border:0;border-radius:12px;
-  padding:6px 6px 3px;
-  background:linear-gradient(158deg, var(--enamel-teal-2), var(--enamel-teal-3));
-  box-shadow:0 0 0 1.5px var(--wire), 0 0 0 4px rgba(6,36,48,.5), var(--shadow-lift);
+  border:2px solid var(--ink);border-radius:6px;
+  padding:7px 7px 4px;
+  background-color:var(--cream);
+  background-image:var(--texture-paper);
+  box-shadow:3px 4px 0 rgba(48,34,23,.4);
   text-align:left;
   transition:transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease;
 }
+.photo-thumb:nth-child(odd){transform:rotate(-1.6deg);}
+.photo-thumb:nth-child(even){transform:rotate(1.3deg);}
+.photo-thumb::after{
+  content:"";
+  position:absolute;top:-9px;left:50%;
+  width:56px;height:17px;
+  transform:translateX(-50%) rotate(-3deg);
+  background:var(--tape);
+  border-radius:2px;
+  pointer-events:none;
+}
 .photo-thumb:hover{
-  transform:translateY(-5px) rotate(-1deg) scale(1.02);
-  box-shadow:0 0 0 1.5px var(--gold), 0 0 0 4px rgba(6,36,48,.5), var(--shadow-soft);
+  transform:translateY(-5px) rotate(0deg) scale(1.03);
+  box-shadow:5px 7px 0 rgba(48,34,23,.4);
+  z-index:2;
 }
 .photo-thumb img,
-.photo-thumb video{aspect-ratio:4/3;object-fit:cover;width:100%;display:block;border-radius:7px;}
-.photo-thumb .cap{padding:.5rem .3rem .25rem;font-family:var(--font-body);font-size:.78rem;color:var(--mint);}
+.photo-thumb video{aspect-ratio:4/3;object-fit:cover;width:100%;display:block;border-radius:3px;}
+.photo-thumb .cap{padding:.5rem .3rem .25rem;font-family:var(--font-body);font-size:.78rem;color:var(--ink);font-weight:700;}
 /* Attribution line for the few sourced photos. Sits in normal flow between the
    image and the caption rather than overlaying the picture. Plain text, not a
    link: the thumb is a <button> and a nested <a> is invalid. */
@@ -679,7 +716,7 @@ section.tight .section-sub{margin-top:.5rem;font-size:.84rem;}
   display:block;padding:.4rem .3rem 0;
   font-family:var(--font-ui);
   font-size:.62rem;line-height:1.35;letter-spacing:.02em;
-  color:var(--mint);opacity:.7;
+  color:var(--ink-soft);
 }
 /* Play badge marks a video thumb. Stays click-through so the whole thumb
    remains one button. */
@@ -688,21 +725,17 @@ section.tight .section-sub{margin-top:.5rem;font-size:.84rem;}
   z-index:2;pointer-events:none;
   width:2.7rem;height:2.7rem;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(150deg, var(--coral), var(--coral-2));
+  background:linear-gradient(150deg, var(--red-bright), var(--red-deep));
   color:#FFF1EA;font-size:1rem;
   padding-left:.18rem;
-  box-shadow:0 0 0 2px var(--wire), 0 4px 10px rgba(0,0,0,.5);
+  box-shadow:0 0 0 2.5px var(--cream), 0 0 0 4px var(--ink);
   border:0;
 }
 .photo-empty{
-  grid-column:1/-1;text-align:center;color:var(--mint);font-style:italic;
+  grid-column:1/-1;text-align:center;color:var(--ink-soft);font-style:italic;
   padding:1.7rem 1.4rem;border-radius:12px;
-  box-shadow:inset 0 0 0 1.5px var(--wire);
-  background-image:var(--fret), var(--fret);
-  background-repeat:repeat-x, repeat-x;
-  background-size:20px 10px, 20px 10px;
-  background-position:left top, left bottom;
-  opacity:.9;
+  border:2.5px dashed var(--ink-soft);
+  background:rgba(255,252,243,.6);
 }
 
 /* ---------- Bonus feature (e.g. Maisie's princess photo) ---------- */
@@ -712,16 +745,18 @@ section.tight .section-sub{margin-top:.5rem;font-size:.84rem;}
   padding:1.5rem;
 }
 .bonus-feature img{
-  border-radius:10px;
-  box-shadow:0 0 0 1.5px var(--wire), 0 0 0 5px rgba(6,36,48,.5), var(--shadow-lift);
+  border:2px solid var(--ink);
+  border-radius:6px;
+  box-shadow:4px 5px 0 rgba(201,58,43,.5);
+  transform:rotate(-1.6deg);
 }
 .bonus-feature .bonus-eyebrow{
   font-family:var(--font-ui);
   font-size:.68rem;text-transform:uppercase;letter-spacing:.14em;
-  color:var(--gold);font-weight:800;margin-bottom:.4rem;
+  color:var(--red);font-weight:800;margin-bottom:.4rem;
 }
-.bonus-feature h3{margin:0 0 .55rem;color:var(--cream);font-size:1.25rem;}
-.bonus-feature p{margin:0 0 .7rem;font-family:var(--font-body);font-size:.93rem;color:var(--mint);}
+.bonus-feature h3{margin:0 0 .55rem;color:var(--ink);font-size:1.3rem;}
+.bonus-feature p{margin:0 0 .7rem;font-family:var(--font-body);font-size:.93rem;color:var(--ink);}
 .bonus-feature p:last-child{margin-bottom:0;}
 @media (max-width:640px){
   .bonus-feature{grid-template-columns:1fr;text-align:center;}
@@ -730,10 +765,9 @@ section.tight .section-sub{margin-top:.5rem;font-size:.84rem;}
 
 /* ---------- Ten mind-blowing facts (story page) ----------
    Teaser tiles carry only the number; the fact is the reward for opening the
-   popout. Tiles cycle through four enamel fields by index — real cloisonné is
-   polychrome, and one colour turns the grid into a spreadsheet.
-   The plate, wire and lattice come from the shared .fact-tile / .fact-pop
-   entries in the ORNAMENT PRIMITIVES section. */
+   popout. Tiles are cream stickers that cycle four ink colours by index —
+   border, stat and index chip together — so the grid reads as a sticker
+   sheet, and the text stays ink-on-cream (AA everywhere) throughout. */
 .facts-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit, minmax(170px, 1fr));
@@ -746,59 +780,58 @@ section.tight .section-sub{margin-top:.5rem;font-size:.84rem;}
   font-family:var(--font-ui);
   transition:transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .22s ease;
 }
+.fact-tile:nth-child(odd){transform:rotate(-1.1deg);}
+.fact-tile:nth-child(even){transform:rotate(.9deg);}
 .fact-tile:hover, .fact-tile:focus-visible{
-  transform:translateY(-6px) rotate(-1.2deg) scale(1.03);
-  box-shadow:
-    0 0 0 1.5px var(--gold),
-    0 0 0 5px rgba(6,36,48,.5),
-    0 20px 38px rgba(0,0,0,.55),
-    inset 0 1px 0 rgba(255,255,255,.4);
+  transform:translateY(-6px) rotate(0deg) scale(1.03);
+  box-shadow:var(--pop-big);
 }
 .fact-index{
-  position:absolute;top:-11px;left:14px;
-  background:linear-gradient(150deg, var(--gold), var(--gold-2));
-  color:var(--enamel-mid);font-weight:800;font-size:.62rem;letter-spacing:.06em;
+  position:absolute;top:-13px;left:14px;
+  color:#FFF6EC;font-weight:800;font-size:.62rem;letter-spacing:.06em;
   padding:.18rem .62rem;border-radius:var(--radius-pill);
-  box-shadow:0 0 0 1.5px var(--enamel-mid), 0 4px 9px rgba(0,0,0,.45);
+  border:2px solid var(--ink);
+  box-shadow:2px 2px 0 rgba(48,34,23,.4);
 }
 .fact-stat{
   display:block;
-  font-family:var(--font-display);font-weight:900;
+  font-family:var(--font-display);font-weight:400;
   font-size:clamp(1.7rem, 4.2vw, 2.1rem);line-height:1;
-  color:var(--gold);overflow-wrap:anywhere;
-  text-shadow:0 2px 0 rgba(0,0,0,.35);
+  overflow-wrap:anywhere;
 }
 .fact-label{
   display:block;margin-top:.4rem;
   font-size:.64rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
-  color:var(--mint);
+  color:var(--ink);
 }
 .fact-hint{
   display:block;margin-top:.75rem;
-  font-size:.64rem;font-weight:700;color:#FFC9BE;opacity:.62;
+  font-size:.64rem;font-weight:700;color:var(--ink-soft);opacity:.75;
   transition:opacity .2s ease;
 }
 .fact-tile:hover .fact-hint, .fact-tile:focus-visible .fact-hint{opacity:1;}
 
-/* Enamel fields, cycled by index in site.js. */
-.fact-tile[data-enamel="coral"], .fact-pop[data-enamel="coral"]{
-  background:linear-gradient(158deg, var(--coral) 0%, #C93B2E 55%, var(--coral-2) 100%);
-}
-.fact-tile[data-enamel="jade"], .fact-pop[data-enamel="jade"]{
-  background:linear-gradient(158deg, #226655 0%, var(--jade) 50%, var(--jade-2) 100%);
-}
-.fact-tile[data-enamel="deep"], .fact-pop[data-enamel="deep"]{
-  background:linear-gradient(158deg, #14586B 0%, #0C4457 50%, #072E3C 100%);
-}
-.fact-tile[data-enamel="coral"] .fact-stat{color:#FFE07A;}
-.fact-tile[data-enamel="coral"] .fact-label{color:#FFD8CE;}
-.fact-tile[data-enamel="coral"] .fact-hint{color:#FFE9DF;}
+/* The four sticker inks, cycled by index in site.js. The data-enamel values
+   are the JS contract ("teal"/"coral"/"jade"/"deep"); here they map to
+   porcelain blue, vermilion, jade and gold. */
+.fact-tile[data-enamel="teal"], .fact-pop[data-enamel="teal"]{border-color:var(--blue);box-shadow:5px 6px 0 rgba(42,100,150,.55);}
+.fact-tile[data-enamel="coral"], .fact-pop[data-enamel="coral"]{border-color:var(--red);box-shadow:5px 6px 0 rgba(201,58,43,.55);}
+.fact-tile[data-enamel="jade"], .fact-pop[data-enamel="jade"]{border-color:var(--jade);box-shadow:5px 6px 0 rgba(30,129,99,.55);}
+.fact-tile[data-enamel="deep"], .fact-pop[data-enamel="deep"]{border-color:var(--gold);box-shadow:5px 6px 0 rgba(240,164,33,.6);}
+.fact-tile[data-enamel="teal"] .fact-stat, .fact-pop[data-enamel="teal"] .fact-pop-stat{color:var(--blue);}
+.fact-tile[data-enamel="coral"] .fact-stat, .fact-pop[data-enamel="coral"] .fact-pop-stat{color:var(--red);}
+.fact-tile[data-enamel="jade"] .fact-stat, .fact-pop[data-enamel="jade"] .fact-pop-stat{color:var(--jade);}
+.fact-tile[data-enamel="deep"] .fact-stat, .fact-pop[data-enamel="deep"] .fact-pop-stat{color:var(--gold-deep);}
+.fact-tile[data-enamel="teal"] .fact-index{background:var(--blue);}
+.fact-tile[data-enamel="coral"] .fact-index{background:var(--red);}
+.fact-tile[data-enamel="jade"] .fact-index{background:var(--jade);}
+.fact-tile[data-enamel="deep"] .fact-index{background:var(--gold-deep);}
 
 /* ---- The popout ---- */
 .fact-overlay{
   position:fixed;inset:0;z-index:95;
   display:grid;place-items:center;padding:1.2rem;
-  background:rgba(4,22,30,.86);
+  background:rgba(48,34,23,.6);
   backdrop-filter:blur(5px);
 }
 .fact-overlay[hidden]{display:none;}
@@ -806,13 +839,8 @@ section.tight .section-sub{margin-top:.5rem;font-size:.84rem;}
   width:min(560px, 100%);max-height:88vh;overflow-y:auto;
   padding:1.7rem 1.7rem 1.4rem;
   border-radius:20px;
+  border-width:3px;
   font-family:var(--font-ui);
-  box-shadow:
-    0 0 0 2px var(--wire),
-    0 0 0 7px rgba(6,36,48,.75),
-    var(--shadow-deep),
-    inset 0 1px 0 rgba(255,255,255,.34),
-    inset 0 -30px 60px rgba(0,0,0,.3);
   animation:factPop .38s cubic-bezier(.34,1.56,.64,1);
 }
 @keyframes factPop{
@@ -821,120 +849,125 @@ section.tight .section-sub{margin-top:.5rem;font-size:.84rem;}
 }
 .fact-close{
   position:absolute;top:1rem;right:1rem;z-index:3;
-  width:34px;height:34px;border-radius:50%;border:0;cursor:pointer;
-  background:linear-gradient(150deg, var(--coral), var(--coral-2));
-  color:#FFE9DF;font-size:.95rem;font-weight:700;
-  box-shadow:0 0 0 1.5px var(--wire), 0 4px 10px rgba(0,0,0,.5);
+  width:34px;height:34px;border-radius:50%;border:2px solid var(--ink);cursor:pointer;
+  background:linear-gradient(150deg, var(--red-bright), var(--red));
+  color:#FFF1EA;font-size:.95rem;font-weight:700;
+  box-shadow:2px 2px 0 rgba(48,34,23,.5);
 }
 .fact-badge{
   display:inline-block;
-  background:linear-gradient(150deg, var(--gold), var(--gold-2));
-  color:var(--enamel-mid);font-weight:800;font-size:.64rem;letter-spacing:.1em;
+  background:var(--ink);
+  color:#FFF6EC;font-weight:800;font-size:.64rem;letter-spacing:.1em;
   text-transform:uppercase;padding:.3rem .8rem;border-radius:var(--radius-pill);
-  box-shadow:0 0 0 1.5px var(--enamel-mid), 0 4px 10px rgba(0,0,0,.45);
+  box-shadow:2px 2px 0 rgba(48,34,23,.3);
 }
 .fact-pop-stat{
-  font-family:var(--font-display);font-weight:900;
+  font-family:var(--font-display);font-weight:400;
   font-size:clamp(2.4rem, 9vw, 3.6rem);line-height:1;
-  color:var(--gold);margin-top:.85rem;overflow-wrap:anywhere;
-  text-shadow:0 3px 0 rgba(0,0,0,.35);
+  margin-top:.85rem;overflow-wrap:anywhere;
 }
 .fact-pop-label{
-  color:var(--mint);font-size:.7rem;font-weight:700;
+  color:var(--ink);font-size:.7rem;font-weight:700;
   letter-spacing:.14em;text-transform:uppercase;margin-top:.35rem;
 }
-/* The quote sits on its own coral enamel inset, the same plate as William's
-   box on the map — it is Maisie talking, not body copy. */
+/* The quote is Maisie talking, not body copy — a speech bubble off the page. */
 .fact-quote-plate{
-  margin-top:1.15rem;padding:1rem 1.1rem 1.05rem;
+  position:relative;
+  margin-top:1.4rem;padding:1rem 1.1rem 1.05rem;
   border-radius:15px;
-  background:linear-gradient(160deg, var(--coral), #A82C24);
-  box-shadow:0 0 0 1.5px var(--wire), 0 10px 24px rgba(0,0,0,.4),
-             inset 0 1px 0 rgba(255,255,255,.3);
+  background:var(--paper);
+  border:2.5px solid var(--ink);
+  box-shadow:3px 4px 0 rgba(48,34,23,.35);
 }
-.fact-qmark{font-family:var(--font-display);font-size:2.6rem;line-height:.6;color:#FFD3C7;opacity:.55;}
+.fact-quote-plate::after{
+  content:"";
+  position:absolute;bottom:-14px;left:34px;
+  width:20px;height:20px;
+  background:var(--paper);
+  border-right:2.5px solid var(--ink);
+  border-bottom:2.5px solid var(--ink);
+  transform:skewX(35deg) rotate(45deg);
+}
+.fact-qmark{font-family:var(--font-display);font-size:2.6rem;line-height:.6;color:var(--red);opacity:.6;}
 .fact-quote{
   font-family:var(--font-body);font-size:.96rem;line-height:1.62;
-  color:#FFF1EA;margin:.2rem 0 0;
+  color:var(--ink);margin:.2rem 0 0;font-weight:600;
 }
-.fact-quote strong{color:#FFE07A;}
-.fact-who{display:flex;align-items:center;gap:.7rem;margin-top:1rem;}
+.fact-quote strong{color:var(--red-deep);}
+.fact-who{display:flex;align-items:center;gap:.7rem;margin-top:1.35rem;}
 .fact-who img{
   width:46px;height:46px;border-radius:50%;object-fit:cover;
-  box-shadow:0 0 0 2px var(--wire), 0 0 0 5px rgba(6,36,48,.55);
+  box-shadow:0 0 0 2.5px var(--gold), 0 0 0 4.5px var(--ink);
 }
-.fact-who b{display:block;color:#FFF3D6;font-size:.8rem;}
-.fact-who span span{color:#FFC9BE;font-size:.68rem;}
+.fact-who b{display:block;color:var(--ink);font-size:.8rem;}
+.fact-who span span{color:var(--ink-soft);font-size:.68rem;}
 .fact-foot{display:flex;align-items:center;gap:.75rem;margin-top:1.3rem;}
 .fact-arrow{
-  width:40px;height:40px;border-radius:50%;border:0;cursor:pointer;
+  width:40px;height:40px;border-radius:50%;border:2.5px solid var(--ink);cursor:pointer;
   font-size:1rem;font-weight:800;
-  background:linear-gradient(var(--gold), var(--gold-2));
-  color:var(--enamel-mid);
-  box-shadow:0 0 0 1.5px var(--enamel-mid), 0 5px 0 var(--gold-deep);
+  background:linear-gradient(#FFC85E, var(--gold));
+  color:var(--ink);
+  box-shadow:0 4px 0 rgba(48,34,23,.82);
   transition:transform .12s ease, box-shadow .12s ease;
 }
 .fact-arrow:active{
   transform:translateY(4px);
-  box-shadow:0 0 0 1.5px var(--enamel-mid), 0 1px 0 var(--gold-deep);
+  box-shadow:0 0 0 rgba(48,34,23,.82);
 }
 .fact-dots{display:flex;gap:.35rem;margin:0 auto;}
 .fact-dot{
-  width:8px;height:8px;border-radius:50%;cursor:pointer;
-  background:rgba(245,237,216,.28);
+  width:9px;height:9px;border-radius:50%;cursor:pointer;
+  background:rgba(48,34,23,.22);
   transition:transform .2s ease, background .2s ease, box-shadow .2s ease;
 }
-.fact-dot.on{background:var(--gold);transform:scale(1.45);box-shadow:0 0 9px var(--gold);}
-.fact-count{color:var(--mint);font-size:.7rem;font-weight:700;letter-spacing:.08em;}
+.fact-dot.on{background:var(--red);transform:scale(1.45);box-shadow:0 0 0 2px rgba(201,58,43,.3);}
+.fact-count{color:var(--ink-soft);font-size:.7rem;font-weight:700;letter-spacing:.08em;}
 
 /* ---------- Gallery page ---------- */
-.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(160px,1fr));gap:1.3rem;}
-.gallery-filter{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-bottom:2rem;}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(160px,1fr));gap:1.5rem;}
+.gallery-filter{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin-bottom:2rem;}
 .gallery-filter button{
   padding:.45rem 1.05rem;font-size:.78rem;cursor:pointer;
 }
 
 /* ---------- Modal ---------- */
-.modal-overlay{position:fixed;inset:0;background:rgba(4,22,30,.86);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:1.5rem;z-index:100;}
+.modal-overlay{position:fixed;inset:0;background:rgba(48,34,23,.6);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:1.5rem;z-index:100;}
 .modal-overlay.open{display:flex;}
 .modal{
   max-width:640px;width:100%;max-height:88vh;overflow-y:auto;
-  box-shadow:
-    0 0 0 2px var(--wire),
-    0 0 0 7px rgba(6,36,48,.75),
-    var(--shadow-deep),
-    inset 0 1px 0 rgba(255,255,255,.34);
+  border-width:3px;
+  box-shadow:var(--pop-big);
 }
-.modal img{width:100%;border-radius:var(--radius-panel) var(--radius-panel) 0 0;}
-.modal video{width:100%;display:block;background:#000;max-height:70vh;border-radius:var(--radius-panel) var(--radius-panel) 0 0;}
+.modal img{width:100%;border-radius:13px 13px 0 0;}
+.modal video{width:100%;display:block;background:#000;max-height:70vh;border-radius:13px 13px 0 0;}
 .modal-body{padding:1.6rem 1.9rem 2.1rem;}
-.modal-body h3{font-family:var(--font-display);font-weight:900;color:var(--cream);margin:.2rem 0 .8rem;font-size:1.3rem;}
-.modal-body .modal-location{font-family:var(--font-ui);font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.12em;font-weight:800;margin-bottom:.35rem;}
-#modalDetail{font-family:var(--font-body);color:#E7F4F2;}
+.modal-body h3{font-family:var(--font-display);font-weight:400;color:var(--ink);margin:.2rem 0 .8rem;font-size:1.4rem;}
+.modal-body .modal-location{font-family:var(--font-ui);font-size:.72rem;color:var(--red);text-transform:uppercase;letter-spacing:.12em;font-weight:800;margin-bottom:.35rem;}
+#modalDetail{font-family:var(--font-body);color:var(--ink);}
 /* Full CC attribution, shown only for sourced photos (the element is hidden
    otherwise, so the rule never leaves a stray divider under a family photo). */
 .modal-credit{
-  margin-top:1.3rem;padding-top:.8rem;border-top:1px solid rgba(217,182,90,.45);
+  margin-top:1.3rem;padding-top:.8rem;border-top:2px dashed rgba(48,34,23,.3);
   font-family:var(--font-ui);
-  font-size:.72rem;line-height:1.5;color:var(--mint);font-style:italic;
+  font-size:.72rem;line-height:1.5;color:var(--ink-soft);font-style:italic;
 }
-.modal-credit a{color:var(--gold);}
+.modal-credit a{color:var(--red-deep);}
 /* Stays circular on purpose — an icon-only close is more recognisable
    as a disc than forced into the pill shape. */
 .modal-close{
   position:absolute;top:.8rem;right:.8rem;z-index:3;
   width:36px;height:36px;border-radius:50%;
-  background:linear-gradient(150deg, var(--coral), var(--coral-2));
-  color:#FFE9DF;border:0;
+  background:linear-gradient(150deg, var(--red-bright), var(--red));
+  color:#FFF1EA;border:2px solid var(--ink);
   font-size:1.05rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 0 1.5px var(--wire), 0 4px 10px rgba(0,0,0,.5);
+  box-shadow:2px 2px 0 rgba(48,34,23,.5);
 }
 .modal-close:hover{
-  background:linear-gradient(150deg, #FF7A63, var(--coral));
-  box-shadow:0 0 0 1.5px var(--cream), 0 4px 10px rgba(0,0,0,.5);
+  background:linear-gradient(150deg, #FF7A63, var(--red-bright));
+  box-shadow:3px 3px 0 rgba(48,34,23,.5);
 }
 
-footer{position:relative;text-align:center;color:var(--mint);opacity:.8;padding:3rem 1.5rem 4rem;font-size:.9rem;font-style:italic;}
+footer{position:relative;text-align:center;color:var(--ink-soft);padding:3rem 1.5rem 4rem;font-size:.9rem;font-style:italic;}
 
 /* ---------- Version stamp ----------
    z-index stays below every overlay (mobile nav 79, nav 80, location
@@ -947,8 +980,8 @@ footer{position:relative;text-align:center;color:var(--mint);opacity:.8;padding:
   font-family:var(--font-ui);
   font-size:.62rem;
   letter-spacing:.06em;
-  color:var(--mint);
-  opacity:.38;
+  color:var(--ink-soft);
+  opacity:.5;
   pointer-events:none;
   user-select:none;
 }
@@ -969,16 +1002,18 @@ footer{position:relative;text-align:center;color:var(--mint);opacity:.8;padding:
   .family-grid{grid-template-columns:repeat(auto-fit, minmax(150px,1fr));gap:1.1rem;}
   .family-card{padding:1.1rem .8rem;}
   .map-case{padding:8px;}
+  .map-inner{box-shadow:0 0 0 4px var(--cream), 0 0 0 6px var(--ink);}
   .pin{width:30px;height:30px;font-size:.8rem;}
   .compass{width:32px;height:32px;font-size:.65rem;}
   .panel{padding:0;}
   .modal-body{padding:1.2rem 1.3rem 1.6rem;}
-  .photo-grid{grid-template-columns:repeat(auto-fill, minmax(105px,1fr));gap:.7rem;}
-  .gallery-grid{grid-template-columns:repeat(auto-fill, minmax(120px,1fr));gap:.8rem;}
+  .photo-grid{grid-template-columns:repeat(auto-fill, minmax(105px,1fr));gap:.9rem;}
+  .gallery-grid{grid-template-columns:repeat(auto-fill, minmax(120px,1fr));gap:1rem;}
+  .photo-thumb::after{width:44px;height:14px;top:-7px;}
   .map-section{min-height:0;}
   .location-overlay{padding:0;}
-  .location-card{max-width:100%;max-height:100vh;height:100vh;border-radius:0;padding:1.3rem 1.2rem 2rem;box-shadow:none;}
-  .nav-cards{grid-template-columns:1fr 1fr;gap:.9rem;}
+  .location-card{max-width:100%;max-height:100vh;height:100vh;border-radius:0;border:0;padding:1.3rem 1.2rem 2rem;box-shadow:none;}
+  .nav-cards{grid-template-columns:1fr 1fr;gap:1rem;}
   .nav-card{padding:1.2rem .9rem;}
   .facts-grid{grid-template-columns:repeat(auto-fit, minmax(140px,1fr));gap:1.4rem .8rem;padding:.9rem 1rem 0;}
   .fact-tile{padding:1.1rem .85rem .9rem;}

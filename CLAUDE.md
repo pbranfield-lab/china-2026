@@ -67,7 +67,9 @@ at Mutianyu.
 ### The data layer
 
 Split across `assets/data/<trip-id>.js` plus the assembler `assets/data.js`,
-loaded in that order by every page. Each trip file declares one object:
+loaded in that order by every page. The trip files are large (30–46 KB each) —
+to edit one entry, Grep for its id and read a window around it rather than
+reading the whole file. Each trip file declares one object:
 
 ```js
 const TRIP_XIAN = { trip: {...}, facts: [...], locations: [...], photos: [...] };
@@ -168,34 +170,41 @@ The features with gotchas worth knowing before touching them:
 
 ### `assets/styles.css`
 
-One shared stylesheet for all pages, built on `:root` custom properties — a
-cloisonné (景泰蓝) enamel palette: deep teal grounds
-(`--enamel-deep`/`-mid`/`-teal*`), a gold wire hairline (`--wire`), gold
-(`--gold`), coral (`--coral`) and jade (`--jade`) enamel fields, with `--mint`
-and `--cream` for type on dark. Three Latin families — `--font-display`
-(Fraunces 900), `--font-ui` (Outfit), `--font-body` (Nunito) — plus
+One shared stylesheet for all pages, built on `:root` custom properties — the
+**"Maisie's zine" print palette**: bright warm rice paper (`--paper`, with
+`--cream` as the card/sticker fill), warm ink (`--ink`/`--ink-soft`) for type
+and outlines, and four accent inks cycled through the components — vermilion
+(`--red*`), gold (`--gold*`), jade (`--jade*`) and porcelain blue (`--blue*`).
+The register is lianhuanhua (连环画) comic print / tween magazine, chosen
+deliberately for the 11–14 audience: bright but not childish, everything
+outlined and scannable. Three Latin families — `--font-display` (Lilita One,
+single 400 weight, chunky), `--font-ui` (Outfit), `--font-body` (Nunito) — plus
 `--font-hanzi` (Noto Serif SC), which every hanzi element names explicitly
 because the Latin faces carry no CJK.
 
-Every raised surface shares one **enamel plate** recipe in the ORNAMENT
-PRIMITIVES section: a gradient field, a 1.5px gold wire, a dark setting ring, a
-glaze highlight and a lattice (`--lattice`) overlay on a `::before`.
-⚠️ That overlay is absolutely positioned, so **direct children of a plate need
-`position:relative`** or they paint underneath it — there is a grouped rule that
-does this for every plate class; extend it when adding a new one.
-`--cloud-scroll` is the page/hero ground pattern. The scroll panel is
-deliberately the one light surface left, because it is the only block with
-enough prose to punish light-on-dark. Component styles are grouped by
+Every raised surface shares one **sticker panel** recipe in the ORNAMENT
+PRIMITIVES section: a cream card with faint paper grain, a 2.5px warm-ink
+outline and a **hard offset shadow** (`--pop`/`--pop-big` — solid print
+shadows, never soft blurs). Cards rest at a slight `nth-child` tilt and
+straighten on hover. The grouped `position:relative` rule for panel children
+is kept as a stacking hook — extend it when adding a new panel class.
+`--cloud-scroll` is the page ground pattern; `--tape` is the washi-tape strip
+on photo thumbs (polaroid treatment). Fact tiles stay cream and cycle their
+`data-enamel` value ("teal"/"coral"/"jade"/"deep" — the JS contract) into
+border/stat/chip colours, so text is always ink-on-cream and passes AA — the
+v2 contrast problem no longer exists. Component styles are grouped by
 page/feature under comment headers — site nav, hero, nav cards, scroll panel,
 family cards, map, location popout, photo thumbs, gallery, modal, facts —
 followed by a single mobile media query block at the end covering all of them.
 
-⚠️ **The map's cream mat is drawn with `box-shadow` spread, not padding:**
+⚠️ **The map's mat is drawn with `box-shadow` spread, not padding:**
 `#pinLayer` positions pins as percentages of `.map-inner`, so any padding there
-shifts every pin off its landmark.
+shifts every pin off its landmark. (The mobile block overrides that same
+box-shadow smaller — keep the technique if editing either.)
 
-The re-skin shipped at `SITE_VERSION` 2.0.0. Its design and plan are kept for
-reference at `docs/superpowers/specs/2026-08-09-cloisonne-reskin-design.md` and
+The zine re-skin shipped at `SITE_VERSION` 3.0.0, replacing the dark cloisonné
+skin (v2.0.0), whose design docs remain at
+`docs/superpowers/specs/2026-08-09-cloisonne-reskin-design.md` and
 `docs/superpowers/plans/2026-08-09-cloisonne-reskin.md`.
 
 ## Adding content or writing copy

@@ -119,11 +119,11 @@ check("the photo modal is identical in map.html and gallery.html", () => {
 
 check("required CSS custom properties are defined", () => {
   const css = read("assets/styles.css");
-  const need = ["--enamel-deep","--enamel-mid","--enamel-teal","--enamel-teal-2",
-    "--enamel-teal-3","--wire","--gold","--gold-2","--gold-deep","--coral","--coral-2",
-    "--mint","--cream","--jade","--jade-2","--paper","--paper-dark","--ink","--ink-soft",
+  const need = ["--paper","--paper-dark","--cream","--ink","--ink-soft",
+    "--red","--red-deep","--red-bright","--gold","--gold-deep","--jade","--jade-deep",
+    "--blue","--blue-deep","--pop","--pop-big","--pop-soft","--tape",
     "--font-display","--font-ui","--font-body","--font-hanzi","--radius-panel",
-    "--radius-pill","--lattice","--cloud-scroll","--fret","--fret-v"];
+    "--radius-pill","--cloud-scroll","--fret","--fret-v"];
   const missing = need.filter(t => !new RegExp(`^\\s*${t}\\s*:`, "m").test(css));
   return missing.length ? `not defined: ${missing.join(", ")}` : null;
 });
