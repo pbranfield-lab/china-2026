@@ -169,62 +169,21 @@ newest `docs/HANDOFF-*.md`, plus
 `docs/superpowers/plans/2026-08-09-cloisonne-reskin.md`. Don't restyle anything
 ad hoc in the meantime — follow the plan.
 
-## Adding content
+## Adding content or writing copy
 
-- **New photo** — drop it into `Photographs/<photoDir>/`, add an entry to that
-  trip's `photos` array in `assets/data/<trip>.js`, with a `location` matching a
-  `LOCATIONS.id` on the same trip. Web-size it first: existing photos are ~1400px
-  on the long edge and 60–250 KB, not raw camera dumps.
-- **New video** — same, but re-encode to **H.264** first (phone video is usually
-  HEVC, which most browsers won't play) and add `type:"video"`. No LFS in this
-  repo, so keep it small: `chairlift-ride-up.mp4` went 204 MB → 17 MB with
-  `-vf scale=960:-2 -c:v libx264 -preset slow -crf 30 -c:a aac -b:a 80k -movflags +faststart`.
-- **New map location** — add to that trip's `locations` array with `x`/`y` read
-  off its plan image as percentages, plus `story` copy. `william` is optional —
-  omit it rather than stubbing it.
-- **New trip** — create `assets/data/<id>.js` on the pattern of the existing
-  three, add it to `TRIP_MODULES` in `assets/data.js`, add a `<script>` tag to all
-  five pages, create `Photographs/<photoDir>/`, and add a plan image to `assets/`.
-  `check.mjs` catches a missed script tag.
-- **Family portraits** — place in `Photographs/forbidden-city/` and reference via
-  `file` in `FAMILY`; picked up automatically on every trip.
-
-Source material, not wired into the site: `Guide/guide.txt` (raw exported chat
-notes with photo-by-photo historical detail); `docs/xian-moments.md` and
-`docs/great-wall-moments.md` (family anecdotes and William quotes still missing —
-the Great Wall one flags which people were identified by outfit-matching rather
-than confirmed, so check it before trusting a name in a caption);
-`docs/great-wall-curation.md` (which 27 of 82 raw files were kept, and why).
-
-## Content voice
-
-All copy — trip intros, `story`/`william`, photo `caption`/`detail` — is Maisie's
-first-person, wry-11-year-old voice, with recurring bits (Mum as "Queen of China,"
-William's deadpan one-liners, Dad's obsessive photo-taking). Match it rather than
-reverting to neutral museum-guide text. `docs/maisie-voice-interview.md` is the
-grounding source; the `maisie` subagent writes in it.
-
-**Two rules on truthfulness, which override tone:**
+**Read `docs/authoring.md` first.** It covers adding a photo, video, location or
+whole trip, the source-material files, Maisie's voice, and the attribution and
+privacy rules. Three things from it are absolute and repeated here so they can't
+be missed by a session that skipped the file:
 
 1. **Don't invent what happened on the trip.** Factual/historical copy about a
    place is fine to write. Specific family moments, quotes and reactions are the
-   family's to supply — leave them out and log them in a `docs/*-moments.md`
-   checklist instead. Nothing half-written ships: omit the field rather than
-   stubbing it.
+   family's to supply — omit the field and log it in a `docs/*-moments.md`
+   checklist instead. Nothing half-written ships.
 2. **Describe only what's actually in the photo.** Open the image before writing
    its caption. Several Xi'an files were misnamed, and captions written from the
    filename rather than the picture were wrong.
-
-**Sourced (non-family) photos** must not mention any family member and must stay
-factual. Currently three, all Xi'an: `bell-tower-day.jpg` (Wang Zhongyin, CC
-BY-SA 4.0), `muslim-quarter-great-mosque-sign.jpg` (Qianeal, CC BY-SA 4.0),
-`muslim-quarter-xiyangshi-arch.jpg` (thierrytutin, CC BY 2.0). The Great Wall trip
-is entirely family photos. Each carries a `credit` object so the attribution
-renders on the page — **a new sourced photo needs one; listing it here is not
-sufficient.** The `credit` objects still have no `source` URL: the originals' URLs
-were never recorded, so full TASL attribution remains incomplete.
-
-**Privacy.** Curation must drop anything that isn't a photograph of a place — the
-raw Great Wall set included a phone screenshot of the entry ticket showing a name
-and partial passport digits, excluded rather than resized. Check for screenshots,
-tickets and boarding passes before publishing a batch.
+3. **A sourced (non-family) photo needs a `credit` object** in its `photos` entry
+   — CC BY / BY-SA require the attribution to be visible wherever the work is
+   shown, so naming it in a doc is not enough. Sourced photos must not mention any
+   family member. Curation drops screenshots, tickets and boarding passes.
