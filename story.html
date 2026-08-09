@@ -40,13 +40,39 @@
     </div>
   </section>
 
-  <!-- Ten facts for the current trip, rendered from FACTS in data.js. -->
+  <!-- Ten facts for the current trip, rendered from FACTS in data.js.
+       The tiles carry only the number; the fact itself lives in the popout. -->
   <section class="wide" id="facts" hidden>
     <div class="section-head reveal">
       <h2 class="section-title">10 Mind-Blowing Facts</h2>
       <p class="section-sub" id="factsSub">Things I genuinely did not believe until I checked.</p>
     </div>
     <div class="facts-grid reveal" id="factsGrid"></div>
+
+    <!-- Opened by site.js when a tile is clicked; ←/→ step through all ten
+         without closing. Unhidden by script, never by CSS alone. -->
+    <div class="fact-overlay" id="factOverlay" hidden>
+      <div class="fact-pop" role="dialog" aria-modal="true" aria-labelledby="factStat" data-enamel="teal">
+        <button class="fact-close" id="factClose" aria-label="Close">✕</button>
+        <span class="fact-badge" id="factBadge"></span>
+        <div class="fact-pop-stat" id="factStat"></div>
+        <div class="fact-pop-label" id="factLabel"></div>
+        <div class="fact-quote-plate">
+          <div class="fact-qmark" aria-hidden="true">&ldquo;</div>
+          <p class="fact-quote" id="factQuote"></p>
+        </div>
+        <div class="fact-who">
+          <img src="assets/maisie-avatar.jpg" alt="Maisie" width="46" height="46">
+          <span><b>Maisie</b><span>age 11 · was actually there</span></span>
+        </div>
+        <div class="fact-foot">
+          <button class="fact-arrow" id="factPrev" aria-label="Previous fact">←</button>
+          <div class="fact-dots" id="factDots"></div>
+          <span class="fact-count" id="factCount"></span>
+          <button class="fact-arrow" id="factNext" aria-label="Next fact">→</button>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section class="tight">
