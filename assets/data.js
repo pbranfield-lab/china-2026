@@ -1,7 +1,7 @@
 /* ============================================================
    SITE VERSION — bump this one line; every page picks it up.
    ============================================================ */
-const SITE_VERSION = "1.4.0";
+const SITE_VERSION = "1.4.1";
 
 /* ============================================================
    HISTORY INTRO — Maisie's opening narration
@@ -599,6 +599,7 @@ const PHOTOS = [
     <p>It's a proper mad contrast, all these modern cars and streetlights in the foreground, and then this centuries-old tiered roof glowing away in the distance like it's from a completely different photo.</p>
     <p>Long day of travelling and this was the first actual look at Xi'an properly, so, decent way to land.</p>` },
   { id:"x17", location:"bell-tower", file:"bell-tower-day.jpg",
+    credit:{ author:"Wang Zhongyin", license:"CC BY-SA 4.0", licenseUrl:"https://creativecommons.org/licenses/by-sa/4.0/" },
     caption:"The Bell Tower, sat dead in the middle of the old city, taxis and everything driving straight round it.",
     detail:`<p>This is the Bell Tower, right in the centre of Xi'an where the old main roads all meet. It was first built in the 1300s and later moved to stand exactly here, and it's one of the best preserved bell towers left standing in the whole country.</p>
     <p>It used to have an actual job, not just look impressive, a huge bell inside got rung every morning to mark the start of the day for the whole city, with the nearby Drum Tower doing the same at dusk. Basically the entire population used to run on the sound of these two towers instead of a clock.</p>
@@ -614,11 +615,13 @@ const PHOTOS = [
     <p>Right in the foreground there's a staff member in a hi-vis vest with 执勤 on the back, which means "on duty," just stood there watching the whole thing, looking about as unbothered by any of it as you'd expect from someone who does this every single night.</p>
     <p>It's a proper mad mix, ancient-looking costumes, neon signs, food stalls, ushers in hi-vis, all happening in the same twenty metres.</p>` },
   { id:"x20", location:"xian-by-night", file:"muslim-quarter-great-mosque-sign.jpg",
+    credit:{ author:"Qianeal", license:"CC BY-SA 4.0", licenseUrl:"https://creativecommons.org/licenses/by-sa/4.0/" },
     caption:"The sign pointing to the Great Mosque, persimmon cakes hanging up right underneath it like nothing.",
     detail:`<p>This is a street corner in the Muslim Quarter, daytime, with a blue road sign pointing towards the Xi'an Great Mosque, written in Chinese and English both. Underneath it there's a whole rack of persimmon cakes hanging up to dry, plus food stalls either side selling snacks and pastries, and shop signs stacked up above everything in Chinese.</p>
     <p>The Muslim Quarter's home to Xi'an's Hui Muslim community, and it's been here for over a thousand years, going right back to Silk Road trading days. The Great Mosque itself is the biggest of ten mosques in this part of the city, tucked away just off this street.</p>
     <p>Even just from this one corner you can tell it's a proper working street, not a set-up-for-tourists version of one, carts, covered stalls, stacked signage, actual daily business going on.</p>` },
   { id:"x21", location:"xian-by-night", file:"muslim-quarter-xiyangshi-arch.jpg",
+    credit:{ author:"thierrytutin", license:"CC BY 2.0", licenseUrl:"https://creativecommons.org/licenses/by/2.0/" },
     caption:"The archway into Xiyangshi, one of the old market lanes, packed out even in the daytime.",
     detail:`<p>This is the archway leading into 西羊市, Xiyangshi, which translates to "West Sheep Market," one of the named lanes running through the Muslim Quarter. The street underneath's absolutely packed with people even in broad daylight, stalls either side selling meat and food, proper old carved wooden shopfronts either side of the arch itself.</p>
     <p>Streets like this have been part of Xi'an's food and trading scene for over a thousand years, right back to when this city was the actual starting point of the Silk Road, so the crowds and the stalls aren't a new thing at all, people have been doing exactly this here for centuries.</p>

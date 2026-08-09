@@ -11,7 +11,21 @@ Live at `https://pbranfield-lab.github.io/china-2026/`.
 
 ---
 
-## What's just been done (this session)
+## Latest change — visible CC attribution (`SITE_VERSION` 1.4.1)
+
+The three sourced Xi'an photos were credited in `CLAUDE.md` only, which CC BY /
+CC BY-SA don't accept — the attribution has to be visible where the work is
+shown. `PHOTOS` entries now take an optional `credit:{author, license,
+licenseUrl}`; `creditBadge()` renders a plain-text line on the thumbnail (plain
+text, not a link — a thumb is a `<button>`) and `#modalCredit` renders the full
+line with the licence linked, staying `hidden` for the family's own photos.
+`#modalCredit` was added to **both** copies of the modal markup.
+
+Still incomplete: no `source` URL on any of the three (see "Loose ends").
+
+---
+
+## The session before that
 
 The **Great Wall at Mutianyu** shipped as a third trip, `?trip=great-wall`.
 
@@ -282,9 +296,11 @@ the fan/ice-cream error and flagging every person it named by outfit-matching.
 - **⚠️ Identities in Great Wall captions were inferred from outfits, not
   confirmed.** The table in `docs/great-wall-moments.md` lists every one. If any
   is wrong, that caption is wrong.
-- **CC attribution still isn't shown on the page** — the three sourced Xi'an
-  photos are credited in `CLAUDE.md` only. CC BY-SA / CC BY want visible
-  attribution. Still worth a credit line in the modal or footer.
+- **CC attribution is now rendered** (done 2026-08-09), but it's **incomplete**:
+  author + licence only. Full TASL attribution also wants the *title* and a link
+  back to the *source*, and the originals' URLs were never recorded when the
+  three photos were taken from the web. If Paul can dig them out, add a
+  `source` URL to each `credit` object and link the credit line to it.
 - **No William quotes and no family moments on the Great Wall trip** — by
   design. `docs/great-wall-moments.md` is the checklist.
 - Empty placeholder folders: `Photographs/shanghai/`, `Photographs/xitan/`
@@ -338,4 +354,5 @@ files to add a trip, stop — you've missed the point of the architecture.
 2. One manual click of the facts jump button (see verification section).
 3. Chase the Great Wall family moments / William quotes — that trip currently
    has none by design.
-4. Consider visible CC attribution for the three sourced Xi'an photos.
+4. ~~Consider visible CC attribution for the three sourced Xi'an photos.~~ Done
+   — but source URLs are still missing, see "Loose ends".

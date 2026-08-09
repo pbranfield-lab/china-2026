@@ -34,7 +34,19 @@ function thumbMedia(photo){
     return `<video src="${photoSrc(photo)}#t=0.5" muted playsinline preload="metadata"></video>
             <span class="play-badge" aria-hidden="true">▶</span>`;
   }
-  return `<img src="${photoSrc(photo)}" alt="${photo.caption}" loading="lazy" />`;
+  return `<img src="${photoSrc(photo)}" alt="${photo.caption}" loading="lazy" />${creditBadge(photo)}`;
+}
+
+/* ---------- Attribution for sourced (non-family) photos ----------
+   A handful of PHOTOS entries aren't the family's own and carry an optional
+   credit:{author, license, licenseUrl}. CC BY / BY-SA both require the
+   attribution to be visible wherever the work is shown, so it goes on the
+   thumbnail as well as in the modal — naming it in CLAUDE.md isn't enough.
+   The thumbnail version is deliberately plain text: a thumb is a <button>,
+   and an <a> nested inside interactive content is invalid HTML. */
+function creditBadge(photo){
+  if(!photo.credit) return "";
+  return `<span class="thumb-credit">© ${photo.credit.author} · ${photo.credit.license}</span>`;
 }
 
 /* ---------- Nav: mobile toggle + current-page highlight ---------- */
@@ -238,6 +250,7 @@ let openPhoto = function(){};
   const modalTitle = document.getElementById("modalTitle");
   const modalDetail = document.getElementById("modalDetail");
   const modalLocation = document.getElementById("modalLocation");
+  const modalCredit = document.getElementById("modalCredit");
 
   /* Drop the video's source entirely rather than just hiding it — a paused
      <video> that still holds a src keeps buffering, and leaving one loaded
@@ -267,6 +280,15 @@ let openPhoto = function(){};
     if(modalLocation){
       const loc = (typeof LOCATIONS !== "undefined") ? LOCATIONS.find(l=>l.id===photo.location) : null;
       modalLocation.textContent = loc ? `${loc.num}. ${loc.name}` : "";
+    }
+    /* Full attribution, with the licence linked out to its deed. Hidden
+       outright for the family's own photos rather than left as an empty rule. */
+    if(modalCredit){
+      const c = photo.credit;
+      modalCredit.innerHTML = c
+        ? `Photograph by ${c.author}, used under <a href="${c.licenseUrl}" target="_blank" rel="noopener license">${c.license}</a>. Not one of ours.`
+        : "";
+      modalCredit.hidden = !c;
     }
     modalOverlay.classList.add("open");
   };
