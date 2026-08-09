@@ -965,16 +965,36 @@ let openPhoto = function(){};
     "No — and this is the bit I didn't believe either:"
   ];
 
-  let quiz, idx, score;
-  function start(){
-    quiz = shuffle([...eligible]).slice(0, 5).map(q=>{
+  /* Solo keeps the original five questions; two-player wants an even count
+     so both players face the same number, alternating question by question. */
+  let quiz, idx, players, scores;
+  const cur = () => idx % players;
+
+  function intro(){
+    card.innerHTML = `
+      <div class="quiz-top"><span class="quiz-badge">The Big Quiz</span></div>
+      <h3 class="quiz-q">How many of you are there, then?</h3>
+      <p class="quiz-mode-sub">Two player is pass-the-phone — you get a question, then you hand it over. No peeking.</p>
+      <div class="quiz-choices quiz-mode">
+        <button class="quiz-choice" type="button" data-players="1">Just me</button>
+        <button class="quiz-choice" type="button" data-players="2">Two of us</button>
+      </div>`;
+    card.querySelectorAll("[data-players]").forEach(b=>
+      b.addEventListener("click", ()=> start(Number(b.dataset.players))));
+  }
+
+  function start(n){
+    players = n || 1;
+    const want = players === 2 ? 6 : 5;
+    const cap = players === 2 ? eligible.length - (eligible.length % 2) : eligible.length;
+    quiz = shuffle([...eligible]).slice(0, Math.min(want, cap)).map(q=>{
       const choices = shuffle([
         {text: q.fact.stat, right: true},
         ...decoys(q).map(v=>({text: q.fmt(v), right: false}))
       ]);
       return {...q, choices};
     });
-    idx = 0; score = 0;
+    idx = 0; scores = Array(players).fill(0);
     ask();
   }
 
@@ -983,7 +1003,8 @@ let openPhoto = function(){};
     card.innerHTML = `
       <div class="quiz-top">
         <span class="quiz-badge">Question ${idx + 1} of ${quiz.length}</span>
-        <span class="quiz-score" aria-label="Score">${"⭐".repeat(score) || "☆"}</span>
+        ${players === 2 ? `<span class="quiz-player" data-p="${cur() + 1}">Player ${cur() + 1}, your go</span>` : ""}
+        <span class="quiz-score" aria-label="Score">${"⭐".repeat(scores[cur()]) || "☆"}</span>
       </div>
       <h3 class="quiz-q">${q.fact.q || `Guess the ${q.year ? "year" : "number"}: <em>${q.fact.label}</em>`}</h3>
       <div class="quiz-choices">
@@ -1003,11 +1024,12 @@ let openPhoto = function(){};
         if(q.choices[Number(b.dataset.i)].right) b.classList.add("correct");
         else if(b === btn) b.classList.add("wrong");
       });
-      if(pick.right) score++;
+      if(pick.right) scores[cur()]++;
+      SoundKit.fx(pick.right ? "right" : "wrong");
       const verdictPool = pick.right ? RIGHT : WRONG;
       card.querySelector(".quiz-verdict").textContent =
         (pick.right ? "✅ " : "❌ ") + verdictPool[Math.floor(Math.random() * verdictPool.length)];
-      card.querySelector(".quiz-score").textContent = "⭐".repeat(score) || "☆";
+      card.querySelector(".quiz-score").textContent = "⭐".repeat(scores[cur()]) || "☆";
       const after = card.querySelector(".quiz-after");
       after.hidden = false;
       after.querySelector(".quiz-next").focus();
@@ -1019,22 +1041,91 @@ let openPhoto = function(){};
   }
 
   function verdict(s, n){
-    if(s === n) return "Full marks! You may now call yourself an expert. I'll allow it.";
+    if(s === n) return "Full marks. You may now call yourself an expert. I'll allow it.";
     if(s >= n * .6) return "Very solid. A couple more goes and you'll be nearly as good as me.";
     if(s >= n * .4) return "Hmm. Did you read my facts, or just admire the pictures?";
     return "That was William-level effort. Scroll up, read my facts, come back.";
   }
 
+  function duelVerdict(){
+    const [a, b] = scores;
+    if(a === b) return a === 0
+      ? "Nil–nil. Did either of you actually read the site?"
+      : "It's a draw. Go again, one of you has to win eventually.";
+    const winner = a > b ? 1 : 2;
+    return [
+      `Player ${winner} wins. Verified by me, personally.`,
+      `Player ${winner} takes it. No arguing, I checked the maths.`
+    ][Math.floor(Math.random() * 2)];
+  }
+
+  /* The share sticker is drawn, never photographed: vectors, text and emoji
+     only, so the canvas stays untainted (toDataURL works even on file://). */
+  function saveSticker(){
+    const scoreText = players === 2 ? `${scores[0]} – ${scores[1]}` : `${scores[0]} / ${quiz.length}`;
+    document.fonts.load("96px 'Lilita One'").catch(()=>{}).then(()=>{
+      const c = document.createElement("canvas");
+      c.width = 640; c.height = 640;
+      const x = c.getContext("2d");
+      const box = (dx, dy) => {
+        x.beginPath();
+        x.roundRect(60 + dx, 60 + dy, 520, 520, 24);
+      };
+      x.fillStyle = "#FAEED6"; x.fillRect(0, 0, 640, 640);
+      x.fillStyle = "rgba(48,34,23,.82)"; box(10, 12); x.fill();
+      x.fillStyle = "#FFFCF3"; box(0, 0); x.fill();
+      x.lineWidth = 5; x.strokeStyle = "#302217"; box(0, 0); x.stroke();
+      x.textAlign = "center";
+      x.font = "80px 'Lilita One', sans-serif";
+      x.fillText(CURRENT_TRIP.icon, 320, 190);
+      x.fillStyle = "#77614C";
+      x.font = "800 24px Outfit, sans-serif";
+      x.fillText((players === 2 ? "HEAD TO HEAD · " : "") + CURRENT_TRIP.name.toUpperCase(), 320, 250);
+      x.fillStyle = "#C93A2B";
+      x.font = "110px 'Lilita One', sans-serif";
+      x.fillText(scoreText, 320, 380);
+      x.fillStyle = "#302217";
+      x.font = "34px 'Lilita One', sans-serif";
+      x.fillText("⭐".repeat(Math.max(...scores)) || "☆", 320, 440);
+      x.fillStyle = "#77614C";
+      x.font = "600 22px Outfit, sans-serif";
+      x.fillText("The Big Quiz · China 2026 · by Maisie", 320, 540);
+      const a = document.createElement("a");
+      a.href = c.toDataURL("image/png");
+      a.download = "china-2026-quiz-sticker.png";
+      a.click();
+    });
+  }
+
   function finish(){
+    const best = Math.max(...scores);
+    const prev = (store.get("quizBest", {}) || {})[CURRENT_TRIP.id] || 0;
+    store.patch("quizBest", { [CURRENT_TRIP.id]: Math.max(best, prev) });
+
+    const scoreboard = players === 2
+      ? `<div class="quiz-final-stat">${scores[0]} – ${scores[1]}</div>
+         <div class="quiz-duel">
+           <span>Player 1: ${"⭐".repeat(scores[0]) || "☆"}</span>
+           <span>Player 2: ${"⭐".repeat(scores[1]) || "☆"}</span>
+         </div>
+         <p class="quiz-verdict">${duelVerdict()}</p>`
+      : `<div class="quiz-final-stat">${scores[0]} / ${quiz.length}</div>
+         <div class="quiz-final-stars">${"⭐".repeat(scores[0]) || "…nothing? Really?"}</div>
+         <p class="quiz-verdict">${verdict(scores[0], quiz.length)}</p>`;
+
     card.innerHTML = `
       <div class="quiz-final">
         <span class="quiz-badge">Final score</span>
-        <div class="quiz-final-stat">${score} / ${quiz.length}</div>
-        <div class="quiz-final-stars">${"⭐".repeat(score) || "…nothing? Really?"}</div>
-        <p class="quiz-verdict">${verdict(score, quiz.length)}</p>
-        <button class="quiz-again" type="button">🔁 Different questions, same quiz</button>
+        ${scoreboard}
+        <div class="quiz-final-actions">
+          <button class="quiz-again" type="button">🔁 Different questions, same quiz</button>
+          <button class="quiz-sticker" type="button">📸 Save my score as a sticker</button>
+          <button class="quiz-mode-switch" type="button">Change players</button>
+        </div>
       </div>`;
-    card.querySelector(".quiz-again").addEventListener("click", start);
+    card.querySelector(".quiz-again").addEventListener("click", ()=> start(players));
+    card.querySelector(".quiz-sticker").addEventListener("click", saveSticker);
+    card.querySelector(".quiz-mode-switch").addEventListener("click", intro);
   }
 
   const n = Math.min(5, eligible.length);
@@ -1042,5 +1133,5 @@ let openPhoto = function(){};
   if(sub) sub.textContent =
     `${n === 5 ? "Five" : n} quick ones about ${CURRENT_TRIP.name}. Every answer is hiding in my facts above — no googling.`;
   document.getElementById("quiz").hidden = false;
-  start();
+  intro();
 })();
