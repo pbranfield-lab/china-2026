@@ -76,6 +76,98 @@ const store = (function(){
   };
 })();
 
+/* ---------- SoundKit ----------
+   All audio in one place: the per-trip ambient loop (from AUDIO in
+   extras.js), tiny WebAudio chirps for game feedback, and zh-CN speech
+   for the hanzi playground. Ambience is OFF by default and only ever
+   starts inside a user gesture — iOS and Chrome both refuse play()
+   outside one, which is also why a page load with sound left on waits
+   for the first pointerdown/keydown before resuming. speak() is
+   independent of the ambience toggle: pressing a pronunciation button
+   is its own consent. */
+const SoundKit = (function(){
+  let ambience = null;   // lazy <audio>, created inside a gesture
+  let ctx = null;        // lazy AudioContext for the fx chirps
+
+  const enabled = () => store.get("sound", "off") === "on";
+
+  function ambientSrc(){
+    if(typeof AUDIO === "undefined" || !CURRENT_TRIP) return null;
+    return AUDIO[CURRENT_TRIP.id] || null;
+  }
+
+  function startAmbience(){
+    const src = ambientSrc();
+    if(!src) return;
+    if(!ambience){
+      ambience = document.createElement("audio");
+      ambience.src = src.file;
+      ambience.loop = true;
+      ambience.preload = "none";
+      ambience.volume = 0.35;
+    }
+    ambience.play().catch(()=>{});
+  }
+
+  function stopAmbience(){
+    if(ambience) ambience.pause();
+  }
+
+  /* Feedback chirps are synthesised, not files: nothing to license,
+     nothing to download, and they can't 404. No-ops while sound is off. */
+  const FX = {
+    right: [[660, 0], [880, 0.07]],
+    wrong: [[220, 0], [175, 0.09]],
+    stamp: [[330, 0], [220, 0.05]],
+    cat:   [[780, 0], [990, 0.06], [1245, 0.12]]
+  };
+  function fx(name){
+    if(!enabled() || !FX[name]) return;
+    try{
+      ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+      if(ctx.state === "suspended") ctx.resume();
+      for(const [freq, at] of FX[name]){
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = "triangle";
+        o.frequency.value = freq;
+        const t = ctx.currentTime + at;
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(0.1, t + 0.015);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
+        o.connect(g).connect(ctx.destination);
+        o.start(t); o.stop(t + 0.14);
+      }
+    }catch(e){}
+  }
+
+  const zhVoice = () =>
+    speechSynthesis.getVoices().find(v => /^zh([-_]|$)/i.test(v.lang));
+
+  function speak(text){
+    if(!("speechSynthesis" in window)) return;
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "zh-CN";
+    u.rate = 0.8;
+    const v = zhVoice();
+    if(v) u.voice = v;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+  }
+
+  /* Voice lists load async on most engines and some never fire
+     voiceschanged, so callers get an answer via callback, exactly once. */
+  function hasZhVoice(cb){
+    if(!("speechSynthesis" in window)) return cb(false);
+    let done = false;
+    const answer = () => { if(!done){ done = true; cb(!!zhVoice()); } };
+    if(speechSynthesis.getVoices().length) return answer();
+    speechSynthesis.addEventListener("voiceschanged", answer, { once:true });
+    setTimeout(answer, 1500);
+  }
+
+  return { enabled, startAmbience, stopAmbience, fx, speak, hasZhVoice };
+})();
+
 /* ---------- Nav: mobile toggle + current-page highlight ---------- */
 (function(){
   const toggle = document.getElementById("navToggle");
@@ -165,6 +257,54 @@ if(CURRENT_TRIP) document.documentElement.setAttribute("data-trip", CURRENT_TRIP
   el.className = "version-stamp";
   el.textContent = "v" + SITE_VERSION;
   document.body.appendChild(el);
+})();
+
+/* ---------- Sound toggle (every page) ----------
+   Injected like the version stamp: no per-page container. Bottom-right
+   (the stamp owns bottom-left). Turning it on inside the click handler
+   satisfies the autoplay rules; arriving on a page with sound already on
+   waits for the first gesture instead. */
+(function(){
+  if(typeof AUDIO === "undefined" || !CURRENT_TRIP) return;
+  const btn = document.createElement("button");
+  btn.id = "soundToggle";
+  btn.className = "sound-toggle";
+  const paint = () => {
+    const on = SoundKit.enabled();
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    btn.innerHTML = on ? "🔊 <span>Sound on</span>" : "🔇 <span>Sound off</span>";
+  };
+  btn.addEventListener("click", () => {
+    const on = !SoundKit.enabled();
+    store.set("sound", on ? "on" : "off");
+    if(on) SoundKit.startAmbience(); else SoundKit.stopAmbience();
+    paint();
+  });
+  paint();
+  document.body.appendChild(btn);
+
+  if(SoundKit.enabled()){
+    const resume = () => SoundKit.startAmbience();
+    window.addEventListener("pointerdown", resume, { once:true });
+    window.addEventListener("keydown", resume, { once:true });
+  }
+})();
+
+/* ---------- Play-page credits panel ----------
+   Sounds are CC0 so credit isn't legally required, but the site's rule is
+   that sourced media gets visible attribution regardless. Vendored
+   libraries add their lines here in later features. */
+(function(){
+  const box = document.getElementById("playCredits");
+  if(!box || typeof AUDIO === "undefined" || typeof TRIPS === "undefined") return;
+  const lines = Object.entries(AUDIO).map(([tripId, a]) => {
+    const trip = TRIPS.find(t => t.id === tripId);
+    return `<li>${trip ? trip.name : tripId} ambience: <a href="${a.sourceUrl}">“${a.title}”</a> by ${a.author} (${a.license})</li>`;
+  });
+  if(!lines.length) return;
+  box.innerHTML = `<h3>Credits, because fair's fair</h3>
+    <ul>${lines.join("")}</ul>`;
+  box.hidden = false;
 })();
 
 /* ---------- Scroll reveal ---------- */

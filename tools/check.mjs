@@ -154,6 +154,18 @@ check("the quiz and teaser containers are in place", () => {
   return null;
 });
 
+check("AUDIO entries resolve to real trips, files and credits", () => {
+  const { TRIPS, AUDIO } = loadData();
+  const ids = new Set(TRIPS.map(t => t.id));
+  for (const [trip, a] of Object.entries(AUDIO)){
+    if (!ids.has(trip)) return `AUDIO has no matching trip: ${trip}`;
+    for (const k of ["file","title","author","license","sourceUrl"])
+      if (!a[k]) return `AUDIO["${trip}"] is missing ${k}`;
+    if (!existsSync(join(ROOT, a.file))) return `${a.file} does not exist on disk`;
+  }
+  return null;
+});
+
 check("journey.html and play.html carry their section containers", () => {
   const j = read("journey.html");
   const missingJ = ["journey","journeySub","journeyStage","timeline","timelineSub","timelineRibbon"]

@@ -101,6 +101,26 @@ The three Xi'an `credit` objects still have no source URL recorded (the
 originals' URLs were lost), so their TASL attribution remains incomplete; the
 Xitang and Shanghai ones are recorded above.
 
+## Sourced audio
+
+The per-trip ambient loops (`assets/audio/<trip-id>.mp3`, wired up in `AUDIO`
+in `assets/data/extras.js`) are Freesound recordings, all CC0, trimmed to 60 s
+mono at 48 kbps with edge fades (`ffmpeg -ss 5 -t 60 -ac 1 -b:a 48k` plus
+`afade` in/out). CC0 requires no attribution, but the credits still render on
+play.html and the full TASL is recorded here:
+
+| File | Original title | Author | Licence | Source |
+|---|---|---|---|---|
+| `audio/forbidden-city.mp3` | Courtyard ambience with pigeons and city sounds in spring | Garuda1982 | CC0 | [Freesound](https://freesound.org/people/Garuda1982/sounds/851386/) |
+| `audio/xian.mp3` | R08-48-Crowd in Reverberant Space.wav | craigsmith | CC0 | [Freesound](https://freesound.org/people/craigsmith/sounds/480728/) |
+| `audio/great-wall.mp3` | Rocky Mountain Outdoors: wind and birds | petebuchwald | CC0 | [Freesound](https://freesound.org/people/petebuchwald/sounds/288899/) |
+| `audio/xitang.mp3` | water lake waves light gentle lap at boats on beach.flac | kyles | CC0 | [Freesound](https://freesound.org/people/kyles/sounds/637945/) |
+| `audio/shanghai.mp3` | Traffic noise in the street of Tuzla, Bosnia | Davor | CC0 | [Freesound](https://freesound.org/people/Davor/sounds/382267/) |
+
+A replacement loop should stay CC0 (or CC BY with the credit added to the
+play.html panel), keep to roughly 60 s / ≤400 KB, and update `AUDIO`, this
+table and `node tools/check.mjs` will hold it to that.
+
 ## Privacy
 
 Curation must drop anything that isn't a photograph of a place. The raw Great Wall

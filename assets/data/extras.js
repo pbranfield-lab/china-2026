@@ -34,6 +34,25 @@ const COMPARATORS = {};
 
 const THEN_NOW = [];
 
-const AUDIO = {};
+/* Per-trip ambient loops, all CC0 from Freesound, trimmed to 60 s mono at
+   48 kbps. CC0 needs no attribution but gets it anyway — the credits render
+   on play.html and the TASL details live in docs/authoring.md. */
+const AUDIO = {
+  "forbidden-city": { file:"assets/audio/forbidden-city.mp3",
+    title:"Courtyard ambience with pigeons", author:"Garuda1982", license:"CC0",
+    sourceUrl:"https://freesound.org/people/Garuda1982/sounds/851386/" },
+  "xian": { file:"assets/audio/xian.mp3",
+    title:"Crowd in a reverberant space", author:"craigsmith", license:"CC0",
+    sourceUrl:"https://freesound.org/people/craigsmith/sounds/480728/" },
+  "great-wall": { file:"assets/audio/great-wall.mp3",
+    title:"Rocky mountain outdoors: wind and birds", author:"petebuchwald", license:"CC0",
+    sourceUrl:"https://freesound.org/people/petebuchwald/sounds/288899/" },
+  "xitang": { file:"assets/audio/xitang.mp3",
+    title:"Water gently lapping at boats", author:"kyles", license:"CC0",
+    sourceUrl:"https://freesound.org/people/kyles/sounds/637945/" },
+  "shanghai": { file:"assets/audio/shanghai.mp3",
+    title:"Street traffic noise", author:"Davor", license:"CC0",
+    sourceUrl:"https://freesound.org/people/Davor/sounds/382267/" }
+};
 
 const CATS = [];

@@ -115,7 +115,8 @@ section.tight .section-title::after{width:110px;}
    hard offset shadow — printed and stuck down, not floating. */
 .enamel,
 .nav-card, .family-card, .location-card, .modal,
-.bonus-feature, .fact-tile, .fact-pop, .teaser-card, .quiz-card{
+.bonus-feature, .fact-tile, .fact-pop, .teaser-card, .quiz-card,
+.play-credits{
   position:relative;
   border:2.5px solid var(--ink);
   border-radius:var(--radius-panel);
@@ -132,7 +133,7 @@ section.tight .section-title::after{width:110px;}
 .enamel > *,
 .nav-card > *, .family-card > *, .modal > *,
 .bonus-feature > *, .fact-tile > *, .fact-pop > *,
-.teaser-card > *, .quiz-card > *,
+.teaser-card > *, .quiz-card > *, .play-credits > *,
 .location-card > .panel, .location-card > .william-toggle{
   position:relative;
 }
@@ -1130,6 +1131,48 @@ footer{position:relative;text-align:center;color:var(--ink-soft);padding:3rem 1.
   user-select:none;
 }
 
+/* ---------- Sound toggle ----------
+   Injected by site.js on every page, bottom-right (the version stamp owns
+   bottom-left). Same pill language as the other labelled controls, kept
+   below every overlay like the stamp. */
+.sound-toggle{
+  position:fixed;
+  right:.7rem;bottom:.6rem;
+  z-index:70;
+  display:flex;align-items:center;gap:.4rem;
+  padding:.45rem .85rem;
+  border:2px solid var(--ink);
+  border-radius:var(--radius-pill);
+  background:var(--cream);
+  box-shadow:3px 3px 0 rgba(48,34,23,.5);
+  font-family:var(--font-ui);
+  font-weight:600;
+  font-size:.8rem;
+  color:var(--ink);
+  cursor:pointer;
+  transition:box-shadow .18s ease, transform .18s ease;
+}
+.sound-toggle:hover{box-shadow:5px 5px 0 rgba(48,34,23,.5);transform:translate(-1px,-1px);}
+.sound-toggle[aria-pressed="true"]{background:linear-gradient(150deg, #FFE9BF, #FFD98F);}
+
+/* ---------- Play-page credits ---------- */
+.play-credits{
+  padding:1.2rem 1.4rem;
+  font-size:.82rem;
+  color:var(--ink-soft);
+}
+.play-credits h3{
+  font-family:var(--font-ui);
+  font-weight:800;
+  font-size:.85rem;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--ink);
+  margin-bottom:.5rem;
+}
+.play-credits ul{list-style:none;display:grid;gap:.25rem;}
+.play-credits a{color:var(--blue);}
+
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
 .reveal.in{opacity:1;transform:translateY(0);}
 
@@ -1179,4 +1222,7 @@ footer{position:relative;text-align:center;color:var(--ink-soft);padding:3rem 1.
   .quiz-choice{font-size:1.15rem;padding:.75rem .6rem;}
   .quiz-q{font-size:1.15rem;}
   .nav-brand{font-size:.9rem;}
+  /* Icon-only toggle on phones: the label would sit over content. */
+  .sound-toggle{padding:.45rem .55rem;}
+  .sound-toggle span{display:none;}
 }

@@ -23,7 +23,8 @@ const read = f => readFileSync(join(ROOT, f), "utf8");
    the input is this checkout's own data, nothing attacker-supplied. */
 const DATA_FILES = readdirSync(join(ROOT, "assets/data")).map(f => "assets/data/" + f);
 const src = DATA_FILES.map(read).join("\n") + read("assets/data.js");
-const { TRIPS, PHOTOS, FAMILY } = new Function(src + ";return {TRIPS,PHOTOS,FAMILY};")();
+const { TRIPS, PHOTOS, FAMILY, AUDIO } =
+  new Function(src + ";return {TRIPS,PHOTOS,FAMILY,AUDIO};")();
 
 const used = new Set();
 const dirOf = id => (TRIPS.find(t => t.id === id) || {}).photoDir || "";
@@ -33,6 +34,7 @@ for (const t of TRIPS) {
   if (t.map) used.add(("assets/" + t.map).toLowerCase());
   if (t.hero) used.add(t.hero.toLowerCase());
 }
+for (const a of Object.values(AUDIO || {})) used.add(a.file.toLowerCase());
 
 /* Paths hard-coded outside the data layer. */
 const CODE = ["index.html", "story.html", "family.html", "map.html", "gallery.html",
