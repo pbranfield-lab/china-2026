@@ -180,6 +180,24 @@ check("JOURNEY route resolves, chains, and matches the map markers", () => {
   return null;
 });
 
+check("TIMELINE eras chain and events land inside them", () => {
+  const { TRIPS, TIMELINE } = loadData();
+  const ids = new Set(TRIPS.map(t => t.id));
+  for (let i = 0; i < TIMELINE.eras.length; i++){
+    const e = TIMELINE.eras[i];
+    if (e.to <= e.from) return `${e.name} ends before it starts`;
+    if (i && e.from !== TIMELINE.eras[i - 1].to)
+      return `gap between ${TIMELINE.eras[i - 1].name} and ${e.name}`;
+  }
+  for (const ev of TIMELINE.events){
+    if (ev.trip && !ids.has(ev.trip)) return `event trip unknown: ${ev.trip}`;
+    if (!ev.china || !ev.britain) return `event at ${ev.year} is missing copy`;
+    if (!TIMELINE.eras.some(e => ev.year >= e.from && ev.year < e.to))
+      return `event year ${ev.year} falls outside every era`;
+  }
+  return null;
+});
+
 check("AUDIO entries resolve to real trips, files and credits", () => {
   const { TRIPS, AUDIO } = loadData();
   const ids = new Set(TRIPS.map(t => t.id));

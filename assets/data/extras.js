@@ -58,7 +58,50 @@ const JOURNEY = {
   ]
 };
 
-const TIMELINE = { eras: [], events: [] };
+/* Dynasty ribbon. Years are signed integers (negative = BC) and eras are
+   contiguous — check.mjs enforces the chain. Two deliberate
+   simplifications, both standard in kid-facing timelines: the messy
+   220–581 stretch (Three Kingdoms through the Northern and Southern
+   dynasties) is one "Divided China" block, and the Yuan is dated from
+   1279 (rule over all of China) so the Song can end where it actually
+   fell. Every event date is verified; approx:true renders "roughly". */
+const TIMELINE = {
+  eras: [
+    { name:"Qin",               hanzi:"秦",   from:-221, to:-206 },
+    { name:"Han",               hanzi:"汉",   from:-206, to:220 },
+    { name:"Divided China",                   from:220,  to:581 },
+    { name:"Sui",               hanzi:"隋",   from:581,  to:618 },
+    { name:"Tang",              hanzi:"唐",   from:618,  to:907 },
+    { name:"Five Dynasties",                  from:907,  to:960 },
+    { name:"Song",              hanzi:"宋",   from:960,  to:1279 },
+    { name:"Yuan",              hanzi:"元",   from:1279, to:1368 },
+    { name:"Ming",              hanzi:"明",   from:1368, to:1644 },
+    { name:"Qing",              hanzi:"清",   from:1644, to:1912 },
+    { name:"Republic",          hanzi:"民国", from:1912, to:1949 },
+    { name:"People's Republic", hanzi:"中国", from:1949, to:2026 }
+  ],
+  today:"And then we turned up. This whole website is what happened next.",
+  events: [
+    { year:-210, trip:"xian",
+      china:"The First Emperor dies and gets an entire clay army sealed underground with him. Imagine ordering that.",
+      britain:"Britain is doing Iron Age roundhouses. Hadrian's Wall is still about 330 years off." },
+    { year:1368, trip:"great-wall",
+      china:"The Ming dynasty kicks off — they're the ones who end up building the brick Great Wall we walked on at Mutianyu.",
+      britain:"Chaucer is busy writing. The Peasants' Revolt is 13 years away." },
+    { year:1406, trip:"forbidden-city",
+      china:"Work starts on the Forbidden City, and fourteen years later it's done. Which is like quite fast for the biggest palace ever.",
+      britain:"Still nine years to go before Agincourt." },
+    { year:1600, approx:true, trip:"xitang",
+      china:"Xitang is already a proper thriving water town by roughly now — the lanes and houses you walk round today are mostly Ming and Qing work.",
+      britain:"Shakespeare is writing Hamlet around then." },
+    { year:1929, trip:"shanghai",
+      china:"Sassoon House, the Peace Hotel, finishes on the Bund — most of those big grand buildings along there are 1920s and 30s.",
+      britain:"The classic red telephone box design turned up in 1926, a few years earlier." },
+    { year:1974, trip:"xian",
+      china:"Some farmers digging a well find the Terracotta Army by total accident. Two thousand years down there, and it took a well to find it.",
+      britain:"That April, ABBA won Eurovision in Brighton." }
+  ]
+};
 
 const HANZI = [];
 

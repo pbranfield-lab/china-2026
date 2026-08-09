@@ -968,6 +968,68 @@ let openPhoto = function(){};
   document.getElementById("journey").hidden = false;
 })();
 
+/* ---------- Dynasty timeline (journey page) ----------
+   A horizontally scrolling ribbon of era blocks with the trip-relevant
+   events pinned inside their dynasty. Events render inside their era
+   rather than being absolutely positioned, so nothing can overlap at any
+   viewport. Native overflow scrolling keeps it keyboard- and
+   touch-accessible with no motion to guard. */
+(function(){
+  const ribbon = document.getElementById("timelineRibbon");
+  if(!ribbon || typeof TIMELINE === "undefined" || !TIMELINE.eras.length) return;
+
+  const tones = ["teal", "coral", "jade", "deep"];
+  const fmtY = y => y < 0 ? `${-y} BC` : String(y);
+
+  const scroll = document.createElement("div");
+  scroll.className = "timeline-scroll";
+  scroll.tabIndex = 0;
+  scroll.setAttribute("role", "region");
+  scroll.setAttribute("aria-label", "Timeline of Chinese dynasties, scrolls sideways");
+  const track = document.createElement("div");
+  track.className = "timeline-track";
+
+  TIMELINE.eras.forEach((era, i)=>{
+    const years = era.to - era.from;
+    const block = document.createElement("section");
+    block.className = "era-block";
+    block.dataset.enamel = tones[i % tones.length];
+    /* Width leans on duration without being proportional — a straight
+       scale would make the Qin unreadably thin next to the Han. */
+    block.style.minWidth = Math.round(Math.min(320, 110 + years / 5)) + "px";
+    const evs = TIMELINE.events
+      .filter(e => e.year >= era.from && e.year < era.to)
+      .sort((a, b) => a.year - b.year);
+    block.innerHTML = `
+      <header class="era-head">
+        ${era.hanzi ? `<span class="era-hanzi">${era.hanzi}</span>` : ""}
+        <h3>${era.name}</h3>
+        <span class="era-years">${fmtY(era.from)} – ${fmtY(era.to)}</span>
+      </header>
+      ${evs.map(e=>{
+        const trip = (typeof TRIPS !== "undefined" && TRIPS.find(t => t.id === e.trip)) || null;
+        return `<article class="tl-event">
+          <span class="tl-year">${e.approx ? "roughly " : ""}${fmtY(e.year)}</span>
+          <p class="tl-china">${trip ? trip.icon + " " : ""}${e.china}</p>
+          <p class="tl-britain"><b>Meanwhile in Britain:</b> ${e.britain}</p>
+          ${trip ? `<a class="tl-link" href="story.html?trip=${trip.id}">${trip.name} →</a>` : ""}
+        </article>`;
+      }).join("")}`;
+    track.appendChild(block);
+  });
+
+  if(TIMELINE.today){
+    const cap = document.createElement("div");
+    cap.className = "tl-today";
+    cap.innerHTML = `<span class="era-hanzi">今</span><p>${TIMELINE.today}</p>`;
+    track.appendChild(cap);
+  }
+
+  scroll.appendChild(track);
+  ribbon.appendChild(scroll);
+  document.getElementById("timeline").hidden = false;
+})();
+
 /* ---------- Home page: "Did you know?" teaser ----------
    One random fact from any trip, straight under the hero, with a dice button
    to shuffle — the hook that pulls a visitor from the front door into a trip.

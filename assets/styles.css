@@ -65,7 +65,8 @@ button{font-family:var(--font-ui);}
 a{color:inherit;}
 img{max-width:100%;display:block;}
 /* The Latin families carry no CJK, so every hanzi element is pinned. */
-.seal-mini, .seal-title span, .hero-hanzi, .nav-card .hanzi, .panel .chinese{
+.seal-mini, .seal-title span, .hero-hanzi, .nav-card .hanzi, .panel .chinese,
+.era-hanzi{
   font-family:var(--font-hanzi);
 }
 :focus-visible{outline:3px solid var(--blue);outline-offset:3px;}
@@ -1234,6 +1235,57 @@ footer{position:relative;text-align:center;color:var(--ink-soft);padding:3rem 1.
 }
 .leg-card p{font-family:var(--font-body);font-weight:600;font-size:.95rem;color:var(--ink);}
 .leg-link{display:inline-block;margin-top:.7rem;font-family:var(--font-ui);font-weight:800;font-size:.85rem;color:var(--blue-deep);}
+
+/* ---------- Dynasty timeline (journey page) ----------
+   The ribbon scrolls inside its own container; the page never scrolls
+   sideways. Era blocks are sticker panels tinted by data-enamel. */
+.timeline-scroll{
+  overflow-x:auto;
+  padding:1rem .2rem 1.6rem;
+  -webkit-overflow-scrolling:touch;
+}
+.timeline-track{
+  display:flex;align-items:stretch;gap:1.1rem;
+  width:max-content;
+  padding:0 .4rem;
+}
+.era-block{
+  padding:.9rem .95rem 1rem;
+  display:flex;flex-direction:column;gap:.7rem;
+}
+.era-block[data-enamel="teal"]{border-color:var(--blue);box-shadow:5px 6px 0 rgba(42,100,150,.55);}
+.era-block[data-enamel="coral"]{border-color:var(--red);box-shadow:5px 6px 0 rgba(201,58,43,.5);}
+.era-block[data-enamel="jade"]{border-color:var(--jade);box-shadow:5px 6px 0 rgba(30,129,99,.55);}
+.era-block[data-enamel="deep"]{border-color:var(--gold-deep);box-shadow:5px 6px 0 rgba(184,119,9,.5);}
+.era-head h3{font-family:var(--font-display);font-weight:400;font-size:1.05rem;color:var(--ink);}
+.era-hanzi{display:block;font-size:1.5rem;color:var(--red);line-height:1.1;}
+.era-years{
+  font-family:var(--font-ui);font-size:.66rem;font-weight:600;
+  letter-spacing:.04em;color:var(--ink-soft);
+}
+.tl-event{
+  background:var(--paper);
+  border:2px solid var(--ink);border-radius:11px;
+  padding:.65rem .7rem;
+  max-width:230px;
+  font-size:.8rem;
+}
+.tl-year{font-family:var(--font-ui);font-weight:800;font-size:.68rem;color:var(--red-deep);text-transform:uppercase;letter-spacing:.04em;}
+.tl-china{font-family:var(--font-body);font-weight:600;color:var(--ink);margin-top:.25rem;}
+.tl-britain{
+  margin-top:.45rem;padding-top:.4rem;
+  border-top:1.5px dashed var(--ink-soft);
+  font-family:var(--font-body);font-weight:600;font-size:.74rem;color:var(--ink-soft);
+}
+.tl-britain b{color:var(--blue-deep);}
+.tl-link{display:inline-block;margin-top:.4rem;font-family:var(--font-ui);font-weight:800;font-size:.72rem;color:var(--blue-deep);}
+.tl-today{
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;gap:.3rem;
+  min-width:150px;max-width:190px;
+  padding:1rem;
+  font-family:var(--font-body);font-weight:700;font-size:.85rem;color:var(--ink);
+}
 
 /* ---------- Sound toggle ----------
    Injected by site.js on every page, bottom-right (the version stamp owns
