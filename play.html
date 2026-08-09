@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Games Bit — China 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Outfit:wght@400;600;800&family=Nunito:wght@400;600;700&family=Noto+Serif+SC:wght@500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="seal-mini">中</span> China 2026</a>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+  <nav class="nav-links" id="navLinks">
+    <a href="story.html">The Story</a>
+    <a href="story.html#facts">🤯 10 Facts</a>
+    <a href="journey.html">The Journey</a>
+    <a href="family.html">Meet the Expedition</a>
+    <a href="play.html">Play</a>
+    <a href="map.html" class="nav-cta">🗺️ The Map</a>
+    <a href="gallery.html">Photo Gallery</a>
+  </nav>
+</header>
+
+<div class="hero compact">
+  <!-- No id="heroSeal" here: this page is trip-agnostic, so the seal stays 中国
+       rather than being swapped to the current trip's characters. -->
+  <div class="seal-title"><span>中国</span></div>
+  <h1>The Games Bit</h1>
+  <p class="sub">Less reading, more doing. You've earned it.</p>
+</div>
+
+<main>
+  <!-- Character-tracing playground, rendered by site.js from HANZI once the
+       vendored stroke library is in place. Hidden until then. -->
+  <section class="wide" id="hanzi" hidden>
+    <div class="section-head reveal">
+      <h2 class="section-title">Learn the Hanzi</h2>
+      <p class="section-sub" id="hanziSub">Trace 中 and 长城 stroke by stroke. There's a proper order and everything, apparently.</p>
+    </div>
+    <div class="hanzi-grid reveal" id="hanziGrid"></div>
+    <div class="hanzi-stage" id="hanziStage" hidden></div>
+  </section>
+
+  <!-- Spot It: a zoomed crop of one of the family photos, guess which.
+       Built by site.js from PHOTOS; needs no data of its own. -->
+  <section class="wide" id="spotit" hidden>
+    <div class="section-head reveal">
+      <h2 class="section-title">Spot It</h2>
+      <p class="section-sub" id="spotSub">A really zoomed-in bit of one of our photos. Guess which one. Harder than it looks.</p>
+    </div>
+    <div class="spot-card reveal" id="spotCard"></div>
+  </section>
+
+  <!-- The passport collects stamps in localStorage as the reader explores.
+       Rendered by site.js; hidden until the passport feature ships. -->
+  <section class="wide" id="passport" hidden>
+    <div class="section-head reveal">
+      <h2 class="section-title">Your Passport</h2>
+      <p class="section-sub" id="passportSub">Collect stamps for exploring the site. And there might be something hidden around here somewhere. Not saying what.</p>
+    </div>
+    <div class="passport-book reveal" id="passportBook"></div>
+  </section>
+
+  <!-- Unhidden by site.js only when every hidden cat has been found. -->
+  <section class="wide" id="catBonus" hidden></section>
+
+  <section class="tight">
+    <div class="nav-cards reveal">
+      <a href="journey.html" class="nav-card featured">
+        <div class="icon">🧭</div>
+        <h3>The Whole Trip</h3>
+        <p>The route drawing itself across China, plus two thousand years of dynasties. Sounds boring, isn't.</p>
+      </a>
+      <a href="gallery.html" class="nav-card">
+        <div class="icon">🖼️</div>
+        <h3>The Photos</h3>
+        <p>Everything Dad finally got off his camera. Some of them are actually good.</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- Licence credits for sounds and vendored libraries; site.js fills and
+       unhides this once there's anything to credit. -->
+  <section class="tight">
+    <div class="play-credits reveal" id="playCredits" hidden></div>
+  </section>
+</main>
+
+<footer>
+  If you found the secret, don't tell William. — Maisie
+</footer>
+
+<!-- One file per trip, plus extras.js (cross-trip data), then the assembler
+     that stitches them into the flat TRIPS / LOCATIONS / PHOTOS / FACTS
+     globals. Order matters: every data file must load before assets/data.js. -->
+<script src="assets/data/forbidden-city.js"></script>
+<script src="assets/data/xian.js"></script>
+<script src="assets/data/great-wall.js"></script>
+<script src="assets/data/xitang.js"></script>
+<script src="assets/data/shanghai.js"></script>
+<script src="assets/data/extras.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

@@ -17,7 +17,9 @@
   <nav class="nav-links" id="navLinks">
     <a href="story.html">The Story</a>
     <a href="story.html#facts">🤯 10 Facts</a>
+    <a href="journey.html">The Journey</a>
     <a href="family.html">Meet the Expedition</a>
+    <a href="play.html">Play</a>
     <a href="map.html" class="nav-cta">🗺️ The Map</a>
     <a href="gallery.html">Photo Gallery</a>
   </nav>
@@ -64,14 +66,15 @@
   This page grows every time Dad finally uploads more photos off his camera roll. Check back later. — Maisie
 </footer>
 
-<!-- One file per trip, then the assembler that stitches them into the
-     flat TRIPS / LOCATIONS / PHOTOS / FACTS globals. Order matters: every
-     trip file must load before assets/data.js. -->
+<!-- One file per trip, plus extras.js (cross-trip data), then the assembler
+     that stitches them into the flat TRIPS / LOCATIONS / PHOTOS / FACTS
+     globals. Order matters: every data file must load before assets/data.js. -->
 <script src="assets/data/forbidden-city.js"></script>
 <script src="assets/data/xian.js"></script>
 <script src="assets/data/great-wall.js"></script>
 <script src="assets/data/xitang.js"></script>
 <script src="assets/data/shanghai.js"></script>
+<script src="assets/data/extras.js"></script>
 <script src="assets/data.js"></script>
 <script src="assets/site.js"></script>
 </body>

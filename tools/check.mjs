@@ -5,7 +5,7 @@
    wide-reaching edit can silently break:
      * data.js still evaluates and its cross-references still resolve
      * site.js still parses
-     * the five page shells still agree with each other
+     * the page shells still agree with each other
      * the CSS tokens and element ids the JS depends on still exist
    Run: node tools/check.mjs
    ============================================================ */
@@ -15,7 +15,8 @@ import { fileURLToPath } from "node:url";
 
 const ROOT  = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read  = f => readFileSync(join(ROOT, f), "utf8");
-const PAGES = ["index.html", "story.html", "family.html", "map.html", "gallery.html"];
+const PAGES = ["index.html", "story.html", "family.html", "map.html", "gallery.html",
+               "journey.html", "play.html"];
 
 let failures = 0;
 function check(name, fn){
@@ -40,12 +41,14 @@ const DATA_FILES = [
   "assets/data/great-wall.js",
   "assets/data/xitang.js",
   "assets/data/shanghai.js",
+  "assets/data/extras.js",         // cross-trip data for the interactive features
   "assets/data.js"                 // the assembler; must come last
 ];
 
 function loadData(){
   const src = DATA_FILES.map(read).join("\n");
-  return new Function(src + ";return {TRIPS,LOCATIONS,PHOTOS,FACTS,FAMILY,SITE_VERSION};")();
+  return new Function(src + ";return {TRIPS,LOCATIONS,PHOTOS,FACTS,FAMILY,SITE_VERSION," +
+    "JOURNEY,TIMELINE,HANZI,COMPARATORS,THEN_NOW,AUDIO,CATS};")();
 }
 
 /* Strip HTML comments before comparing blocks — the two modal copies carry
@@ -105,7 +108,7 @@ check("every page links the same font stylesheet", () => {
 check("every page links assets/styles.css", () =>
   PAGES.filter(p => !read(p).includes('href="assets/styles.css"')).join(", ") || null);
 
-check("the site nav is identical on all five pages", () => {
+check("the site nav is identical on every page", () => {
   const navs = PAGES.map(p => stripComments(block(read(p), /<header class="site-nav">/, /<\/header>/) || ""));
   if (navs.some(n => !n)) return "a page has no .site-nav header";
   if (new Set(navs).size !== 1) return "nav markup has drifted between pages";
@@ -148,6 +151,25 @@ check("the quiz and teaser containers are in place", () => {
   const i = read("index.html");
   const missingI = ["teaser","teaserCard"].filter(id => !i.includes(`id="${id}"`));
   if (missingI.length) return `index.html missing ids: ${missingI.join(", ")}`;
+  return null;
+});
+
+check("journey.html and play.html carry their section containers", () => {
+  const j = read("journey.html");
+  const missingJ = ["journey","journeySub","journeyStage","timeline","timelineSub","timelineRibbon"]
+    .filter(id => !j.includes(`id="${id}"`));
+  if (missingJ.length) return `journey.html missing ids: ${missingJ.join(", ")}`;
+  for (const id of ["journey","timeline"])
+    if (!new RegExp(`<section class="wide" id="${id}" hidden>`).test(j))
+      return `#${id} is no longer hidden in the markup`;
+  const p = read("play.html");
+  const missingP = ["hanzi","hanziSub","hanziGrid","hanziStage","spotit","spotSub","spotCard",
+    "passport","passportSub","passportBook","catBonus","playCredits"]
+    .filter(id => !p.includes(`id="${id}"`));
+  if (missingP.length) return `play.html missing ids: ${missingP.join(", ")}`;
+  for (const id of ["hanzi","spotit","passport","catBonus"])
+    if (!new RegExp(`<section class="wide" id="${id}" hidden>`).test(p))
+      return `#${id} is no longer hidden in the markup`;
   return null;
 });
 

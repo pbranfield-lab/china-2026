@@ -96,7 +96,7 @@ const store = (function(){
 
 /* ---------- Contextual nav ----------
    The header carries the full set of links in static markup (check.mjs asserts
-   the five pages agree), and this block adapts it per page. The home page is
+   all the pages agree), and this block adapts it per page. The home page is
    the trip chooser: trip-scoped links (story/facts/map/gallery) would silently
    land the reader on TRIPS[0] before they've chosen, so they hide there. On
    every other page a chip names the trip you're inside and links back to the
@@ -134,7 +134,7 @@ const store = (function(){
    as "story.html#facts?trip=..." with the param stuck inside the fragment. */
 (function(){
   if(!CURRENT_TRIP) return;
-  const PAGES = /^(index|story|family|map|gallery)\.html$/;
+  const PAGES = /^(index|story|family|map|gallery|journey|play)\.html$/;
   document.querySelectorAll("a[href]").forEach(a=>{
     const raw = a.getAttribute("href");
     if(/^([a-z]+:|\/\/|#)/i.test(raw)) return;          // external, protocol-relative, in-page

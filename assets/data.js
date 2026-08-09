@@ -4,7 +4,8 @@
    Each trip lives in its own file under assets/data/ and is loaded BEFORE
    this one; this file stitches them into the flat globals the rest of the
    site reads. Adding a trip is a new file, one line in TRIP_MODULES, and
-   one <script> tag on each of the five pages.
+   one <script> tag on every page. (assets/data/extras.js also loads here —
+   it carries the cross-trip data for the interactive features.)
 
    Splitting it up is not cosmetic: this file was 127 KB in one piece, which
    meant editing a single Xi'an caption had to load all three trips.
@@ -13,7 +14,7 @@
 /* ============================================================
    SITE VERSION — bump this one line; every page picks it up.
    ============================================================ */
-const SITE_VERSION = "3.2.1";
+const SITE_VERSION = "3.3.0";
 
 /* Tag a group of entries with their trip, so the tag is declared once per
    group instead of repeated on every object. */

@@ -36,6 +36,7 @@ for (const t of TRIPS) {
 
 /* Paths hard-coded outside the data layer. */
 const CODE = ["index.html", "story.html", "family.html", "map.html", "gallery.html",
+  "journey.html", "play.html",
   "assets/site.js", "assets/styles.css"].map(read).join("\n");
 for (const m of CODE.matchAll(/(?:Photographs|assets)\/[\w./-]+\.(?:jpg|jpeg|png|svg|webp|mp4|mp3|ogg|gif)/gi))
   used.add(m[0].toLowerCase());

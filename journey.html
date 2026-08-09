@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Meet the Expedition — China 2026</title>
+<title>The Whole Trip — China 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Outfit:wght@400;600;800&family=Nunito:wght@400;600;700&family=Noto+Serif+SC:wght@500;700;900&display=swap" rel="stylesheet">
@@ -29,45 +29,51 @@
   <!-- No id="heroSeal" here: this page is trip-agnostic, so the seal stays 中国
        rather than being swapped to the current trip's characters. -->
   <div class="seal-title"><span>中国</span></div>
-  <h1>Meet the Expedition</h1>
-  <p class="sub">Know your cast before the map spoils it.</p>
+  <h1>The Whole Trip</h1>
+  <p class="sub">Five places, one country, and like 2,500 km in between. We went ALL that way.</p>
 </div>
 
 <main>
-  <section>
-    <div class="family-grid reveal" id="familyGrid"></div>
+  <!-- The scrolling route map: the path draws itself leg by leg as the
+       reader scrolls. Rendered entirely by site.js from JOURNEY; hidden
+       until the data actually has stops so a half-built page never shows
+       a bare heading. -->
+  <section class="wide" id="journey" hidden>
+    <div class="section-head reveal">
+      <h2 class="section-title">The Route</h2>
+      <p class="section-sub" id="journeySub">Watch it draw itself. Beijing, then the Wall, then Xi'an, then Xitang, then Shanghai. My feet did every bit of that.</p>
+    </div>
+    <div class="journey-stage" id="journeyStage"></div>
   </section>
 
-  <section class="tight">
-    <div class="bonus-feature reveal">
-      <img src="Photographs/forbidden-city/maisie-princess-xitang.jpg" alt="Maisie dressed as a Chinese princess in Xitang" />
-      <div>
-        <div class="bonus-eyebrow">Bonus, Not From Beijing</div>
-        <h3>Guest Appearance: Me, As A Princess</h3>
-        <p>This one's from Xitang, near Shanghai — a different stop on the trip, a proper water-town, and a proper photo studio that does full traditional hair, makeup, and hanfu. Not a phone snap. An actual shoot.</p>
-        <p>Since Mum thinks she's the Queen of China, it's only fitting I get to be a princess. Would I wear this every day. Obviously not practical for school. Would I wear it again given the chance. Also obviously yes.</p>
-      </div>
+  <!-- Dynasty timeline with the parallel "meanwhile in Britain" strip.
+       Rendered by site.js from TIMELINE; hidden until there are eras. -->
+  <section class="wide" id="timeline" hidden>
+    <div class="section-head reveal">
+      <h2 class="section-title">The Timeline</h2>
+      <p class="section-sub" id="timelineSub">Every dynasty from the Qin to now, next to what Britain was up to at the same time. Britain does not come out of this well.</p>
     </div>
+    <div class="timeline-ribbon reveal" id="timelineRibbon"></div>
   </section>
 
   <section class="tight">
     <div class="nav-cards reveal">
-      <a href="map.html" class="nav-card featured">
-        <div class="icon">🗺️</div>
-        <h3>To the Map</h3>
-        <p>See what everyone actually did once we got there.</p>
+      <a href="play.html" class="nav-card featured">
+        <div class="icon">🎮</div>
+        <h3>The Games Bit</h3>
+        <p>Trace actual Chinese characters, guess my zoomed-in photos, collect passport stamps. Better than Roblox. Okay, nearly.</p>
       </a>
-      <a href="gallery.html" class="nav-card">
-        <div class="icon">🖼️</div>
-        <h3>Photo Gallery</h3>
-        <p>Every photo from the whole day, all in one place.</p>
+      <a href="map.html" class="nav-card">
+        <div class="icon">🗺️</div>
+        <h3>The Map</h3>
+        <p>Every place we went, pinned, with the actual stories of what happened at each one.</p>
       </a>
     </div>
   </section>
 </main>
 
 <footer>
-  This page grows every time Dad finally uploads more photos off his camera roll. Check back later. — Maisie
+  That's 2,500 km and like two thousand years on one page. You're welcome. — Maisie
 </footer>
 
 <!-- One file per trip, plus extras.js (cross-trip data), then the assembler
