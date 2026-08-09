@@ -171,7 +171,9 @@ if(CURRENT_TRIP) document.documentElement.setAttribute("data-trip", CURRENT_TRIP
     const jumpToFacts = ()=> section.scrollIntoView({ block:"start", behavior:"auto" });
     let settled = false;
     const release = ()=>{ settled = true; };
-    ["wheel","touchstart","keydown"].forEach(e =>
+    // pointerdown covers a scrollbar drag, which fires none of the others and
+    // would otherwise be fought by the pin for the rest of the window.
+    ["wheel","keydown","pointerdown","touchstart"].forEach(e =>
       window.addEventListener(e, release, { once:true, passive:true }));
 
     const until = Date.now() + 1200;
@@ -184,7 +186,18 @@ if(CURRENT_TRIP) document.documentElement.setAttribute("data-trip", CURRENT_TRIP
 
   /* The jump link lives above the fold; hide it if there's nothing to jump to. */
   const jump = document.getElementById("factsJump");
-  if(jump) jump.hidden = false;
+  if(jump){
+    jump.hidden = false;
+    /* Supplement the browser's own fragment jump rather than replacing it — no
+       preventDefault, so if this scroll ever fails the plain anchor still works
+       and the button can't end up dead. It's here because clicking the link
+       when the URL already ends in #facts is a same-fragment navigation, which
+       browsers ignore; without this the button would do nothing on the second
+       press, or when arriving via the nav's "10 Facts" link. */
+    jump.addEventListener("click", ()=>{
+      section.scrollIntoView({ block:"start" });
+    });
+  }
 })();
 
 /* ---------- Family grid (family page) ---------- */
