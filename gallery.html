@@ -66,6 +66,12 @@
   </div>
 </div>
 
+<!-- One file per trip, then the assembler that stitches them into the
+     flat TRIPS / LOCATIONS / PHOTOS / FACTS globals. Order matters: every
+     trip file must load before assets/data.js. -->
+<script src="assets/data/forbidden-city.js"></script>
+<script src="assets/data/xian.js"></script>
+<script src="assets/data/great-wall.js"></script>
 <script src="assets/data.js"></script>
 <script src="assets/site.js"></script>
 </body>

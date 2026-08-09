@@ -34,8 +34,15 @@ function check(name, fn){
    data.js, read from disk, in a script only ever run by hand from a checkout —
    nothing here is attacker-supplied or reachable at runtime by the shipped
    site. Static scanners flag the pattern; it is deliberate and contained. */
+const DATA_FILES = [
+  "assets/data/forbidden-city.js",
+  "assets/data/xian.js",
+  "assets/data/great-wall.js",
+  "assets/data.js"                 // the assembler; must come last
+];
+
 function loadData(){
-  const src = read("assets/data.js");
+  const src = DATA_FILES.map(read).join("\n");
   return new Function(src + ";return {TRIPS,LOCATIONS,PHOTOS,FACTS,FAMILY,SITE_VERSION};")();
 }
 
@@ -59,14 +66,31 @@ check("data.js evaluates and exposes its bindings", () => {
 
 check("site.js parses", () => { new Function(read("assets/site.js")); return null; });
 
-check("every page loads data.js then site.js", () => {
+check("every trip file is loaded, in order, before site.js", () => {
   for (const p of PAGES){
     const s = read(p);
-    const d = s.indexOf("assets/data.js"), j = s.indexOf("assets/site.js");
-    if (d < 0 || j < 0) return `${p} is missing a script tag`;
-    if (d > j) return `${p} loads site.js before data.js`;
+    const at = f => s.indexOf(`src="${f}"`);
+    const positions = DATA_FILES.map(at);
+    if (positions.some(i => i < 0))
+      return `${p} is missing: ${DATA_FILES.filter((f, i) => positions[i] < 0).join(", ")}`;
+    // The assembler reads the trip consts, so every trip file must precede it.
+    const assembler = positions[positions.length - 1];
+    if (positions.slice(0, -1).some(i => i > assembler))
+      return `${p} loads assets/data.js before one of its trip files`;
+    const site = at("assets/site.js");
+    if (site < 0) return `${p} is missing assets/site.js`;
+    if (assembler > site) return `${p} loads site.js before the data assembler`;
   }
   return null;
+});
+
+check("every trip in TRIP_MODULES has its own data file", () => {
+  const { TRIPS } = loadData();
+  const declared = DATA_FILES.slice(0, -1).map(f => f.split("/").pop().replace(".js", ""));
+  const missing = TRIPS.map(t => t.id).filter(id => !declared.includes(id));
+  return missing.length
+    ? `no assets/data/<id>.js for: ${missing.join(", ")} (or check.mjs's DATA_FILES is stale)`
+    : null;
 });
 
 check("every page links the same font stylesheet", () => {
