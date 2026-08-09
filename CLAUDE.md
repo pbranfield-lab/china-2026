@@ -6,7 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A static, no-build multi-page HTML/CSS/JS site: **"China 2026"**, a family travel journal/photo album covering a family's 2026 trips across China, narrated in-character by "Maisie," an 11-year-old. There is no `package.json`, no bundler, no test suite, and no server-side code — every page is plain HTML that loads `assets/data.js` then `assets/site.js` directly via `<script>` tags.
 
-**No single trip is the theme.** The site began as a Forbidden City album and was rebranded once it covered more than one destination; the Forbidden City is now just `TRIPS[0]`. It remains first in the array purely because a bare URL with no `?trip=` falls back to `TRIPS[0]`, which keeps every pre-existing link working — that's a compatibility default, not a statement about billing. Don't reintroduce Forbidden City branding into the shared nav, titles or home hero.
+**No single trip is the theme.** The site began as a Forbidden City album and was rebranded once it covered more than one destination; the Forbidden City is now just `TRIPS[0]`. It remains first in the array purely because a bare URL with no `?trip=` falls back to `TRIPS[0]`, which keeps every pre-existing link working — that's a compatibility default, not a statement about top billing. Don't reintroduce Forbidden City branding into the shared nav, titles or home hero.
+
+**Start a fresh session by reading the newest `docs/HANDOFF-*.md`**, then this file. The handoff is timestamped in its filename, is rewritten at the end of every session, and is the authoritative statement of what's done and what's next. This file describes how the site is built and is meant to stay true indefinitely; the handoff describes where the work got to and is expected to go stale.
 
 ## Where it lives
 
@@ -19,7 +21,8 @@ sits at that old name containing nothing but a redirect page, because renaming a
 repo does **not** redirect its GitHub Pages URL. Consequences: the old
 `github.com` repo URL now shows that stub rather than redirecting here, and
 pushing this project to the old remote URL would push to the stub — check
-`git remote -v` says `china-2026`. See `docs/HANDOFF.md` for the full reasoning.
+`git remote -v` says `china-2026`. See the newest `docs/HANDOFF-*.md` for the
+full reasoning.
 
 ## Running it locally
 

@@ -33,7 +33,8 @@ To preview it, serve the directory with any static file server:
 python3 -m http.server 8899
 ```
 
-See `CLAUDE.md` for the architecture and `docs/HANDOFF.md` for current state.
+See `CLAUDE.md` for the architecture, and the newest `docs/HANDOFF-*.md` for
+current state — the timestamp is in the filename, and there is only ever one.
 
 ## A note on the content
 
@@ -52,7 +53,9 @@ figures that are traditional or reported rather than established are hedged as
 such. That accuracy is the entire point of the section.
 
 Photographs are the family's own except for three Creative Commons images on the
-Xi'an trip, credited in `CLAUDE.md`.
+Xi'an trip. Those carry their author and licence on the page itself — on the
+thumbnail and again in the photo modal — because CC BY and CC BY-SA require the
+attribution to be visible wherever the work is shown.
 
 ## Previous name
 
