@@ -67,6 +67,34 @@ function creditBadge(photo){
   });
 })();
 
+/* ---------- Contextual nav ----------
+   The header carries the full set of links in static markup (check.mjs asserts
+   the five pages agree), and this block adapts it per page. The home page is
+   the trip chooser: trip-scoped links (story/facts/map/gallery) would silently
+   land the reader on TRIPS[0] before they've chosen, so they hide there. On
+   every other page a chip names the trip you're inside and links back to the
+   chooser to switch. */
+(function(){
+  const links = document.getElementById("navLinks");
+  if(!links) return;
+  const here = location.pathname.split("/").pop() || "index.html";
+  if(here === "index.html"){
+    links.querySelectorAll("a[href]").forEach(a=>{
+      const page = a.getAttribute("href").split("#")[0].split("?")[0];
+      if(/^(story|map|gallery)\.html$/.test(page)) a.hidden = true;
+    });
+    return;
+  }
+  if(!CURRENT_TRIP) return;
+  const chip = document.createElement("a");
+  chip.className = "nav-trip";
+  chip.href = "index.html";
+  chip.title = "Choose another trip";
+  chip.innerHTML = `<span aria-hidden="true">${CURRENT_TRIP.icon}</span><span class="nav-trip-name">${CURRENT_TRIP.name}</span><b aria-hidden="true">⇄</b>`;
+  const brand = document.querySelector(".nav-brand");
+  if(brand) brand.insertAdjacentElement("afterend", chip);
+})();
+
 /* ---------- Carry the current trip across every internal link ----------
    It isn't just the header nav that needs the param. Each page ends with
    "what to look at next" cards pointing at bare page names, and without the
@@ -511,11 +539,19 @@ let openPhoto = function(){};
     const a = document.createElement("a");
     a.className = "nav-card";
     a.href = `map.html?trip=${trip.id}`;
+    /* Magazine cover lines: say how much is inside, computed so a new photo
+       or fact never leaves a stale count. Zero-count parts just drop out. */
+    const counts = [
+      [(typeof LOCATIONS !== "undefined") ? LOCATIONS.filter(l=>l.trip===trip.id).length : 0, "spots"],
+      [(typeof PHOTOS !== "undefined") ? PHOTOS.filter(p=>p.trip===trip.id).length : 0, "photos"],
+      [(typeof FACTS !== "undefined" && FACTS[trip.id]) ? FACTS[trip.id].length : 0, "facts"]
+    ].filter(([n])=>n).map(([n, word])=>`${n} ${word}`).join(" · ");
     a.innerHTML = `
       <div class="icon">${trip.icon}</div>
       <span class="hanzi">${trip.chinese}</span>
       <h3>${trip.name}</h3>
       <p>${trip.blurb}</p>
+      ${counts ? `<span class="card-counts">${counts}</span>` : ""}
     `;
     return a;
   });
@@ -655,4 +691,189 @@ let openPhoto = function(){};
       filterBar.appendChild(btn);
     });
   }
+})();
+
+/* ---------- Home page: "Did you know?" teaser ----------
+   One random fact from any trip, straight under the hero, with a dice button
+   to shuffle — the hook that pulls a visitor from the front door into a trip.
+   The "all N facts" link names the fact's own trip explicitly, so the
+   link-rewrite pass (which only fills in missing trip params) leaves it be. */
+(function(){
+  const card = document.getElementById("teaserCard");
+  if(!card || typeof FACTS === "undefined" || typeof TRIPS === "undefined") return;
+  const pool = [];
+  TRIPS.forEach(t=>(FACTS[t.id] || []).forEach(f=>pool.push({trip:t, fact:f})));
+  if(!pool.length) return;
+
+  let last = -1;
+  function draw(){
+    let i;
+    do { i = Math.floor(Math.random() * pool.length); } while(pool.length > 1 && i === last);
+    last = i;
+    const {trip, fact} = pool[i];
+    card.innerHTML = `
+      <span class="teaser-badge">Did you know?</span>
+      <div class="teaser-stat">${fact.stat}</div>
+      <div class="teaser-label">${fact.label}</div>
+      <p class="teaser-text">${fact.text}</p>
+      <div class="teaser-foot">
+        <span class="teaser-trip">${trip.icon} ${trip.name}</span>
+        <button class="teaser-again" type="button">🎲 Another one</button>
+        <a class="teaser-more" href="story.html?trip=${trip.id}#facts">All ${(FACTS[trip.id] || []).length}, plus the quiz →</a>
+      </div>`;
+    card.querySelector(".teaser-again").addEventListener("click", draw);
+  }
+  draw();
+  document.getElementById("teaser").hidden = false;
+})();
+
+/* ---------- The Big Quiz (story page) ----------
+   Built from the same FACTS the tiles show, so there is no second copy of the
+   truth to drift. Only facts whose stat is a single leading number can be
+   quizzed — a numeric answer needs numeric decoys, so "east", "rice" and
+   ranges like "7–8 m" sit out. Decoys are scaled (or, for years, shifted) and
+   then formatted to match the real stat's commas/decimals/suffix, so the odd
+   one out never gives itself away by its shape. */
+(function(){
+  const card = document.getElementById("quizCard");
+  if(!card || typeof FACTS === "undefined" || !CURRENT_TRIP) return;
+
+  const eligible = (FACTS[CURRENT_TRIP.id] || []).map(fact=>{
+    const m = /^([~≈]?)([\d,]+(?:\.\d+)?)([^\d]*)$/.exec(fact.stat);
+    if(!m) return null;
+    const value = parseFloat(m[2].replace(/,/g, ""));
+    if(Number.isNaN(value)) return null;
+    const dec = m[2].includes(".");
+    const year = Number.isInteger(value) && value >= 1000 && value <= 2100 && !m[1] && !m[3].trim();
+    const fmt = n=>{
+      let s = dec ? n.toFixed(1) : String(Math.round(n));
+      if(m[2].includes(",")) s = Number(s).toLocaleString("en-GB", {minimumFractionDigits: dec ? 1 : 0});
+      return m[1] + s + m[3];
+    };
+    return {fact, value, year, fmt};
+  }).filter(Boolean);
+  if(eligible.length < 4) return;   // not enough to quiz on; section stays hidden
+
+  const shuffle = arr=>{
+    for(let i = arr.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  };
+
+  function decoys(q){
+    const seen = new Set([q.value]);
+    const out = [];
+    let guard = 40;
+    while(out.length < 2 && guard--){
+      let v;
+      if(q.year){
+        v = q.value + (Math.random() < .5 ? -1 : 1) * (12 + Math.floor(Math.random() * 120));
+        if(v > 2025) v = q.value - (12 + Math.floor(Math.random() * 120));
+      } else if(q.value === 0){
+        /* Nothing scales off zero, so borrow a couple of confidently wrong
+           numbers — one cheeky, one enormous. */
+        v = [7, 12, 88, 350, 1200, 9999][Math.floor(Math.random() * 6)];
+      } else {
+        const f = [0.25, 0.4, 0.6, 1.5, 2.5, 4][Math.floor(Math.random() * 6)];
+        v = q.value * f;
+        v = q.value >= 100 ? Math.round(v / 10) * 10 : (Math.round(v * 10) / 10);
+      }
+      if(!seen.has(v) && v >= 0){ seen.add(v); out.push(v); }
+    }
+    return out;
+  }
+
+  const RIGHT = [
+    "YES. Nailed it.",
+    "Correct. I'm impressed, and I don't impress easily.",
+    "Right! Somebody's been paying attention.",
+    "Correct — as verified by me, personally."
+  ];
+  const WRONG = [
+    "Nope! The real answer is even better:",
+    "Not quite — brace yourself:",
+    "Wrong, but honestly the truth is weirder:",
+    "No — and this is the bit I didn't believe either:"
+  ];
+
+  let quiz, idx, score;
+  function start(){
+    quiz = shuffle([...eligible]).slice(0, 5).map(q=>{
+      const choices = shuffle([
+        {text: q.fact.stat, right: true},
+        ...decoys(q).map(v=>({text: q.fmt(v), right: false}))
+      ]);
+      return {...q, choices};
+    });
+    idx = 0; score = 0;
+    ask();
+  }
+
+  function ask(){
+    const q = quiz[idx];
+    card.innerHTML = `
+      <div class="quiz-top">
+        <span class="quiz-badge">Question ${idx + 1} of ${quiz.length}</span>
+        <span class="quiz-score" aria-label="Score">${"⭐".repeat(score) || "☆"}</span>
+      </div>
+      <h3 class="quiz-q">Guess the ${q.year ? "year" : "number"}: <em>${q.fact.label}</em></h3>
+      <div class="quiz-choices">
+        ${q.choices.map((c, i)=>`<button class="quiz-choice" type="button" data-i="${i}">${c.text}</button>`).join("")}
+      </div>
+      <div class="quiz-after" hidden>
+        <p class="quiz-verdict"></p>
+        <div class="quiz-explain">${q.fact.text}</div>
+        <button class="quiz-next" type="button">${idx + 1 === quiz.length ? "Show me my score →" : "Next question →"}</button>
+      </div>`;
+
+    const buttons = [...card.querySelectorAll(".quiz-choice")];
+    buttons.forEach(btn=>btn.addEventListener("click", ()=>{
+      const pick = q.choices[Number(btn.dataset.i)];
+      buttons.forEach(b=>{
+        b.disabled = true;
+        if(q.choices[Number(b.dataset.i)].right) b.classList.add("correct");
+        else if(b === btn) b.classList.add("wrong");
+      });
+      if(pick.right) score++;
+      const verdictPool = pick.right ? RIGHT : WRONG;
+      card.querySelector(".quiz-verdict").textContent =
+        (pick.right ? "✅ " : "❌ ") + verdictPool[Math.floor(Math.random() * verdictPool.length)];
+      card.querySelector(".quiz-score").textContent = "⭐".repeat(score) || "☆";
+      const after = card.querySelector(".quiz-after");
+      after.hidden = false;
+      after.querySelector(".quiz-next").focus();
+    }));
+    card.querySelector(".quiz-next").addEventListener("click", ()=>{
+      idx++;
+      if(idx < quiz.length) ask(); else finish();
+    });
+  }
+
+  function verdict(s, n){
+    if(s === n) return "Full marks! You may now call yourself an expert. I'll allow it.";
+    if(s >= n * .6) return "Very solid. A couple more goes and you'll be nearly as good as me.";
+    if(s >= n * .4) return "Hmm. Did you read my facts, or just admire the pictures?";
+    return "That was William-level effort. Scroll up, read my facts, come back.";
+  }
+
+  function finish(){
+    card.innerHTML = `
+      <div class="quiz-final">
+        <span class="quiz-badge">Final score</span>
+        <div class="quiz-final-stat">${score} / ${quiz.length}</div>
+        <div class="quiz-final-stars">${"⭐".repeat(score) || "…nothing? Really?"}</div>
+        <p class="quiz-verdict">${verdict(score, quiz.length)}</p>
+        <button class="quiz-again" type="button">🔁 Different questions, same quiz</button>
+      </div>`;
+    card.querySelector(".quiz-again").addEventListener("click", start);
+  }
+
+  const n = Math.min(5, eligible.length);
+  const sub = document.getElementById("quizSub");
+  if(sub) sub.textContent =
+    `${n === 5 ? "Five" : n} quick ones about ${CURRENT_TRIP.name}. Every answer is hiding in my facts above — no googling.`;
+  document.getElementById("quiz").hidden = false;
+  start();
 })();

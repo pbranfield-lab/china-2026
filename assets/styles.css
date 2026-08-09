@@ -117,7 +117,7 @@ section.tight .section-title::after{width:110px;}
    hard offset shadow — printed and stuck down, not floating. */
 .enamel,
 .nav-card, .family-card, .location-card, .modal,
-.bonus-feature, .fact-tile, .fact-pop{
+.bonus-feature, .fact-tile, .fact-pop, .teaser-card, .quiz-card{
   position:relative;
   border:2.5px solid var(--ink);
   border-radius:var(--radius-panel);
@@ -134,6 +134,7 @@ section.tight .section-title::after{width:110px;}
 .enamel > *,
 .nav-card > *, .family-card > *, .modal > *,
 .bonus-feature > *, .fact-tile > *, .fact-pop > *,
+.teaser-card > *, .quiz-card > *,
 .location-card > .panel, .location-card > .william-toggle{
   position:relative;
 }
@@ -216,6 +217,24 @@ section.tight .section-title::after{width:110px;}
   font-size:.85rem;color:#FFF1EA;flex-shrink:0;
   text-shadow:0 1px 1px rgba(0,0,0,.45);
 }
+/* Trip context chip, injected by site.js on every page except the chooser.
+   margin-right:auto hugs it up beside the brand and pushes the links right;
+   on pages without it, the header's space-between behaves as before. */
+.nav-trip{
+  display:inline-flex;align-items:center;gap:.4rem;min-width:0;
+  margin-right:auto;
+  font-family:var(--font-ui);font-weight:700;font-size:.78rem;
+  color:var(--ink);text-decoration:none;
+  background:rgba(240,164,33,.28);
+  border:2px solid var(--ink);border-radius:var(--radius-pill);
+  padding:.26rem .8rem;
+  white-space:nowrap;
+  box-shadow:2px 2px 0 rgba(48,34,23,.35);
+  transition:background .15s ease;
+}
+.nav-trip:hover{background:rgba(240,164,33,.55);}
+.nav-trip b{font-weight:800;color:var(--red);}
+.nav-trip-name{overflow:hidden;text-overflow:ellipsis;}
 .nav-toggle{
   display:none;
   background:var(--cream);border:2px solid var(--ink);border-radius:var(--radius-pill);
@@ -280,6 +299,9 @@ section.tight .section-title::after{width:110px;}
   .nav-links.open{transform:translateX(0);}
   .nav-links a{width:100%;}
   .nav-links a.nav-cta{text-align:center;}
+  /* The chip shares the bar with the brand and the burger — truncate it. */
+  .nav-trip{max-width:38vw;font-size:.7rem;padding:.22rem .6rem;}
+  .nav-trip b{display:none;}
 }
 
 /* ---------- Hero ---------- */
@@ -387,7 +409,9 @@ section.tight .section-title::after{width:110px;}
   color:var(--ink);font-style:normal;
   background:rgba(240,164,33,.95);
   border:2px solid var(--ink);
-  border-radius:var(--radius-pill);
+  /* Not the pill radius: this line wraps to two or three rows on mobile,
+     and a stadium shape around multi-line text reads as a mistake. */
+  border-radius:12px;
   padding:.2rem .9rem;
   transform:rotate(-.7deg);
   box-shadow:3px 4px 0 rgba(48,34,23,.5);
@@ -444,6 +468,16 @@ section.tight .section-title::after{width:110px;}
 .nav-card .hanzi{display:block;font-size:.78rem;color:var(--red);margin-bottom:.2rem;letter-spacing:.12em;font-weight:700;}
 .nav-card h3{margin:0 0 .35rem;color:var(--ink);font-size:1.12rem;}
 .nav-card p{margin:0;font-family:var(--font-body);font-size:.8rem;color:var(--ink-soft);line-height:1.45;font-weight:600;}
+/* Magazine cover line: how much is inside each trip. */
+.card-counts{
+  display:inline-block;margin-top:.6rem;
+  font-family:var(--font-ui);font-size:.62rem;font-weight:800;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink);
+  background:rgba(240,164,33,.35);
+  border:1.5px solid var(--ink);border-radius:var(--radius-pill);
+  padding:.16rem .6rem;
+}
 /* The featured card is the red sticker in the sheet. */
 .nav-card.featured{
   background-color:var(--red);
@@ -923,6 +957,124 @@ section.tight .section-sub{margin-top:.5rem;font-size:.84rem;}
 .fact-dot.on{background:var(--red);transform:scale(1.45);box-shadow:0 0 0 2px rgba(201,58,43,.3);}
 .fact-count{color:var(--ink-soft);font-size:.7rem;font-weight:700;letter-spacing:.08em;}
 
+/* ---------- "Did you know?" teaser (home page) ---------- */
+.teaser-card{
+  max-width:640px;margin:0 auto;
+  padding:1.4rem 1.5rem 1.2rem;
+  transform:rotate(-.8deg);
+}
+.teaser-badge{
+  display:inline-block;
+  background:var(--red);color:#FFF6EC;
+  font-family:var(--font-ui);font-weight:800;font-size:.64rem;letter-spacing:.1em;
+  text-transform:uppercase;padding:.3rem .8rem;border-radius:var(--radius-pill);
+  border:2px solid var(--ink);
+  box-shadow:2px 2px 0 rgba(48,34,23,.4);
+  transform:rotate(-2deg);
+}
+.teaser-stat{
+  font-family:var(--font-display);
+  font-size:clamp(2rem, 6vw, 2.8rem);line-height:1;
+  color:var(--red);margin-top:.7rem;overflow-wrap:anywhere;
+}
+.teaser-label{
+  font-family:var(--font-ui);font-size:.68rem;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink);margin-top:.3rem;
+}
+.teaser-text{font-family:var(--font-body);font-size:.95rem;color:var(--ink);margin:.8rem 0 0;font-weight:600;}
+.teaser-text strong{color:var(--red-deep);}
+.teaser-foot{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin-top:1rem;}
+.teaser-trip{
+  font-family:var(--font-ui);font-size:.72rem;font-weight:800;color:var(--ink);
+  background:rgba(240,164,33,.35);
+  border:1.5px solid var(--ink);border-radius:var(--radius-pill);
+  padding:.2rem .7rem;
+}
+.teaser-again{
+  cursor:pointer;
+  font-family:var(--font-ui);font-size:.78rem;font-weight:800;color:var(--ink);
+  background:linear-gradient(#FFC85E, var(--gold));
+  border:2px solid var(--ink);border-radius:var(--radius-pill);
+  padding:.4rem .9rem;
+  box-shadow:0 3px 0 rgba(48,34,23,.82);
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.teaser-again:active{transform:translateY(3px);box-shadow:0 0 0 rgba(48,34,23,.82);}
+.teaser-more{
+  margin-left:auto;
+  font-family:var(--font-ui);font-size:.78rem;font-weight:800;
+  color:var(--red-deep);text-decoration:none;
+}
+.teaser-more:hover{text-decoration:underline;}
+
+/* ---------- The Big Quiz (story page) ---------- */
+#quiz{scroll-margin-top:78px;}
+.quiz-card{
+  max-width:640px;margin:0 auto;
+  padding:1.6rem 1.7rem 1.5rem;
+}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:.8rem;}
+.quiz-badge{
+  display:inline-block;
+  background:var(--ink);color:#FFF6EC;
+  font-family:var(--font-ui);font-weight:800;font-size:.64rem;letter-spacing:.1em;
+  text-transform:uppercase;padding:.3rem .8rem;border-radius:var(--radius-pill);
+}
+.quiz-score{font-size:.9rem;letter-spacing:.1em;}
+.quiz-q{
+  font-family:var(--font-display);font-weight:400;
+  color:var(--ink);font-size:1.35rem;margin:1rem 0 0;
+}
+.quiz-q em{font-style:normal;color:var(--red);}
+.quiz-choices{
+  display:grid;grid-template-columns:repeat(3, 1fr);gap:.9rem;
+  margin-top:1.1rem;
+}
+.quiz-choice{
+  cursor:pointer;
+  font-family:var(--font-display);font-size:1.25rem;line-height:1.1;
+  color:var(--ink);
+  background:var(--cream);
+  border:2.5px solid var(--ink);border-radius:12px;
+  padding:.9rem .6rem;
+  overflow-wrap:anywhere;
+  box-shadow:3px 4px 0 rgba(48,34,23,.5);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.quiz-choice:hover:not(:disabled){transform:translate(-2px,-3px);box-shadow:5px 7px 0 rgba(48,34,23,.5);}
+.quiz-choice:disabled{cursor:default;}
+.quiz-choice.correct{background:#DFF3E7;border-color:var(--jade);box-shadow:3px 4px 0 rgba(30,129,99,.55);}
+.quiz-choice.wrong{background:#F9E0DA;border-color:var(--red);box-shadow:3px 4px 0 rgba(201,58,43,.5);opacity:.85;}
+.quiz-after{margin-top:1.2rem;}
+.quiz-verdict{font-family:var(--font-ui);font-weight:800;font-size:.95rem;color:var(--ink);margin:0 0 .7rem;}
+/* Maisie explains — same speech-bubble register as the facts popout. */
+.quiz-explain{
+  position:relative;
+  background:var(--paper);
+  border:2.5px solid var(--ink);border-radius:13px;
+  padding:.9rem 1.05rem;
+  font-family:var(--font-body);font-size:.92rem;color:var(--ink);font-weight:600;
+}
+.quiz-explain strong{color:var(--red-deep);}
+.quiz-next, .quiz-again{
+  cursor:pointer;margin-top:1.1rem;
+  font-family:var(--font-ui);font-size:.88rem;font-weight:800;color:#FFF6EC;
+  background:linear-gradient(150deg, var(--red-bright), var(--red));
+  border:2.5px solid var(--ink);border-radius:var(--radius-pill);
+  padding:.6rem 1.3rem;
+  box-shadow:0 4px 0 rgba(48,34,23,.82);
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.quiz-next:active, .quiz-again:active{transform:translateY(4px);box-shadow:0 0 0 rgba(48,34,23,.82);}
+.quiz-final{text-align:center;}
+.quiz-final-stat{
+  font-family:var(--font-display);
+  font-size:clamp(3rem, 10vw, 4.2rem);line-height:1;
+  color:var(--red);margin-top:.8rem;
+}
+.quiz-final-stars{font-size:1.1rem;margin-top:.5rem;letter-spacing:.14em;}
+.quiz-final .quiz-verdict{margin-top:.9rem;}
+
 /* ---------- Gallery page ---------- */
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(160px,1fr));gap:1.5rem;}
 .gallery-filter{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin-bottom:2rem;}
@@ -1025,4 +1177,14 @@ footer{position:relative;text-align:center;color:var(--ink-soft);padding:3rem 1.
   .fact-count{display:none;}   /* the dots already say where you are */
   .fact-who img{width:40px;height:40px;}
   .bonus-feature{padding:1.1rem;}
+  /* At two-up card width the counts line wraps; a stadium radius around
+     three wrapped rows reads as an egg, so square it off. */
+  .card-counts{border-radius:10px;font-size:.58rem;}
+  .teaser-card{padding:1.1rem 1rem 1rem;}
+  .teaser-more{margin-left:0;width:100%;}
+  .quiz-card{padding:1.2rem 1rem 1.1rem;}
+  .quiz-choices{grid-template-columns:1fr;gap:.7rem;}
+  .quiz-choice{font-size:1.15rem;padding:.75rem .6rem;}
+  .quiz-q{font-size:1.15rem;}
+  .nav-brand{font-size:.9rem;}
 }

@@ -138,6 +138,17 @@ check("story.html carries the facts popout markup", () => {
   return null;
 });
 
+check("the quiz and teaser containers are in place", () => {
+  const s = read("story.html");
+  const missing = ["quiz","quizSub","quizCard"].filter(id => !s.includes(`id="${id}"`));
+  if (missing.length) return `story.html missing ids: ${missing.join(", ")}`;
+  if (!/<section class="wide" id="quiz" hidden>/.test(s)) return "#quiz is no longer hidden in the markup";
+  const i = read("index.html");
+  const missingI = ["teaser","teaserCard"].filter(id => !i.includes(`id="${id}"`));
+  if (missingI.length) return `index.html missing ids: ${missingI.join(", ")}`;
+  return null;
+});
+
 check("FACTS are well formed and belong to a real trip", () => {
   const { TRIPS, FACTS } = loadData();
   const ids = new Set(TRIPS.map(t => t.id));

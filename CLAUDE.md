@@ -57,8 +57,9 @@ not a test suite — everything visual still needs a browser.
 are near-identical shells: same `<head>`, same `.site-nav` markup, same script
 includes at the end of `<body>`. They differ only in `<main>` and which optional
 containers they carry (`#historyIntro`, `#familyGrid`, `#pinLayer`/`#detailPanel`,
-`#galleryGrid`, `#modalOverlay`, `#factsGrid`/`#factOverlay`). Copy an existing
-page as the template for a new one.
+`#galleryGrid`, `#modalOverlay`, `#factsGrid`/`#factOverlay`,
+`#quiz`/`#quizCard`, `#teaser`/`#teaserCard`). Copy an existing page as the
+template for a new one.
 
 **Trips.** One set of pages, made trip-aware by `?trip=<id>`; no param falls back
 to `TRIPS[0]`. Currently the Forbidden City (Beijing), Xi'an, and the Great Wall
@@ -120,6 +121,25 @@ current one, so a photo always points at the right folder. `data-trip` is set on
 `<html>` so CSS can tune per-trip.
 
 The features with gotchas worth knowing before touching them:
+
+- **Contextual nav.** The header markup is identical on all five pages
+  (check.mjs asserts it); site.js adapts it at load. On `index.html` the
+  trip-scoped links (story/facts/map/gallery) are hidden — the home page is the
+  trip chooser, and those links would silently land on `TRIPS[0]` before a trip
+  was chosen. On every other page a `.nav-trip` chip is injected after the
+  brand, naming the current trip and linking back to the chooser.
+- **The Big Quiz** (`story.html#quiz`) is built from the same `FACTS` as the
+  tiles — there is no separate quiz data to drift out of truth. Only facts
+  whose `stat` is one leading number qualify ("east", "rice" and ranges like
+  "7–8 m" sit out); decoys are scaled — or shifted, for years — and formatted
+  to match the real stat's commas/decimals/suffix so the shape never gives the
+  answer away. The section stays `hidden` unless the trip has ≥4 quizzable
+  facts. Five random questions per run, replayable.
+- **The home teaser** (`#teaser`) shows one random fact from any trip with a
+  reshuffle button; its "plus the quiz" link names the fact's own trip
+  explicitly, which is what stops the link-rewrite pass re-pointing it at
+  `TRIPS[0]`. Trip chooser cards carry computed `.card-counts` cover lines, so
+  counts never go stale.
 
 - ⚠️ **Every internal link is rewritten to carry `?trip=`**, not just the nav —
   the "what to look at next" cards point at bare page names and would silently

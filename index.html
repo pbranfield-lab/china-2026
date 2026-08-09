@@ -36,6 +36,9 @@
 
 <main>
   <section class="tight">
+    <div class="section-head reveal">
+      <h2 class="section-title">Pick a Trip</h2>
+    </div>
     <!-- Trip cards are rendered into here from TRIPS; the Expedition card
          below is trip-agnostic and stays put at the end. -->
     <div class="nav-cards reveal" id="tripChooser">
@@ -46,6 +49,14 @@
         <p>Meet Mum, Dad, and William.</p>
       </a>
     </div>
+  </section>
+
+  <!-- "Did you know?" — one random fact from any trip, filled in by site.js.
+       Hidden until it renders so a no-JS load doesn't show an empty sticker.
+       Sits after the chooser: picking a trip is the page's job, this is the
+       hook for whoever is still undecided. -->
+  <section class="tight" id="teaser" hidden>
+    <div class="teaser-card reveal" id="teaserCard"></div>
   </section>
 </main>
 
