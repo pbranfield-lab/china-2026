@@ -17,6 +17,7 @@ family:
 ## Media notes
 
 - `bund-skyline-night.mp4` is the web re-encode (H.264, 960px, ~5.8 MB) of
-  `20260726_215458.mp4` (58 MB HEVC original, kept on disk, untracked).
+  `20260726_215458.mp4` (58 MB HEVC original — deleted with Paul's OK,
+  2026-08-09).
 - `lujiazui-three-towers.jpg` is the 1400px re-size of `20260730_202154.jpg`
-  (original kept on disk, untracked).
+  (original deleted with Paul's OK, 2026-08-09).

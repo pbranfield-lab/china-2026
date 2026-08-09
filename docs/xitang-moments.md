@@ -24,5 +24,5 @@ can fill — add them to `assets/data/xitang.js` when supplied.
 ## Photo provenance note
 
 The six shoot photos arrived via WhatsApp (`IMG-20260804-WA*.jpg`) and were
-copied to descriptive names; the WA originals are still in
-`Photographs/xitan/`, untracked, pending a cleanup OK.
+copied to descriptive names; the WA originals were deleted with Paul's OK on
+2026-08-09 — the descriptive copies are the only versions now.
