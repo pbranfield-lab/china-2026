@@ -47,8 +47,8 @@ rules below are not optional and are repeated in `CLAUDE.md` for that reason.
 
 ## Source material, not wired into the site
 
-- `Guide/guide.txt` — raw exported chat notes with photo-by-photo historical
-  detail, used when writing `story` / `detail` copy.
+- `docs/forbidden-city-guide-notes.txt` — raw exported chat notes with
+  photo-by-photo historical detail, used when writing `story` / `detail` copy.
 - `docs/xian-moments.md`, `docs/great-wall-moments.md` — the family anecdotes and
   William quotes still missing from those trips. The Great Wall one flags which
   people were identified by outfit-matching rather than confirmed, so check it

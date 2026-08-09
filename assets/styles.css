@@ -24,7 +24,6 @@
   /* The Latin families carry no Chinese glyphs, so every hanzi element
      names Noto explicitly rather than falling through to a system default. */
   --font-hanzi:'Noto Serif SC', Georgia, serif;
-  --font-hanzi-sans:'Noto Sans SC', system-ui, sans-serif;
 
   --radius-panel:16px;
   --radius-pill:99px;
@@ -45,7 +44,6 @@
   /* Key-fret (回纹) molding, drawn once, repeated as a border strip.
      Drawn 1:1 at its rendered size so the meander never squashes. */
   --fret:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Cpath d='M0 5 H5 V2 H15 V8 H20' fill='none' stroke='%23C93A2B' stroke-width='1.5'/%3E%3C/svg%3E");
-  --fret-bright:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Cpath d='M0 5 H5 V2 H15 V8 H20' fill='none' stroke='%23F0A421' stroke-width='1.5'/%3E%3C/svg%3E");
   /* Same molding rotated 90° for the vertical runs of a full frame. */
   --fret-v:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='20' viewBox='0 0 10 20'%3E%3Cpath d='M5 0 V5 H8 V15 H2 V20' fill='none' stroke='%23C93A2B' stroke-width='1.5'/%3E%3C/svg%3E");
   /* Auspicious clouds (祥云) — the page ground, gold ink on rice paper. */
@@ -371,12 +369,6 @@ section.tight .section-title::after{width:110px;}
   writing-mode:vertical-rl;letter-spacing:.15em;
 }
 .hero.compact .seal-title span{font-size:1.4rem;}
-.hero .kicker{
-  position:relative;z-index:1;
-  font-family:var(--font-ui);
-  letter-spacing:.22em;text-transform:uppercase;font-size:.68rem;font-weight:800;
-  color:var(--red);margin-bottom:.4rem;
-}
 .hero h1{
   position:relative;z-index:1;
   display:inline-block;

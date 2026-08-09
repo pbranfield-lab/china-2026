@@ -12,6 +12,8 @@ China, written in character by Maisie, aged 11.
 | The Forbidden City | Beijing | `?trip=forbidden-city` |
 | Xi'an & the Terracotta Warriors | Xi'an | `?trip=xian` |
 | The Great Wall at Mutianyu | Beijing | `?trip=great-wall` |
+| Xitang Water Town | near Shanghai | `?trip=xitang` |
+| Shanghai | Shanghai | `?trip=shanghai` |
 
 Each trip has its own plan or panorama with numbered pins, a narrated story, a
 photo gallery, and ten facts. No single trip is the site's theme — the home page
@@ -20,18 +22,23 @@ is a chooser.
 ## How it's built
 
 Static HTML, CSS and vanilla JavaScript. No build step, no bundler, no
-dependencies, no server-side code. Every page loads `assets/data.js` then
-`assets/site.js` via plain `<script>` tags.
+dependencies, no server-side code. Every page loads one data file per trip from
+`assets/data/`, then the assembler `assets/data.js`, then `assets/site.js`, all
+via plain `<script>` tags.
 
-There is only one set of pages. They're made trip-aware by a `?trip=<id>` query
-parameter, so **adding a trip is pure data** — a `TRIPS` entry, a photo folder,
-a plan image, and tagged `LOCATIONS`/`PHOTOS` groups. No HTML changes.
+There is only one set of pages, made trip-aware by a `?trip=<id>` query
+parameter. Adding a trip is a new `assets/data/<id>.js` file, one line in
+`TRIP_MODULES`, a `<script>` tag on each of the five pages, a photo folder and
+a plan image — no new pages.
 
 To preview it, serve the directory with any static file server:
 
 ```bash
 python3 -m http.server 8899
 ```
+
+There is no test suite, but `node tools/check.mjs` asserts the structural
+invariants a wide edit can silently break.
 
 See `CLAUDE.md` for the architecture, and the newest `docs/HANDOFF-*.md` for
 current state — the timestamp is in the filename, and there is only ever one.
@@ -52,10 +59,11 @@ The "10 Mind-Blowing Facts" on each trip are verified before publishing, and
 figures that are traditional or reported rather than established are hedged as
 such. That accuracy is the entire point of the section.
 
-Photographs are the family's own except for three Creative Commons images on the
-Xi'an trip. Those carry their author and licence on the page itself — on the
-thumbnail and again in the photo modal — because CC BY and CC BY-SA require the
-attribution to be visible wherever the work is shown.
+Photographs are the family's own except for a handful of Creative Commons
+images (currently nine, across the Xi'an, Xitang and Shanghai trips). Those
+carry their author and licence on the page itself — on the thumbnail and again
+in the photo modal — because CC BY and CC BY-SA require the attribution to be
+visible wherever the work is shown.
 
 ## Previous name
 

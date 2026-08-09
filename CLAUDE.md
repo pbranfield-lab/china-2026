@@ -51,6 +51,11 @@ both copies of the photo modal are identical, the CSS defines every token the
 stylesheet needs, and `story.html` carries the ids the facts popout queries. It is
 not a test suite — everything visual still needs a browser.
 
+A second, advisory script — `node tools/orphans.mjs` — lists media files in
+`Photographs/` and `assets/` that nothing references (data layer, hard-coded
+page markup, and CSS all count as references). Everything tracked is published
+by GitHub Pages, so an orphan should be a deliberate decision, not drift.
+
 ## Architecture
 
 **Pages** (`index.html`, `story.html`, `family.html`, `map.html`, `gallery.html`)
@@ -229,8 +234,8 @@ box-shadow smaller — keep the technique if editing either.)
 
 The zine re-skin shipped at `SITE_VERSION` 3.0.0, replacing the dark cloisonné
 skin (v2.0.0), whose design docs remain at
-`docs/superpowers/specs/2026-08-09-cloisonne-reskin-design.md` and
-`docs/superpowers/plans/2026-08-09-cloisonne-reskin.md`.
+`docs/archive/2026-08-09-cloisonne-reskin-design.md` and
+`docs/archive/2026-08-09-cloisonne-reskin.md`.
 
 ## Adding content or writing copy
 
