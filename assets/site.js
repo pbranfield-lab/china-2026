@@ -49,6 +49,33 @@ function creditBadge(photo){
   return `<span class="thumb-credit">© ${photo.credit.author} · ${photo.credit.license}</span>`;
 }
 
+/* ---------- Reduced motion, shared flag ----------
+   The stylesheet's prefers-reduced-motion blanket only reaches CSS
+   animation; anything JS drives (count-ups, path draws, injected
+   animations) must check this flag itself. */
+const REDUCED_MOTION = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- Persistent state ----------
+   One namespaced localStorage key holding a single JSON object, so the
+   site never scatters keys and a future format change only has to bump
+   the version suffix. Every access is wrapped: localStorage can be
+   absent or throwing (private browsing, storage-blocked embeds) and the
+   site must degrade to session-only behaviour, never error.
+
+   Keys in use: sound (on/off), visited {tripId:true}, quizBest
+   {tripId:n}, spotBest (n), cats {catId:true}, hanzi {char:true},
+   inputs {comparatorKey:value}. */
+const store = (function(){
+  const KEY = "china2026:v1";
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e){ return {}; } };
+  const save = d  => { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch(e){} };
+  return {
+    get:   (k, fallback) => { const d = load(); return (k in d) ? d[k] : fallback; },
+    set:   (k, v) => { const d = load(); d[k] = v; save(d); },
+    patch: (k, obj) => { const d = load(); d[k] = Object.assign({}, d[k], obj); save(d); }
+  };
+})();
+
 /* ---------- Nav: mobile toggle + current-page highlight ---------- */
 (function(){
   const toggle = document.getElementById("navToggle");

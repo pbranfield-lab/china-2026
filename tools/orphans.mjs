@@ -37,7 +37,7 @@ for (const t of TRIPS) {
 /* Paths hard-coded outside the data layer. */
 const CODE = ["index.html", "story.html", "family.html", "map.html", "gallery.html",
   "assets/site.js", "assets/styles.css"].map(read).join("\n");
-for (const m of CODE.matchAll(/(?:Photographs|assets)\/[\w./-]+\.(?:jpg|jpeg|png|svg|webp|mp4)/gi))
+for (const m of CODE.matchAll(/(?:Photographs|assets)\/[\w./-]+\.(?:jpg|jpeg|png|svg|webp|mp4|mp3|ogg|gif)/gi))
   used.add(m[0].toLowerCase());
 /* styles.css URLs are relative to assets/. */
 for (const m of read("assets/styles.css").matchAll(/url\(['"]?([\w./-]+\.(?:jpg|jpeg|png|svg|webp))/gi))
@@ -47,7 +47,7 @@ function walk(dir) {
   return readdirSync(join(ROOT, dir), { withFileTypes: true }).flatMap(e =>
     e.isDirectory() ? walk(`${dir}/${e.name}`) : [`${dir}/${e.name}`]);
 }
-const MEDIA = /\.(jpg|jpeg|png|svg|webp|mp4)$/i;
+const MEDIA = /\.(jpg|jpeg|png|svg|webp|mp4|mp3|ogg|gif)$/i;
 const onDisk = [...walk("Photographs"), ...walk("assets")].filter(f => MEDIA.test(f));
 const orphans = onDisk.filter(f => !used.has(f.toLowerCase()));
 
