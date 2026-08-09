@@ -142,10 +142,21 @@ The features with gotchas worth knowing before touching them:
   fragment handling finds nothing at first paint) and the CJK webfonts land after
   load and reflow the intro by hundreds of pixels. `pointerdown` is in the release
   list because a scrollbar drag fires none of the others.
-- **Facts** render from `FACTS[CURRENT_TRIP.id]` into `#factsGrid`. `#facts` is
-  `hidden` in the markup and only unhidden when the current trip actually has
-  facts, so a trip without them doesn't leave a bare heading; the same guard
-  reveals the `#factsJump` button in the hero.
+- **Facts** render from `FACTS[CURRENT_TRIP.id]` into `#factsGrid`. Tiles are
+  teasers — index, `stat`, `label`, a hint — and deliberately do **not** render
+  `text`; clicking one opens `#factOverlay`, a `role="dialog"` popout with the
+  fact in quotes and Maisie's medallion (`assets/maisie-avatar.jpg`, one photo
+  shared by all three trips because the Xi'an folder has none of her). ←/→
+  buttons, dots and the arrow keys step through all ten and wrap at either end;
+  Escape, ✕ or a backdrop click closes and returns focus to the tile. Tab is
+  trapped inside the dialog. Stats count up once on scroll-into-view, guarded by
+  its own `matchMedia` check because a `textContent` change is not something the
+  stylesheet's `prefers-reduced-motion` blanket can suppress — and the count
+  inherits thousands-grouping from the stat string, or a year counts as "1,974".
+  Tiles and the popout cycle four enamel colours via a `data-enamel` attribute.
+  `#facts` is `hidden` in the markup and only unhidden when the current trip
+  actually has facts, so a trip without them doesn't leave a bare heading; the
+  same guard reveals the `#factsJump` button in the hero.
 - **Attribution** for sourced photos renders twice: `creditBadge()` puts plain
   text inside the thumb (plain text because a thumb is a `<button>` and a nested
   `<a>` is invalid), and `#modalCredit` carries the full line with the licence
@@ -157,17 +168,35 @@ The features with gotchas worth knowing before touching them:
 
 ### `assets/styles.css`
 
-One shared stylesheet, built on `:root` custom properties (a lacquer / vermillion
-/ gold palette, `--font-display` / `--font-body`). Component styles are grouped by
-page/feature under comment headers — site nav, hero, nav cards, scroll panel,
-family cards, map, location popout, photo thumbs, gallery, modal — followed by a
-single mobile media query block at the end covering all of them.
+One shared stylesheet for all pages, built on `:root` custom properties — a
+cloisonné (景泰蓝) enamel palette: deep teal grounds
+(`--enamel-deep`/`-mid`/`-teal*`), a gold wire hairline (`--wire`), gold
+(`--gold`), coral (`--coral`) and jade (`--jade`) enamel fields, with `--mint`
+and `--cream` for type on dark. Three Latin families — `--font-display`
+(Fraunces 900), `--font-ui` (Outfit), `--font-body` (Nunito) — plus
+`--font-hanzi` (Noto Serif SC), which every hanzi element names explicitly
+because the Latin faces carry no CJK.
 
-⚠️ **A full re-skin is designed and planned but not yet implemented.** See the
-newest `docs/HANDOFF-*.md`, plus
-`docs/superpowers/specs/2026-08-09-cloisonne-reskin-design.md` and
-`docs/superpowers/plans/2026-08-09-cloisonne-reskin.md`. Don't restyle anything
-ad hoc in the meantime — follow the plan.
+Every raised surface shares one **enamel plate** recipe in the ORNAMENT
+PRIMITIVES section: a gradient field, a 1.5px gold wire, a dark setting ring, a
+glaze highlight and a lattice (`--lattice`) overlay on a `::before`.
+⚠️ That overlay is absolutely positioned, so **direct children of a plate need
+`position:relative`** or they paint underneath it — there is a grouped rule that
+does this for every plate class; extend it when adding a new one.
+`--cloud-scroll` is the page/hero ground pattern. The scroll panel is
+deliberately the one light surface left, because it is the only block with
+enough prose to punish light-on-dark. Component styles are grouped by
+page/feature under comment headers — site nav, hero, nav cards, scroll panel,
+family cards, map, location popout, photo thumbs, gallery, modal, facts —
+followed by a single mobile media query block at the end covering all of them.
+
+⚠️ **The map's cream mat is drawn with `box-shadow` spread, not padding:**
+`#pinLayer` positions pins as percentages of `.map-inner`, so any padding there
+shifts every pin off its landmark.
+
+The re-skin shipped at `SITE_VERSION` 2.0.0. Its design and plan are kept for
+reference at `docs/superpowers/specs/2026-08-09-cloisonne-reskin-design.md` and
+`docs/superpowers/plans/2026-08-09-cloisonne-reskin.md`.
 
 ## Adding content or writing copy
 
