@@ -19,17 +19,27 @@ Each trip has its own plan or panorama with numbered pins, a narrated story, a
 photo gallery, and ten facts. No single trip is the site's theme — the home page
 is a chooser.
 
+Beyond the per-trip pages there's The Journey (a scrolling route map of the
+whole itinerary plus a dynasty timeline with a "meanwhile in Britain" strip)
+and The Games Bit (character tracing, a photo-guessing game, a passport that
+collects stamps as you explore, and a big quiz with a two-player
+pass-the-phone mode). Then & Now sliders on the story pages pair century-old
+public-domain photographs with the family's own. There's also a hunt hidden
+across the site; find everything and it says so.
+
 ## How it's built
 
 Static HTML, CSS and vanilla JavaScript. No build step, no bundler, no
-dependencies, no server-side code. Every page loads one data file per trip from
-`assets/data/`, then the assembler `assets/data.js`, then `assets/site.js`, all
-via plain `<script>` tags.
+server-side code. Every page loads one data file per trip from
+`assets/data/`, plus `assets/data/extras.js` (cross-trip data for the
+interactive features), then the assembler `assets/data.js`, then
+`assets/site.js`, all via plain `<script>` tags. The one vendored library is
+Hanzi Writer (MIT), which powers the character tracing on the games page.
 
-There is only one set of pages, made trip-aware by a `?trip=<id>` query
+There is only one set of trip pages, made trip-aware by a `?trip=<id>` query
 parameter. Adding a trip is a new `assets/data/<id>.js` file, one line in
-`TRIP_MODULES`, a `<script>` tag on each of the five pages, a photo folder and
-a plan image — no new pages.
+`TRIP_MODULES`, a `<script>` tag on each page, a photo folder and a plan
+image — no new pages.
 
 To preview it, serve the directory with any static file server:
 
@@ -60,10 +70,12 @@ figures that are traditional or reported rather than established are hedged as
 such. That accuracy is the entire point of the section.
 
 Photographs are the family's own except for a handful of Creative Commons
-images (currently nine, across the Xi'an, Xitang and Shanghai trips). Those
-carry their author and licence on the page itself — on the thumbnail and again
-in the photo modal — because CC BY and CC BY-SA require the attribution to be
-visible wherever the work is shown.
+images (currently nine, across the Xi'an, Xitang and Shanghai trips) and three
+public-domain historic photographs behind the Then & Now sliders. All of them
+carry their author and licence on the page itself — because CC BY and CC BY-SA
+require the attribution to be visible wherever the work is shown, and the
+site credits public domain and CC0 sources anyway (the ambient sound loops
+included).
 
 ## Previous name
 

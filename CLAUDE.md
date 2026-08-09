@@ -44,12 +44,16 @@ No lint or build. One check script:
 node tools/check.mjs
 ```
 
-It asserts the structural invariants a wide edit can silently break: the data
-files still evaluate and their cross-references resolve, `site.js` parses, all
-five pages agree on nav/fonts/scripts and load the data files in the right order,
-both copies of the photo modal are identical, the CSS defines every token the
-stylesheet needs, and `story.html` carries the ids the facts popout queries. It is
-not a test suite — everything visual still needs a browser.
+It asserts the structural invariants a wide edit can silently break (~24
+checks): the data files still evaluate and their cross-references resolve,
+`site.js` parses, all seven pages agree on nav/fonts/scripts and load the data
+files in the right order, exactly two pages carry the (identical) photo modal,
+the CSS defines every token the stylesheet needs, the feature sections carry
+their ids, and every extras.js structure resolves — journey legs chain,
+timeline eras are contiguous, audio/historic files exist with full credits,
+hanzi have stroke-data files, comparators stay declarative, and each page has
+exactly one hidden cat. It is not a test suite — everything visual still needs
+a browser.
 
 A second, advisory script — `node tools/orphans.mjs` — lists media files in
 `Photographs/` and `assets/` that nothing references (data layer, hard-coded
@@ -58,25 +62,39 @@ by GitHub Pages, so an orphan should be a deliberate decision, not drift.
 
 ## Architecture
 
-**Pages** (`index.html`, `story.html`, `family.html`, `map.html`, `gallery.html`)
-are near-identical shells: same `<head>`, same `.site-nav` markup, same script
-includes at the end of `<body>`. They differ only in `<main>` and which optional
-containers they carry (`#historyIntro`, `#familyGrid`, `#pinLayer`/`#detailPanel`,
-`#galleryGrid`, `#modalOverlay`, `#factsGrid`/`#factOverlay`,
-`#quiz`/`#quizCard`, `#teaser`/`#teaserCard`). Copy an existing page as the
-template for a new one.
+**Pages** (`index.html`, `story.html`, `family.html`, `map.html`,
+`gallery.html`, `journey.html`, `play.html`) are near-identical shells: same
+`<head>`, same `.site-nav` markup, same script includes at the end of `<body>`
+(play.html adds the vendored hanzi-writer between `data.js` and `site.js`).
+They differ only in `<main>` and which optional containers they carry
+(`#historyIntro`, `#familyGrid`, `#pinLayer`/`#detailPanel`, `#galleryGrid`,
+`#modalOverlay`, `#factsGrid`/`#factOverlay`, `#quiz`/`#quizCard`,
+`#teaser`/`#teaserCard`, `#scale`, `#thenNow`, `#journeyStage`,
+`#timelineRibbon`, `#hanziGrid`, `#spotCard`, `#passportBook`, `#catBonus`,
+`#playCredits`). Copy an existing page as the template for a new one — a new
+page must also join check.mjs's `PAGES`, the link-rewrite whitelist in site.js,
+orphans.mjs's CODE list, and the nav on **every** page (check 7 enforces
+byte-identity). ⚠️ Only map.html and gallery.html may carry `#modalOverlay` —
+check 8 hard-asserts exactly two.
 
-**Trips.** One set of pages, made trip-aware by `?trip=<id>`; no param falls back
-to `TRIPS[0]`. Currently the Forbidden City (Beijing), Xi'an, the Great Wall
-at Mutianyu, Xitang Water Town (⚠️ its `photoDir` is `"xitan"` — the folder's
-spelling, not the town's), and Shanghai.
+**Trips.** One set of trip pages, made trip-aware by `?trip=<id>`; no param
+falls back to `TRIPS[0]`. Currently the Forbidden City (Beijing), Xi'an, the
+Great Wall at Mutianyu, Xitang Water Town (⚠️ its `photoDir` is `"xitan"` — the
+folder's spelling, not the town's), and Shanghai. `journey.html` and
+`play.html` are trip-agnostic like family.html (no `#heroSeal`, visible in the
+index nav). **The real itinerary order** — Shanghai base first with Xitang as
+a day trip, then three nights in Xi'an (Terracotta Warriors day trip), then
+Beijing as base (Forbidden City in the city, Mutianyu day trip) — is encoded
+in `JOURNEY` and narrated on the journey page; don't contradict it in copy.
+`TRIP_MODULES` order is a compatibility default, not chronology.
 
 ### The data layer
 
-Split across `assets/data/<trip-id>.js` plus the assembler `assets/data.js`,
-loaded in that order by every page. The trip files are large (30–46 KB each) —
-to edit one entry, Grep for its id and read a window around it rather than
-reading the whole file. Each trip file declares one object:
+Split across `assets/data/<trip-id>.js`, the cross-trip file
+`assets/data/extras.js`, and the assembler `assets/data.js`, loaded in that
+order by every page. The trip files are large (30–46 KB each) — to edit one
+entry, Grep for its id and read a window around it rather than reading the
+whole file. Each trip file declares one object:
 
 ```js
 const TRIP_XIAN = { trip: {...}, facts: [...], locations: [...], photos: [...] };
@@ -119,32 +137,52 @@ Field notes, per global:
   because a portrait lives in the folder of the trip it was taken on. `site.js`
   uses it verbatim as `` `Photographs/${person.file}` `` — never prepend a
   trip directory.
+- **`assets/data/extras.js`** carries the interactive features' cross-trip
+  data, all declarative (check.mjs evaluates it — no functions): `JOURNEY`
+  (route stops + legs; `day:true` legs return to their base city, and the leg
+  chain is checked), `TIMELINE` (contiguous eras + events with the Britain
+  lines), `HANZI` (each char needs a stroke file at
+  `assets/vendor/hanzi-data/<codepoint-hex>.js`), `COMPARATORS` (unitValues
+  mirror numbers already in FACTS — one copy of the truth), `THEN_NOW`
+  (historic `then.file` under `Photographs/historic/` with a full credit
+  object; `now` is a PHOTOS **id**), `AUDIO` (per-trip loops + credits), and
+  `CATS`/`CAT_BONUS` (one cat per page; bonus facts verified and hedged).
 
 ### `assets/site.js`
 
 Vanilla JS, structured as independent IIFEs — one per feature, each guarding on
 `document.getElementById(...)` so a page only wires up what it has. Module-scope
 constants resolve first: `CURRENT_TRIP` (from `?trip=`, default `TRIPS[0]`),
-`TRIP_LOCATIONS`, `FAMILY_PHOTO_DIR` (pinned to `"forbidden-city"`), and
-`photoSrc(photo)` — which builds a src from the photo's **own** `trip`, not the
-current one, so a photo always points at the right folder. `data-trip` is set on
-`<html>` so CSS can tune per-trip.
+`TRIP_LOCATIONS`, `photoSrc(photo)` — which builds a src from the photo's
+**own** `trip`, not the current one, so a photo always points at the right
+folder — plus three v4 foundations: `REDUCED_MOTION` (JS-driven animation
+must check it; the CSS blanket can't reach `textContent`/dash-offset changes),
+`store` (the **only** localStorage surface: one namespaced JSON blob under
+`china2026:v1` with keys `sound, visited, quizBest, spotBest, cats, hanzi,
+inputs`, every access try/caught so private browsing degrades silently), and
+`SoundKit` (ambient loop per trip, WebAudio feedback chirps, zh-CN
+`speak()`/`hasZhVoice()`; audio only ever starts inside a user gesture).
+`data-trip` is set on `<html>` so CSS can tune per-trip.
 
 The features with gotchas worth knowing before touching them:
 
-- **Contextual nav.** The header markup is identical on all five pages
+- **Contextual nav.** The header markup is identical on every page
   (check.mjs asserts it); site.js adapts it at load. On `index.html` the
   trip-scoped links (story/facts/map/gallery) are hidden — the home page is the
   trip chooser, and those links would silently land on `TRIPS[0]` before a trip
-  was chosen. On every other page a `.nav-trip` chip is injected after the
-  brand, naming the current trip and linking back to the chooser.
+  was chosen; the trip-agnostic Journey/Family/Play links stay. On every other
+  page a `.nav-trip` chip is injected after the brand, naming the current trip
+  and linking back to the chooser.
 - **The Big Quiz** (`story.html#quiz`) is built from the same `FACTS` as the
   tiles — there is no separate quiz data to drift out of truth. Only facts
   whose `stat` is one leading number qualify ("east", "rice" and ranges like
   "7–8 m" sit out); decoys are scaled — or shifted, for years — and formatted
   to match the real stat's commas/decimals/suffix so the shape never gives the
   answer away. The section stays `hidden` unless the trip has ≥4 quizzable
-  facts. Five random questions per run, replayable.
+  facts. A chooser fronts it: solo (5 questions) or pass-the-phone 2-player
+  (6, alternating, per-player stars, winner card). Best scores feed the
+  passport, and `finish()` can draw a 640px share sticker onto a canvas —
+  **vectors/text/emoji only, never photos**, so the canvas stays untainted.
 - **The home teaser** (`#teaser`) shows one random fact from any trip with a
   reshuffle button; its "plus the quiz" link names the fact's own trip
   explicitly, which is what stops the link-rewrite pass re-pointing it at
@@ -158,7 +196,11 @@ The features with gotchas worth knowing before touching them:
   already containing `trip=`**, which is the only thing stopping the home-page
   chooser cards all pointing at the same trip — don't remove that check. The hash
   is split off *before* the query, or `story.html#facts` becomes
-  `story.html#facts?trip=…`.
+  `story.html#facts?trip=…`. Two corollaries: the whitelist regex names all
+  seven pages (a new page must join it), and the rewrite **discards any other
+  query params** — so no feature may introduce its own; deep links use `#hash`
+  only. Links injected by JS after load must carry their own `?trip=` — the
+  pass has already run.
 - ⚠️ **`PHOTOS.indexOf(p)` / `PHOTOS[i]` in the map popout is positional** — its
   thumbnails index into the flat global `PHOTOS`. Don't point that render path at
   a filtered copy. The gallery is safe to filter because it looks photos up by
@@ -194,9 +236,26 @@ The features with gotchas worth knowing before touching them:
   `<a>` is invalid), and `#modalCredit` carries the full line with the licence
   linked. `#modalCredit` stays `hidden` for family photos so there's no stray
   divider.
+- **The v4 features**, briefly (each its own IIFE, each hiding its section
+  when its data is empty): the **Journey** scroll-draw (measures route path
+  lengths at runtime, drives `stroke-dashoffset` from an IntersectionObserver;
+  reduced motion renders everything drawn), the **timeline** ribbon (events
+  render *inside* their era blocks so nothing overlaps), **Then & Now** (an
+  invisible full-frame range input drives the clip-path divider — keyboard and
+  touch for free; credits render under every frame, including public domain),
+  the **hanzi playground** (data loads by injected `<script>`, not fetch, so
+  file:// works; speak button hidden without a zh voice), **Spot-It** (pool is
+  `!p.credit && p.type !== "video"` — family photos only, so no in-game
+  attribution), the **Scale-o-matic** (ops live in JS, data stays
+  declarative), the **passport** (trip-scoped pages stamp `visited`; play.html
+  renders the book), and the **cats** (one per page from `CATS`; all found
+  unlocks `#catBonus` and the print-only certificate — `@media print` shows
+  only `.cert-print`).
 - Also: nav toggle + current-page highlight, `?loc=` deep links validated against
   the current trip, scroll-reveal, the home hero image rotation and the hero
-  subtitle counted from `TRIPS`, the trip chooser, and the gallery location filter.
+  subtitle counted from `TRIPS`, the trip chooser, the gallery location filter,
+  the injected sound toggle (bottom-right; stamp owns bottom-left) and the
+  play-page credits panel (audio + vendored-library attribution).
 
 ### `assets/styles.css`
 
@@ -224,8 +283,13 @@ on photo thumbs (polaroid treatment). Fact tiles stay cream and cycle their
 border/stat/chip colours, so text is always ink-on-cream and passes AA — the
 v2 contrast problem no longer exists. Component styles are grouped by
 page/feature under comment headers — site nav, hero, nav cards, scroll panel,
-family cards, map, location popout, photo thumbs, gallery, modal, facts —
-followed by a single mobile media query block at the end covering all of them.
+family cards, map, location popout, photo thumbs, gallery, modal, facts,
+teaser, quiz, journey, timeline, then & now, hanzi, spot-it, scale-o-matic,
+passport, cats/toast/certificate, sound toggle — followed by a single mobile
+media query block at the end covering all of them. New feature CSS goes in its
+own commented section **before** the mobile block, with its mobile rules
+**inside** that block; SVG `#` colours in CSS data-URIs must be `%23` (inline
+DOM SVG is exempt).
 
 ⚠️ **The map's mat is drawn with `box-shadow` spread, not padding:**
 `#pinLayer` positions pins as percentages of `.map-inner`, so any padding there
