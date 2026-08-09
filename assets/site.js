@@ -860,6 +860,114 @@ let openPhoto = function(){};
   }
 })();
 
+/* ---------- The Journey (journey page) ----------
+   The route map draws itself as the leg cards scroll past. Path lengths
+   are measured at runtime, never hardcoded; day-trip legs are out-and-back
+   spurs whose next leg starts from the same base city. Cards are injected
+   here, so their trip links must carry ?trip= themselves — the rewrite
+   pass has already run. Under reduced motion (or no IntersectionObserver)
+   the whole route renders drawn with the final total showing. */
+(function(){
+  const stage = document.getElementById("journeyStage");
+  if(!stage || typeof JOURNEY === "undefined" || !JOURNEY.stops.length) return;
+  const svg = document.getElementById("routeMap");
+  const legsBox = document.getElementById("journeyLegs");
+  const distEl = document.getElementById("distanceNow");
+  if(!svg || !legsBox || !distEl) return;
+
+  const tripOf = id => (typeof TRIPS !== "undefined" && TRIPS.find(t => t.id === id)) || null;
+
+  const legPaths = [...svg.querySelectorAll(".route-leg")]
+    .sort((a, b) => Number(a.dataset.leg) - Number(b.dataset.leg));
+  legPaths.forEach(p=>{
+    const L = p.getTotalLength();
+    p.style.strokeDasharray = L;
+    p.style.strokeDashoffset = L;
+  });
+
+  const stopMarks = [...svg.querySelectorAll(".route-stop")];
+  const markOf = trip => stopMarks.find(s => s.dataset.stop === trip);
+
+  const cum = [0];
+  JOURNEY.legs.forEach(l => cum.push(cum[cum.length - 1] + l.km));
+
+  function card(leg, html){
+    const el = document.createElement("article");
+    el.className = "leg-card";
+    el.dataset.leg = String(leg);
+    el.innerHTML = html;
+    legsBox.appendChild(el);
+  }
+
+  const startTrip = tripOf(JOURNEY.stops[0].trip);
+  card(0, `
+    <span class="leg-badge">The start</span>
+    <h3>${JOURNEY.stops[0].label} ${startTrip ? startTrip.icon : ""}</h3>
+    <p>${JOURNEY.start}</p>
+    <a class="leg-link" href="story.html?trip=${JOURNEY.stops[0].trip}">Read the ${startTrip ? startTrip.name : ""} story →</a>`);
+
+  JOURNEY.legs.forEach((leg, i)=>{
+    const from = JOURNEY.stops.find(s => s.trip === leg.from);
+    const to = JOURNEY.stops[i + 1];
+    const trip = tripOf(leg.to);
+    card(i + 1, `
+      <span class="leg-badge">${leg.day ? "Day trip" : `Leg ${i + 1}`}</span>
+      <h3>${from.label} ${leg.day ? "⇄" : "→"} ${to.label} ${trip ? trip.icon : ""}</h3>
+      <span class="leg-km">${leg.distanceLabel} — ${leg.compare}</span>
+      <p>${leg.blurb}</p>
+      <a class="leg-link" href="story.html?trip=${leg.to}">Read the ${trip ? trip.name : ""} story →</a>`);
+  });
+
+  card(JOURNEY.legs.length, `
+    <span class="leg-badge">The whole thing</span>
+    <h3>${JOURNEY.totalLabel}</h3>
+    <p>${JOURNEY.end}</p>`);
+
+  let high = -1;
+  function setDistance(n){
+    const target = cum[Math.min(n, cum.length - 1)];
+    const from = Number(distEl.dataset.v || 0);
+    distEl.dataset.v = String(target);
+    if(REDUCED_MOTION || from === target){
+      distEl.textContent = target.toLocaleString("en-GB");
+      return;
+    }
+    const t0 = performance.now();
+    (function tick(now){
+      const t = Math.min(1, ((now || performance.now()) - t0) / 700);
+      const eased = 1 - Math.pow(1 - t, 3);
+      distEl.textContent = Math.round(from + (target - from) * eased).toLocaleString("en-GB");
+      if(t < 1) requestAnimationFrame(tick);
+    })();
+  }
+
+  function activate(n){
+    if(n <= high) return;
+    high = n;
+    for(let k = 1; k <= n && k <= legPaths.length; k++)
+      legPaths[k - 1].style.strokeDashoffset = 0;
+    JOURNEY.stops.slice(0, n + 1).forEach(s=>{
+      const mark = markOf(s.trip);
+      if(mark) mark.classList.add("in");
+    });
+    setDistance(n);
+  }
+
+  activate(0);
+  if(REDUCED_MOTION || !("IntersectionObserver" in window)){
+    activate(JOURNEY.legs.length);
+  } else {
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting) activate(Number(e.target.dataset.leg));
+      });
+    }, {threshold: 0.4});
+    legsBox.querySelectorAll(".leg-card").forEach(c => obs.observe(c));
+  }
+
+  document.getElementById("journey").hidden = false;
+})();
+
 /* ---------- Home page: "Did you know?" teaser ----------
    One random fact from any trip, straight under the hero, with a dice button
    to shuffle — the hook that pulls a visitor from the front door into a trip.

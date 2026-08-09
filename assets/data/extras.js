@@ -24,7 +24,39 @@
    - CATS:        the hidden-cat hunt, one entry per page.
    ============================================================ */
 
-const JOURNEY = { stops: [], legs: [] };
+/* The route page. Stops appear in itinerary order and each has a marker
+   (data-stop) in journey.html's inline SVG. Legs chain between stops;
+   day:true means an out-and-back from the current base city, so the next
+   leg starts from that base, not from the day-trip stop. km values are
+   the counted travel (day trips count both ways), rounded, and always
+   presented with "about". Distance comparisons are ballpark straight-line
+   figures, deliberately hedged with "roughly". */
+const JOURNEY = {
+  stops: [
+    { trip:"shanghai",       label:"Shanghai" },
+    { trip:"xitang",         label:"Xitang" },
+    { trip:"xian",           label:"Xi'an" },
+    { trip:"forbidden-city", label:"Beijing" },
+    { trip:"great-wall",     label:"Mutianyu" }
+  ],
+  start:"It all starts in Shanghai, which is not exactly easing yourself in — skyscrapers, the Bund, lights everywhere, the works.",
+  end:"Add it all up and that's about 2,800 km, which is genuinely further than London to Istanbul. Err, I had a good one. Whatever happens next is in your imagination.",
+  totalLabel:"about 2,800 km",
+  legs: [
+    { from:"shanghai", to:"xitang", day:true, km:180,
+      distanceLabel:"about 90 km each way", compare:"roughly London to Oxford",
+      blurb:"First detour — about 90 km out to Xitang and back, London to Oxford basically. Skyscrapers swapped for a little town where the streets are canals." },
+    { from:"shanghai", to:"xian", km:1400,
+      distanceLabel:"about 1,400 km", compare:"roughly London to Rome",
+      blurb:"Then the big one, about 1,400 km to Xi'an — roughly London to Rome. Three nights there, with a whole clay army waiting about 40 km east of the city." },
+    { from:"xian", to:"forbidden-city", km:1100,
+      distanceLabel:"about 1,100 km", compare:"roughly London to Barcelona",
+      blurb:"Another about 1,100 km up to Beijing, roughly London to Barcelona. That was base for the rest of the holiday, with the Forbidden City sitting right in the middle of the city." },
+    { from:"forbidden-city", to:"great-wall", day:true, km:140,
+      distanceLabel:"about 70 km each way", compare:"roughly London to Brighton",
+      blurb:"Last detour — about 70 km each way out to the Great Wall at Mutianyu. London to Brighton, except instead of a beach there's a massive wall going over the mountains." }
+  ]
+};
 
 const TIMELINE = { eras: [], events: [] };
 

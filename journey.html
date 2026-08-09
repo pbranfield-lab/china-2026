@@ -30,7 +30,7 @@
        rather than being swapped to the current trip's characters. -->
   <div class="seal-title"><span>中国</span></div>
   <h1>The Whole Trip</h1>
-  <p class="sub">Five places, one country, and like 2,500 km in between. We went ALL that way.</p>
+  <p class="sub">Five places, one country, and about 2,800 km in between. We went ALL that way.</p>
 </div>
 
 <main>
@@ -41,9 +41,69 @@
   <section class="wide" id="journey" hidden>
     <div class="section-head reveal">
       <h2 class="section-title">The Route</h2>
-      <p class="section-sub" id="journeySub">Watch it draw itself. Beijing, then the Wall, then Xi'an, then Xitang, then Shanghai. My feet did every bit of that.</p>
+      <p class="section-sub" id="journeySub">Watch it draw itself. Shanghai first, then Xi'an, then Beijing — plus the day-trip detours sneaking off the side.</p>
     </div>
-    <div class="journey-stage" id="journeyStage"></div>
+    <div class="journey-stage" id="journeyStage">
+      <div class="journey-map">
+        <!-- A schematic, not survey data — same honesty rule as the trip
+             plans. Inline (not an <img>) so site.js can drive the route
+             paths' stroke-dashoffset as the cards scroll past. Islands are
+             drawn, not labelled; nothing here is to scale. -->
+        <svg id="routeMap" viewBox="0 0 100 84" role="img"
+             aria-label="Sketch map of China showing the route: Beijing, the Great Wall at Mutianyu, Xi'an, Xitang, then Shanghai">
+          <path class="china-outline" d="M 1,35
+            L 4.5,29 9,25.5 14.5,20 21,15 29,11.5 32,16 35.5,22.5 39,25
+            43.5,26.5 47.5,28 51.5,28.5 57,24.5 62.5,21 66,15.5 71.5,10.5
+            75,5.5 79.5,2 84,5 89,9 94,11 99,13.5 96.5,19 93.5,26 88,30
+            83,33 79,34.5 76,35 73.5,35.2 72,35.5 74,36.5 77,37 80,38.5
+            78.5,42 76.5,46 78,49.5 79.5,53 77.5,55.5 76,59 74.5,64 72.5,69
+            69,71.5 65,73.5 62,76 60,79 58,77.5 56.5,76 52,74.5 47,73.5
+            43,72 39.5,70 40,66 40,62 36,61.5 29.5,61 24,60.5 19.5,60
+            14,57 9.5,52.5 6.5,49 4,45.5 2,40 Z"/>
+          <ellipse class="china-island" cx="59.5" cy="82" rx="2.1" ry="1.5"/>
+          <ellipse class="china-island" cx="78.6" cy="61.5" rx="1.1" ry="2"/>
+
+          <!-- Route order matches the actual itinerary: Shanghai base first
+               (Xitang day trip), the long haul to Xi'an, then Beijing base
+               (Mutianyu day trip). Day-trip legs are dashed out-and-back
+               spurs; the solid legs are the moves between base cities. -->
+          <path class="route-leg day" data-leg="1" d="M 79,52.8 Q 77.5,54.6 75.5,54.5"/>
+          <path class="route-leg" data-leg="2" d="M 79,52.8 Q 66,53 58,46"/>
+          <path class="route-leg" data-leg="3" d="M 58,46 Q 66,39 70,33"/>
+          <path class="route-leg day" data-leg="4" d="M 70,33 Q 70.2,31.6 71,30.5"/>
+
+          <g class="route-stop" data-stop="shanghai">
+            <circle cx="79" cy="52.8" r="1.5"/>
+            <text x="80.8" y="52.4">Shanghai</text>
+          </g>
+          <g class="route-stop" data-stop="xitang">
+            <circle cx="75.5" cy="54.5" r="1.5"/>
+            <text x="74.8" y="58.2" text-anchor="end">Xitang</text>
+          </g>
+          <g class="route-stop" data-stop="xian">
+            <circle cx="58" cy="46" r="1.5"/>
+            <text x="56.3" y="47.2" text-anchor="end">Xi'an</text>
+          </g>
+          <g class="route-stop" data-stop="forbidden-city">
+            <circle cx="70" cy="33" r="1.5"/>
+            <text x="68.3" y="34.2" text-anchor="end">Beijing</text>
+          </g>
+          <g class="route-stop" data-stop="great-wall">
+            <circle cx="71" cy="30.5" r="1.5"/>
+            <text x="72.6" y="29.8">Mutianyu</text>
+          </g>
+        </svg>
+        <div class="journey-distance" aria-live="polite">
+          <span class="journey-distance-num" id="distanceNow">0</span>
+          <span class="journey-distance-label">km so far</span>
+        </div>
+        <p class="journey-key">
+          <span class="key-line"></span> big moves ·
+          <span class="key-line key-day"></span> day trips (there and back)
+        </p>
+      </div>
+      <div class="journey-legs" id="journeyLegs"></div>
+    </div>
   </section>
 
   <!-- Dynasty timeline with the parallel "meanwhile in Britain" strip.
@@ -73,7 +133,7 @@
 </main>
 
 <footer>
-  That's 2,500 km and like two thousand years on one page. You're welcome. — Maisie
+  That's about 2,800 km and like two thousand years on one page. You're welcome. — Maisie
 </footer>
 
 <!-- One file per trip, plus extras.js (cross-trip data), then the assembler

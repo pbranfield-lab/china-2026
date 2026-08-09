@@ -116,7 +116,7 @@ section.tight .section-title::after{width:110px;}
 .enamel,
 .nav-card, .family-card, .location-card, .modal,
 .bonus-feature, .fact-tile, .fact-pop, .teaser-card, .quiz-card,
-.play-credits{
+.play-credits, .leg-card{
   position:relative;
   border:2.5px solid var(--ink);
   border-radius:var(--radius-panel);
@@ -133,7 +133,7 @@ section.tight .section-title::after{width:110px;}
 .enamel > *,
 .nav-card > *, .family-card > *, .modal > *,
 .bonus-feature > *, .fact-tile > *, .fact-pop > *,
-.teaser-card > *, .quiz-card > *, .play-credits > *,
+.teaser-card > *, .quiz-card > *, .play-credits > *, .leg-card > *,
 .location-card > .panel, .location-card > .william-toggle{
   position:relative;
 }
@@ -1162,6 +1162,79 @@ footer{position:relative;text-align:center;color:var(--ink-soft);padding:3rem 1.
   user-select:none;
 }
 
+/* ---------- The Journey (journey page) ----------
+   Sticky map on the left, leg cards scrolling past on the right; the
+   route paths' dash offsets are driven from site.js. */
+.journey-stage{
+  display:grid;
+  grid-template-columns:minmax(0, 6fr) minmax(0, 5fr);
+  gap:2.2rem;
+  align-items:start;
+  max-width:1060px;
+  margin:0 auto;
+}
+.journey-map{
+  position:sticky;top:86px;
+  border:2.5px solid var(--ink);
+  border-radius:var(--radius-panel);
+  background-color:var(--cream);
+  background-image:var(--texture-paper);
+  box-shadow:var(--pop);
+  padding:1rem 1rem .8rem;
+}
+.journey-map svg{width:100%;height:auto;display:block;}
+.china-outline, .china-island{
+  fill:#F5E9CB;
+  stroke:var(--ink);
+  stroke-width:.6;
+  stroke-linejoin:round;
+}
+.route-leg{
+  fill:none;
+  stroke:var(--red);
+  stroke-width:1.1;
+  stroke-linecap:round;
+  transition:stroke-dashoffset 1.4s ease;
+}
+.route-leg.day{stroke:var(--blue);stroke-width:.85;}
+.route-stop{opacity:0;transition:opacity .5s ease .25s;}
+.route-stop.in{opacity:1;}
+.route-stop circle{fill:var(--red);stroke:var(--ink);stroke-width:.4;}
+.route-stop text{font-family:var(--font-ui);font-size:3px;font-weight:600;fill:var(--ink);}
+.journey-distance{
+  display:flex;align-items:baseline;justify-content:center;gap:.45rem;
+  margin-top:.6rem;
+}
+.journey-distance-num{font-family:var(--font-display);font-size:1.7rem;line-height:1;color:var(--red);}
+.journey-distance-label{
+  font-family:var(--font-ui);font-size:.72rem;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);
+}
+.journey-key{margin-top:.35rem;text-align:center;font-family:var(--font-ui);font-size:.68rem;color:var(--ink-soft);}
+.key-line{
+  display:inline-block;width:22px;height:0;vertical-align:middle;margin-right:.25rem;
+  border-top:3px solid var(--red);border-radius:2px;
+}
+.key-line.key-day{border-top-color:var(--blue);border-top-width:2px;}
+/* Tall gaps between cards are what gives the map time to draw. */
+.leg-card{padding:1.4rem 1.5rem;margin-bottom:42vh;}
+.leg-card:first-child{margin-top:4vh;}
+.leg-card:last-child{margin-bottom:6vh;}
+.leg-badge{
+  display:inline-block;
+  background:var(--ink);color:#FFF6EC;
+  font-family:var(--font-ui);font-weight:800;font-size:.64rem;letter-spacing:.1em;
+  text-transform:uppercase;padding:.3rem .8rem;border-radius:var(--radius-pill);
+}
+.leg-card h3{font-family:var(--font-display);font-weight:400;font-size:1.45rem;color:var(--ink);margin:.7rem 0 .35rem;}
+.leg-km{
+  display:inline-block;
+  font-family:var(--font-ui);font-weight:800;font-size:.78rem;
+  color:var(--red-deep);margin-bottom:.5rem;
+}
+.leg-card p{font-family:var(--font-body);font-weight:600;font-size:.95rem;color:var(--ink);}
+.leg-link{display:inline-block;margin-top:.7rem;font-family:var(--font-ui);font-weight:800;font-size:.85rem;color:var(--blue-deep);}
+
 /* ---------- Sound toggle ----------
    Injected by site.js on every page, bottom-right (the version stamp owns
    bottom-left). Same pill language as the other labelled controls, kept
@@ -1256,4 +1329,9 @@ footer{position:relative;text-align:center;color:var(--ink-soft);padding:3rem 1.
   /* Icon-only toggle on phones: the label would sit over content. */
   .sound-toggle{padding:.45rem .55rem;}
   .sound-toggle span{display:none;}
+  /* Journey stacks: the map stays stuck to the top while cards pass. */
+  .journey-stage{grid-template-columns:1fr;gap:1.2rem;}
+  .journey-map{top:64px;z-index:4;padding:.7rem .7rem .5rem;}
+  .journey-distance-num{font-size:1.4rem;}
+  .leg-card{margin-bottom:52vh;}
 }

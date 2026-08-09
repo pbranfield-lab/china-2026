@@ -154,6 +154,32 @@ check("the quiz and teaser containers are in place", () => {
   return null;
 });
 
+check("JOURNEY route resolves, chains, and matches the map markers", () => {
+  const { TRIPS, JOURNEY } = loadData();
+  const ids = new Set(TRIPS.map(t => t.id));
+  for (const s of JOURNEY.stops) if (!ids.has(s.trip)) return `stop trip unknown: ${s.trip}`;
+  if (JOURNEY.legs.length !== JOURNEY.stops.length - 1) return "legs don't span the stops";
+  if (!JOURNEY.start || !JOURNEY.end || !JOURNEY.totalLabel) return "JOURNEY is missing its framing copy";
+  /* Day trips return to the base city, so the next leg starts from the
+     base, not the day-trip stop. */
+  let base = JOURNEY.stops[0].trip;
+  for (let i = 0; i < JOURNEY.legs.length; i++){
+    const l = JOURNEY.legs[i];
+    if (l.from !== base) return `leg ${i + 1} starts at ${l.from}, expected ${base}`;
+    if (l.to !== JOURNEY.stops[i + 1].trip) return `leg ${i + 1} ends at ${l.to}, expected ${JOURNEY.stops[i + 1].trip}`;
+    if (typeof l.km !== "number") return `leg ${i + 1} km is not a number`;
+    if (!l.blurb || !l.distanceLabel || !l.compare) return `leg ${i + 1} is missing copy`;
+    if (!l.day) base = l.to;
+  }
+  const j = read("journey.html");
+  for (const s of JOURNEY.stops)
+    if (!j.includes(`data-stop="${s.trip}"`)) return `journey.html has no map marker for ${s.trip}`;
+  const paths = (j.match(/class="route-leg[^"]*"/g) || []).length;
+  if (paths !== JOURNEY.legs.length)
+    return `journey.html draws ${paths} route legs for ${JOURNEY.legs.length} data legs`;
+  return null;
+});
+
 check("AUDIO entries resolve to real trips, files and credits", () => {
   const { TRIPS, AUDIO } = loadData();
   const ids = new Set(TRIPS.map(t => t.id));
