@@ -48,7 +48,7 @@ const DATA_FILES = [
 function loadData(){
   const src = DATA_FILES.map(read).join("\n");
   return new Function(src + ";return {TRIPS,LOCATIONS,PHOTOS,FACTS,FAMILY,SITE_VERSION," +
-    "JOURNEY,TIMELINE,HANZI,COMPARATORS,THEN_NOW,AUDIO,CATS};")();
+    "JOURNEY,TIMELINE,HANZI,COMPARATORS,THEN_NOW,AUDIO,CATS,CAT_BONUS};")();
 }
 
 /* Strip HTML comments before comparing blocks — the two modal copies carry
@@ -177,6 +177,25 @@ check("JOURNEY route resolves, chains, and matches the map markers", () => {
   const paths = (j.match(/class="route-leg[^"]*"/g) || []).length;
   if (paths !== JOURNEY.legs.length)
     return `journey.html draws ${paths} route legs for ${JOURNEY.legs.length} data legs`;
+  return null;
+});
+
+check("CATS cover every page exactly once and the bonus pack is whole", () => {
+  const { CATS, CAT_BONUS } = loadData();
+  if (!CATS.length) return null;
+  const pages = CATS.map(c => c.page);
+  const extra = pages.filter(p => !PAGES.includes(p));
+  if (extra.length) return `cats on unknown pages: ${extra.join(", ")}`;
+  if (new Set(pages).size !== pages.length) return "a page has more than one cat";
+  if (pages.length !== PAGES.length)
+    return `expected one cat per page (${PAGES.length}), found ${pages.length}`;
+  if (new Set(CATS.map(c => c.id)).size !== CATS.length) return "cat ids are not unique";
+  for (const c of CATS)
+    for (const k of ["id","page","anchor","corner","pose","line"])
+      if (!c[k]) return `${c.id || "?"} is missing ${k}`;
+  for (const k of ["heading","intro","facts","certificateHeading","certificateBody"])
+    if (!CAT_BONUS[k] || (k === "facts" && !CAT_BONUS.facts.length))
+      return `CAT_BONUS is missing ${k}`;
   return null;
 });
 

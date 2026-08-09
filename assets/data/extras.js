@@ -235,4 +235,40 @@ const AUDIO = {
     sourceUrl:"https://freesound.org/people/Davor/sounds/382267/" }
 };
 
-const CATS = [];
+/* The hidden-cat hunt: one cat per page, tucked into a corner of its
+   anchor element. Finding all of them unlocks the Palace Cats bonus on
+   play.html — anchored in the true fact that the Palace Museum has famous
+   resident cats. `corner` is tl/tr/bl/br; `pose` picks a sticker
+   silhouette in site.js. */
+const CATS = [
+  { id:"cat-home",    page:"index.html",   anchor:"#tripChooser",  corner:"br", pose:"sit",
+    line:"A cat, right on the front page. Bold of it." },
+  { id:"cat-story",   page:"story.html",   anchor:"#historyIntro", corner:"tr", pose:"loaf",
+    line:"This one's been sitting in the history bit the whole time. Probably knows more than me by now." },
+  { id:"cat-family",  page:"family.html",  anchor:"#familyGrid",   corner:"bl", pose:"sit",
+    line:"A cat hiding in with my family. Honestly, it fits right in." },
+  { id:"cat-map",     page:"map.html",     anchor:"#mapCase",      corner:"bl", pose:"loaf",
+    line:"Found on the map. Cats always know exactly where they are." },
+  { id:"cat-gallery", page:"gallery.html", anchor:"#galleryGrid",  corner:"tr", pose:"sit",
+    line:"Hiding in the gallery. It's not actually in any of the photos, I checked." },
+  { id:"cat-journey", page:"journey.html", anchor:".journey-map",  corner:"br", pose:"loaf",
+    line:"A cat on the journey page. Longest walk of its little life." },
+  { id:"cat-play",    page:"play.html",    anchor:".passport-book", corner:"tl", pose:"sit",
+    line:"This one was on the games page the whole time. Sneaky little thingymajig." }
+];
+
+/* The bonus pack behind the hunt. Every fact verified; hedges kept. */
+const CAT_BONUS = {
+  heading:"The Palace Cats",
+  hanzi:"宫猫",
+  intro:"Seven out of seven — so now you get to know the thing I love most, which is that the Forbidden City has real actual cats living in it.",
+  facts: [
+    "The Palace Museum is home to a whole population of stray cats today — reportedly well over a hundred — and the staff feed them and give them names.",
+    "So the story goes, they're reportedly descendants of the cats the Ming and Qing emperors kept. Imagine having an emperor for your great-great-whatever owner.",
+    "The Ming palace genuinely had an official Cat Room — 猫儿房 — an actual office of palace staff whose whole job was raising the court's cats. A department. For cats.",
+    "Emperor Jiajing's favourite cat was called Shuangmei, which means Frost-Eyebrows. When she died she reportedly got a coffin and her own burial mound.",
+    "They earn their keep, too — the cats scare off the rodents that could chew the ancient wooden halls. Basically tiny security guards."
+  ],
+  certificateHeading:"Official Cat-Finder Certificate",
+  certificateBody:"This certifies that ______________________ found all seven cats hiding on this website, which took proper detective work. Verified by me, personally. — Maisie"
+};

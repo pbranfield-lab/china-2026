@@ -1416,6 +1416,118 @@ let openPhoto = function(){};
   document.getElementById("passport").hidden = false;
 })();
 
+/* ---------- Hidden cats (every page) ----------
+   One small sticker cat per page, tucked into a corner of its anchor.
+   Inline DOM SVG (no data-URI, so no %23 escaping applies). Found cats
+   stay visible at low opacity so a revisit isn't confusing. Finding all
+   of them unlocks the Palace Cats bonus panel on play.html. */
+(function(){
+  if(typeof CATS === "undefined" || !CATS.length) return;
+  const here = location.pathname.split("/").pop() || "index.html";
+  const cat = CATS.find(c => c.page === here);
+
+  const found = () => store.get("cats", {}) || {};
+  const allFound = () => CATS.every(c => found()[c.id]);
+
+  const POSES = {
+    sit: `<svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true">
+      <path d="M13 34 C7 34 5 28 6.5 23 C7.5 19 10 16.5 12 15.5 L10.5 8 L16 12 C17.5 11.6 19.5 11.6 21 12 L26.5 8 L25 15.5 C27 16.5 29.5 19 30.5 23 C32 28 30 34 24 34 Z"
+        fill="#F0A421" stroke="#302217" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M30 30 C34 29 36 25 34.5 21" fill="none" stroke="#302217" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="15.5" cy="20" r="1.3" fill="#302217"/>
+      <circle cx="22.5" cy="20" r="1.3" fill="#302217"/>
+      <path d="M17.5 24 Q19 25.5 20.5 24" fill="none" stroke="#302217" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>`,
+    loaf: `<svg viewBox="0 0 44 34" width="36" height="28" aria-hidden="true">
+      <path d="M8 28 C3 28 2 22 5 19 C4 13 8 9 13 9 L11.5 3.5 L16.5 7 C18 6.6 20 6.6 21.5 7 L26.5 3.5 L25 9 C33 9 40 14 41 20 C42 25 39 28 34 28 Z"
+        fill="#F0A421" stroke="#302217" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="14.5" cy="15" r="1.3" fill="#302217"/>
+      <circle cx="21.5" cy="15" r="1.3" fill="#302217"/>
+      <path d="M16.5 19 Q18 20.5 19.5 19" fill="none" stroke="#302217" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>`
+  };
+
+  function toast(msg){
+    let el = document.getElementById("toast");
+    if(!el){
+      el = document.createElement("div");
+      el.id = "toast";
+      el.className = "toast";
+      el.setAttribute("role", "status");
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(el._t);
+    el._t = setTimeout(()=> el.classList.remove("show"), 4500);
+  }
+
+  if(cat){
+    const anchor = document.querySelector(cat.anchor);
+    if(anchor){
+      if(getComputedStyle(anchor).position === "static") anchor.style.position = "relative";
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = `cat-sticker cat-${cat.corner}`;
+      btn.setAttribute("aria-label", "A small cat. Suspicious.");
+      btn.innerHTML = POSES[cat.pose] || POSES.sit;
+      if(found()[cat.id]) btn.classList.add("found");
+      btn.addEventListener("click", ()=>{
+        const already = found()[cat.id];
+        store.patch("cats", { [cat.id]: true });
+        btn.classList.add("found");
+        SoundKit.fx("cat");
+        if(already){
+          toast("Already found this one. It remembers you.");
+        } else {
+          const total = Object.keys(found()).length;
+          toast(allFound()
+            ? cat.line + " That's all seven — the games page has something for you."
+            : cat.line + ` (${total} of ${CATS.length})`);
+        }
+      });
+      anchor.appendChild(btn);
+    }
+  }
+
+  /* The bonus panel, play.html only. */
+  const bonus = document.getElementById("catBonus");
+  if(bonus && typeof CAT_BONUS !== "undefined" && allFound()){
+    bonus.innerHTML = `
+      <div class="section-head reveal">
+        <h2 class="section-title">${CAT_BONUS.heading} <span class="pp-hanzi">${CAT_BONUS.hanzi || ""}</span></h2>
+        <p class="section-sub">${CAT_BONUS.intro}</p>
+      </div>
+      <div class="catfacts reveal">
+        ${CAT_BONUS.facts.map((f, i)=>`
+          <article class="catfact" data-enamel="${["teal","coral","jade","deep"][i % 4]}">
+            <span class="catfact-index">🐈 ${i + 1}</span>
+            <p>${f}</p>
+          </article>`).join("")}
+      </div>
+      <div class="cat-cert-row reveal">
+        <button type="button" class="quiz-sticker" id="certBtn">🖨️ Print my Cat-Finder Certificate</button>
+      </div>`;
+    bonus.hidden = false;
+    document.getElementById("certBtn").addEventListener("click", ()=>{
+      if(!document.getElementById("certPrint")){
+        const cert = document.createElement("div");
+        cert.id = "certPrint";
+        cert.className = "cert-print";
+        cert.innerHTML = `
+          <div class="cert-inner">
+            <div class="cert-seal">中</div>
+            <h1>${CAT_BONUS.certificateHeading}</h1>
+            <p>${CAT_BONUS.certificateBody}</p>
+            <p class="cert-foot">China 2026 · pbranfield-lab.github.io/china-2026</p>
+          </div>`;
+        document.body.appendChild(cert);
+      }
+      window.print();
+    });
+  }
+})();
+
 /* ---------- Home page: "Did you know?" teaser ----------
    One random fact from any trip, straight under the hero, with a dice button
    to shuffle — the hook that pulls a visitor from the front door into a trip.

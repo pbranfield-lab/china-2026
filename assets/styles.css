@@ -118,7 +118,7 @@ section.tight .section-title::after{width:110px;}
 .nav-card, .family-card, .location-card, .modal,
 .bonus-feature, .fact-tile, .fact-pop, .teaser-card, .quiz-card,
 .play-credits, .leg-card, .hanzi-tile, .hanzi-stage, .spot-card, .scale-card,
-.passport-page{
+.passport-page, .catfact{
   position:relative;
   border:2.5px solid var(--ink);
   border-radius:var(--radius-panel);
@@ -137,7 +137,7 @@ section.tight .section-title::after{width:110px;}
 .bonus-feature > *, .fact-tile > *, .fact-pop > *,
 .teaser-card > *, .quiz-card > *, .play-credits > *, .leg-card > *,
 .hanzi-tile > *, .hanzi-stage > *, .spot-card > *, .scale-card > *,
-.passport-page > *,
+.passport-page > *, .catfact > *,
 .location-card > .panel, .location-card > .william-toggle{
   position:relative;
 }
@@ -1516,6 +1516,73 @@ footer{position:relative;text-align:center;color:var(--ink-soft);padding:3rem 1.
   100%{transform:rotate(-12deg) scale(1);opacity:.85;}
 }
 .stamp-in{animation:stamp-in .45s ease-out both;}
+
+/* ---------- Hidden cats, toast & certificate ---------- */
+.cat-sticker{
+  position:absolute;
+  z-index:6;
+  width:40px;height:40px;
+  padding:2px;
+  background:none;border:none;
+  cursor:pointer;
+  transform:rotate(-6deg);
+  transition:transform .18s ease;
+  filter:drop-shadow(2px 2px 0 rgba(48,34,23,.35));
+}
+.cat-sticker:hover{transform:rotate(-6deg) scale(1.12);}
+.cat-sticker.found{opacity:.45;}
+.cat-tl{top:-14px;left:-8px;}
+.cat-tr{top:-14px;right:-8px;}
+.cat-bl{bottom:-12px;left:-8px;}
+.cat-br{bottom:-12px;right:-8px;}
+.toast{
+  position:fixed;
+  left:50%;bottom:3.4rem;
+  transform:translate(-50%, 20px);
+  z-index:95;
+  max-width:min(420px, 88vw);
+  padding:.7rem 1.1rem;
+  background:var(--cream);
+  border:2.5px solid var(--ink);
+  border-radius:var(--radius-panel);
+  box-shadow:var(--pop);
+  font-family:var(--font-body);font-weight:700;font-size:.88rem;color:var(--ink);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .3s ease, transform .3s ease;
+}
+.toast.show{opacity:1;transform:translate(-50%, 0);}
+.catfacts{
+  display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+  gap:1.4rem;max-width:820px;margin:0 auto;
+}
+.catfact{padding:1.1rem 1.2rem;}
+.catfact[data-enamel="teal"]{border-color:var(--blue);}
+.catfact[data-enamel="coral"]{border-color:var(--red);}
+.catfact[data-enamel="jade"]{border-color:var(--jade);}
+.catfact[data-enamel="deep"]{border-color:var(--gold-deep);}
+.catfact-index{
+  font-family:var(--font-ui);font-weight:800;font-size:.72rem;
+  color:var(--red-deep);letter-spacing:.06em;
+}
+.catfact p{margin-top:.4rem;font-family:var(--font-body);font-weight:600;font-size:.88rem;color:var(--ink);}
+.cat-cert-row{text-align:center;margin-top:1.6rem;}
+/* The printable certificate: hidden on screen, the only thing on paper. */
+.cert-print{display:none;}
+@media print{
+  body > *{display:none !important;}
+  body > .cert-print{display:block !important;}
+  .cert-inner{
+    max-width:640px;margin:15vh auto 0;padding:3rem;
+    border:4px double #302217;border-radius:14px;
+    text-align:center;
+    font-family:Georgia, serif;color:#302217;
+  }
+  .cert-seal{font-size:2.4rem;color:#C93A2B;margin-bottom:1rem;}
+  .cert-inner h1{font-size:1.6rem;letter-spacing:.04em;margin-bottom:1.2rem;}
+  .cert-inner p{font-size:1.05rem;line-height:1.7;}
+  .cert-foot{margin-top:2rem;font-size:.8rem;color:#77614C;}
+}
 
 /* ---------- Sound toggle ----------
    Injected by site.js on every page, bottom-right (the version stamp owns
