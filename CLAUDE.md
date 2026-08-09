@@ -142,10 +142,21 @@ The features with gotchas worth knowing before touching them:
   fragment handling finds nothing at first paint) and the CJK webfonts land after
   load and reflow the intro by hundreds of pixels. `pointerdown` is in the release
   list because a scrollbar drag fires none of the others.
-- **Facts** render from `FACTS[CURRENT_TRIP.id]` into `#factsGrid`. `#facts` is
-  `hidden` in the markup and only unhidden when the current trip actually has
-  facts, so a trip without them doesn't leave a bare heading; the same guard
-  reveals the `#factsJump` button in the hero.
+- **Facts** render from `FACTS[CURRENT_TRIP.id]` into `#factsGrid` (`story.html`).
+  Tiles are teasers — index, `stat`, `label`, a hint — and deliberately do **not**
+  render `text`; clicking one opens `#factOverlay`, a `role="dialog"` popout with
+  the fact in quotes and Maisie's medallion (`assets/maisie-avatar.jpg`, one photo
+  shared by all three trips because the Xi'an folder has none of her). ←/→
+  buttons, dots and the arrow keys step through all ten and wrap at either end;
+  Escape, ✕ or a backdrop click closes and returns focus to the tile. Tab is
+  trapped inside the dialog. Tiles and the popout cycle four enamel colours via a
+  `data-enamel` attribute. `#facts` is `hidden` in the markup and only unhidden
+  when the current trip actually has facts, so a trip without them doesn't leave a
+  bare heading; the same guard reveals the `#factsJump` button in the hero.
+- ⚠️ The facts **count-up needs its own `matchMedia` guard** — it changes
+  `textContent`, which the stylesheet's `prefers-reduced-motion` blanket cannot
+  suppress. It also only groups thousands if the written `stat` does, so the year
+  stats (`1974`, `1368`) don't animate as `1,974` and then snap.
 - **Attribution** for sourced photos renders twice: `creditBadge()` puts plain
   text inside the thumb (plain text because a thumb is a `<button>` and a nested
   `<a>` is invalid), and `#modalCredit` carries the full line with the licence
@@ -157,17 +168,41 @@ The features with gotchas worth knowing before touching them:
 
 ### `assets/styles.css`
 
-One shared stylesheet, built on `:root` custom properties (a lacquer / vermillion
-/ gold palette, `--font-display` / `--font-body`). Component styles are grouped by
-page/feature under comment headers — site nav, hero, nav cards, scroll panel,
-family cards, map, location popout, photo thumbs, gallery, modal — followed by a
-single mobile media query block at the end covering all of them.
+One shared stylesheet for all five pages, built on `:root` custom properties — a
+cloisonné (景泰蓝) enamel palette: deep teal grounds (`--enamel-deep/-mid/-teal*`),
+a gold wire hairline (`--wire`), and gold (`--gold`), coral (`--coral`) and jade
+(`--jade`) enamel fields, with `--mint` and `--cream` for type on dark. Three
+Latin families — `--font-display` (Fraunces 900), `--font-ui` (Outfit),
+`--font-body` (Nunito) — plus `--font-hanzi` (Noto Serif SC), which every hanzi
+element names explicitly because the Latin faces carry no CJK.
 
-⚠️ **A full re-skin is designed and planned but not yet implemented.** See the
-newest `docs/HANDOFF-*.md`, plus
+Every raised surface shares one **enamel plate** recipe in the ORNAMENT
+PRIMITIVES section: a gradient field, a 1.5px gold wire, a dark setting ring, a
+glaze highlight and a `--lattice` overlay on a `::before`.
+
+- ⚠️ That overlay is absolutely positioned, so **direct children of a plate need
+  `position:relative`** or they paint underneath it. One grouped rule does this
+  for every plate class — extend it when you add a new one.
+- ⚠️ **The map's cream mat is drawn with `box-shadow` spread, not padding.**
+  `#pinLayer` positions pins as percentages of `.map-inner`, so padding there
+  shifts every pin off its landmark.
+- ⚠️ **`--coral` and `--jade` are not text grounds.** A 158deg gradient puts its
+  lightest stop exactly under the first line of text, and both miss WCAG AA
+  there. Surfaces that carry prose use the darker `--coral-field*` /
+  `--coral-plate` / `--jade-field*` variants instead; pins, close buttons, play
+  badges and the seal keep the bright fields because they carry a glyph, not
+  prose. Measure before introducing a new pairing.
+
+`--cloud-scroll` is the page and hero ground pattern. The scroll panel is
+deliberately the one light surface left, because it is the only block with
+enough continuous prose to punish light-on-dark. Component styles are grouped by
+page/feature under comment headers — site nav, hero, nav cards, scroll panel,
+family cards, map, location popout, photo thumbs, gallery, modal, facts —
+followed by a single mobile media query block at the end covering all of them.
+
+The re-skin's design spec and implementation plan are kept for reference at
 `docs/superpowers/specs/2026-08-09-cloisonne-reskin-design.md` and
-`docs/superpowers/plans/2026-08-09-cloisonne-reskin.md`. Don't restyle anything
-ad hoc in the meantime — follow the plan.
+`docs/superpowers/plans/2026-08-09-cloisonne-reskin.md`.
 
 ## Adding content
 
