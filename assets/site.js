@@ -49,6 +49,21 @@ function creditBadge(photo){
   return `<span class="thumb-credit">© ${photo.credit.author} · ${photo.credit.license}</span>`;
 }
 
+/* ---------- Hero jump chips (story page) ----------
+   Sections that reveal themselves append a chip to the hero so readers
+   can see what's further down without scrolling blind. No-op on pages
+   without the container; #factsJump stays a static element because
+   check.mjs asserts it. */
+function addHeroJump(href, label){
+  const box = document.getElementById("heroJumps");
+  if(!box) return;
+  const a = document.createElement("a");
+  a.className = "hero-jump";
+  a.href = href;
+  a.textContent = label;
+  box.appendChild(a);
+}
+
 /* ---------- Reduced motion, shared flag ----------
    The stylesheet's prefers-reduced-motion blanket only reaches CSS
    animation; anything JS drives (count-ups, path draws, injected
@@ -729,6 +744,32 @@ let openPhoto = function(){};
   // Trip cards go first; whatever's already in the markup (Meet the Expedition)
   // stays put at the end.
   chooser.prepend(...cards);
+
+  /* Feature cards for the trip-agnostic pages, slotted between the trips
+     and the static Expedition card. Their cover lines are computed like
+     the trip counts, so they never go stale. */
+  const staticCard = chooser.querySelector('a[href="family.html"]');
+  const feature = (href, icon, hanzi, title, blurb, counts)=>{
+    const a = document.createElement("a");
+    a.className = "nav-card";
+    a.href = href;
+    a.innerHTML = `
+      <div class="icon">${icon}</div>
+      <span class="hanzi">${hanzi}</span>
+      <h3>${title}</h3>
+      <p>${blurb}</p>
+      ${counts ? `<span class="card-counts">${counts}</span>` : ""}`;
+    chooser.insertBefore(a, staticCard);
+  };
+  const kmTotal = (typeof JOURNEY !== "undefined" && JOURNEY.totalLabel) ? JOURNEY.totalLabel : "";
+  const eraCount = (typeof TIMELINE !== "undefined") ? TIMELINE.eras.length : 0;
+  feature("journey.html", "🧭", "旅程", "The Whole Trip",
+    "The route draws itself right across China, then a timeline of every dynasty since the Qin. Britain does not come out of it well.",
+    [kmTotal, eraCount ? `${eraCount} dynasties` : ""].filter(Boolean).join(" · "));
+  const charCount = (typeof HANZI !== "undefined") ? HANZI.length : 0;
+  feature("play.html", "🎮", "玩", "The Games Bit",
+    "Learn to write actual Chinese, guess my zoomed-in photos, and fill a passport up as you go.",
+    [charCount ? `${charCount} characters` : "", "Spot-It", "your passport"].filter(Boolean).join(" · "));
 })();
 
 /* ---------- Map page: pins + focus-shift popout ---------- */
@@ -925,7 +966,8 @@ let openPhoto = function(){};
   card(JOURNEY.legs.length, `
     <span class="leg-badge">The whole thing</span>
     <h3>${JOURNEY.totalLabel}</h3>
-    <p>${JOURNEY.end}</p>`);
+    <p>${JOURNEY.end}</p>
+    <a class="leg-link" href="play.html?trip=${CURRENT_TRIP ? CURRENT_TRIP.id : ""}">Earned a go on The Games Bit →</a>`);
 
   let high = -1;
   function setDistance(n){
@@ -1087,7 +1129,10 @@ let openPhoto = function(){};
     grid.appendChild(fig);
   });
 
-  if(grid.children.length) document.getElementById("thenNow").hidden = false;
+  if(grid.children.length){
+    document.getElementById("thenNow").hidden = false;
+    addHeroJump("#thenNow", "🕰️ Then & Now ↓");
+  }
 })();
 
 /* ---------- Hanzi playground (play page) ----------
@@ -1335,6 +1380,7 @@ let openPhoto = function(){};
   });
 
   document.getElementById("scale").hidden = false;
+  addHeroJump("#scale", "📏 The Scale-o-matic ↓");
 })();
 
 /* ---------- Passport: visit stamps ----------
@@ -1390,8 +1436,12 @@ let openPhoto = function(){};
         <div><h3>${t.name}</h3><span class="pp-hanzi">${t.chinese}</span></div>
       </div>
       <div class="pp-rows">
-        <span class="pp-row">${visited[t.id] ? "Pages explored" : "Not explored yet"}</span>
-        <span class="pp-row">${stars ? `Quiz best: ${"⭐".repeat(stars)}` : "Quiz not conquered yet"}</span>
+        <span class="pp-row">${visited[t.id]
+          ? "Pages explored"
+          : `<a class="pp-go" href="story.html?trip=${t.id}">You haven't been here yet →</a>`}</span>
+        <span class="pp-row">${stars
+          ? `Quiz best: ${"⭐".repeat(stars)}`
+          : `<a class="pp-go" href="story.html?trip=${t.id}#quiz">Quiz not conquered yet →</a>`}</span>
       </div>
       ${visited[t.id] ? `<span class="pp-stamp stamp-in"><b class="pp-stamp-hanzi">到</b> ARRIVED</span>` : ""}`;
     book.appendChild(page);
@@ -1794,6 +1844,20 @@ let openPhoto = function(){};
     card.querySelector(".quiz-again").addEventListener("click", ()=> start(players));
     card.querySelector(".quiz-sticker").addEventListener("click", saveSticker);
     card.querySelector(".quiz-mode-switch").addEventListener("click", intro);
+
+    /* Pull the reader onward: another trip's quiz, picked at random from
+       the trips that actually have one. Injected after the rewrite pass,
+       so the link carries its own ?trip=. */
+    const others = (typeof TRIPS !== "undefined" ? TRIPS : [])
+      .filter(t => t.id !== CURRENT_TRIP.id && (FACTS[t.id] || []).length >= 4);
+    if(others.length){
+      const next = others[Math.floor(Math.random() * others.length)];
+      const a = document.createElement("a");
+      a.className = "quiz-crosslink";
+      a.href = `story.html?trip=${next.id}#quiz`;
+      a.textContent = `Reckon you'd survive the ${next.name} one? →`;
+      card.querySelector(".quiz-final").appendChild(a);
+    }
   }
 
   const n = Math.min(5, eligible.length);
@@ -1801,5 +1865,6 @@ let openPhoto = function(){};
   if(sub) sub.textContent =
     `${n === 5 ? "Five" : n} quick ones about ${CURRENT_TRIP.name}. Every answer is hiding in my facts above — no googling.`;
   document.getElementById("quiz").hidden = false;
+  addHeroJump("#quiz", "🧠 The Big Quiz ↓");
   intro();
 })();

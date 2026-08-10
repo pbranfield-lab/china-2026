@@ -29,8 +29,12 @@
   <div class="seal-title"><span id="heroSeal">紫禁城</span></div>
   <h1>The Story So Far</h1>
   <p class="sub">History bit. Don't worry, I made it interesting.</p>
-  <!-- Unhidden by site.js only when the current trip actually has facts. -->
-  <a class="hero-jump" id="factsJump" href="#facts" hidden>🤯 Jump to the 10 Mind-Blowing Facts ↓</a>
+  <!-- Jump chips: #factsJump is unhidden by site.js when the trip has
+       facts; the quiz, Scale-o-matic and Then & Now sections append their
+       own chips here as they reveal themselves. -->
+  <div class="hero-jumps" id="heroJumps">
+    <a class="hero-jump" id="factsJump" href="#facts" hidden>🤯 Jump to the 10 Mind-Blowing Facts ↓</a>
+  </div>
 </div>
 
 <main>

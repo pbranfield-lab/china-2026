@@ -1443,6 +1443,19 @@ footer{position:relative;text-align:center;color:var(--ink-soft);padding:3rem 1.
   font-family:var(--font-ui);font-weight:800;font-size:.9rem;color:var(--ink);
 }
 
+/* ---------- Hero jump chips & quiz cross-link ---------- */
+.hero-jumps{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;
+  margin-top:1rem;
+}
+/* Chips added by JS reuse .hero-jump; the row wrapper just lays them out. */
+.hero-jumps .hero-jump{margin-top:0;}
+.quiz-crosslink{
+  display:inline-block;margin-top:1rem;
+  font-family:var(--font-ui);font-weight:800;font-size:.85rem;
+  color:var(--blue-deep);
+}
+
 /* ---------- Scale-o-matic (story page) ---------- */
 .scale-grid{
   display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
@@ -1491,6 +1504,7 @@ footer{position:relative;text-align:center;color:var(--ink-soft);padding:3rem 1.
 .pp-hanzi{font-family:var(--font-hanzi);font-size:.8rem;color:var(--red-deep);}
 .pp-rows{display:grid;gap:.3rem;margin-top:.7rem;}
 .pp-row{font-family:var(--font-ui);font-weight:600;font-size:.78rem;color:var(--ink-soft);}
+.pp-go{color:var(--blue-deep);font-weight:800;}
 .pp-row b{color:var(--red-deep);}
 .pp-caption{margin-top:.6rem;font-family:var(--font-body);font-weight:600;font-size:.82rem;color:var(--ink);}
 .pp-tease{
