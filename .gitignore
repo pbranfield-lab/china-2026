@@ -1,3 +1,4 @@
 .superpowers/
 .claude/worktrees/
 .claude/settings.local.json
+.playwright-mcp/
