@@ -147,10 +147,14 @@ table and `node tools/check.mjs` will hold it to that.
 - `hanzi-data/<hex>.js` — per-character stroke data from hanzi-writer-data,
   wrapped as plain scripts (`HANZI_DATA["中"] = {…}`) so the playground works
   on `file://` with no fetch. Derived from Make Me a Hanzi under the Arphic
-  Public License — see `hanzi-data-NOTICE.txt`. **Adding a character to
-  `HANZI` in extras.js means adding its data file here** (filename is the
-  char's codepoint in hex); check.mjs verifies the pairing, and the credits
-  panel on play.html already names both projects.
+  Public License — see `hanzi-data-NOTICE.txt`. **Adding a character to a
+  pack in `HANZI_PACKS` in extras.js means adding its data file here**
+  (filename is the char's codepoint in hex; the fetch recipe lives in git
+  history under the v4.2.0 commit). A char may appear in only one pack, and
+  its pinyin/meaning are load-bearing facts — verify before editing.
+  check.mjs enforces the file pairing and uniqueness, and the credits panel
+  on play.html already names both projects. Packs unlock in array order:
+  tracing 10 characters of a pack opens the next.
 
 ## Privacy
 

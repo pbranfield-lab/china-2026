@@ -1145,7 +1145,7 @@ let openPhoto = function(){};
 (function(){
   const grid = document.getElementById("hanziGrid");
   const stage = document.getElementById("hanziStage");
-  if(!grid || !stage || typeof HANZI === "undefined" || !HANZI.length) return;
+  if(!grid || !stage || typeof HANZI_PACKS === "undefined" || !HANZI_PACKS.length) return;
   if(typeof HanziWriter === "undefined") return;
 
   const hex = ch => ch.codePointAt(0).toString(16);
@@ -1164,19 +1164,81 @@ let openPhoto = function(){};
   const traced = () => store.get("hanzi", {}) || {};
   let currentBtn = null;
 
-  HANZI.forEach((h, i)=>{
-    const b = document.createElement("button");
-    b.type = "button";
-    b.className = "hanzi-tile";
-    b.dataset.enamel = tones[i % tones.length];
-    b.innerHTML = `
-      <span class="hanzi-glyph">${h.char}</span>
-      <span class="hanzi-pinyin">${h.pinyin}</span>
-      <span class="hanzi-mean">${h.meaning}</span>
-      ${traced()[h.char] ? `<span class="hanzi-done" title="Traced">✓</span>` : ""}`;
-    b.addEventListener("click", ()=> select(h, b));
-    grid.appendChild(b);
-  });
+  /* Packs unlock in order: tracing NEED characters of a pack opens the
+     next one. The next locked pack shows as a teaser with its countdown;
+     anything further shows name-only, so the road ahead is visible
+     without spoiling it. */
+  const NEED = 10;
+  const tracedIn = pack => {
+    const t = traced();
+    return pack.chars.filter(h => t[h.char]).length;
+  };
+  const needFor = pack => Math.min(NEED, pack.chars.length);
+  function unlockedCount(){
+    let n = 1;
+    while(n < HANZI_PACKS.length && tracedIn(HANZI_PACKS[n - 1]) >= needFor(HANZI_PACKS[n - 1])) n++;
+    return n;
+  }
+
+  const sub = document.getElementById("hanziSub");
+  if(sub) sub.textContent =
+    `${HANZI.length} characters in ${HANZI_PACKS.length} packs, unlocking as you trace. Start with our trip names and see how far you get.`;
+
+  function renderGrid(){
+    grid.innerHTML = "";
+    const open = unlockedCount();
+    HANZI_PACKS.forEach((pack, pi)=>{
+      const head = document.createElement("div");
+      const done = tracedIn(pack);
+      if(pi < open){
+        head.className = "hanzi-pack-head";
+        head.innerHTML = `
+          <span class="hanzi-pack-hanzi">${pack.hanzi}</span>
+          <div class="hanzi-pack-text"><h3>${pack.name}</h3><p>${pack.blurb}</p></div>
+          <span class="hanzi-pack-progress">${done} / ${pack.chars.length}</span>`;
+        grid.appendChild(head);
+        const row = document.createElement("div");
+        row.className = "hanzi-pack-grid";
+        pack.chars.forEach((h, i)=>{
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "hanzi-tile";
+          b.dataset.enamel = tones[i % tones.length];
+          b.dataset.char = h.char;
+          b.innerHTML = `
+            <span class="hanzi-glyph">${h.char}</span>
+            <span class="hanzi-pinyin">${h.pinyin}</span>
+            <span class="hanzi-mean">${h.meaning}</span>
+            ${traced()[h.char] ? `<span class="hanzi-done" title="Traced">✓</span>` : ""}`;
+          b.addEventListener("click", ()=> select(h, b));
+          row.appendChild(b);
+        });
+        grid.appendChild(row);
+        if(done === pack.chars.length){
+          const full = document.createElement("p");
+          full.className = "hanzi-pack-complete";
+          full.textContent = `That's all of ${pack.name}. Every stroke, all you.`;
+          grid.appendChild(full);
+        }
+      } else if(pi === open){
+        const prev = HANZI_PACKS[pi - 1];
+        const more = needFor(prev) - tracedIn(prev);
+        head.className = "hanzi-pack-head locked";
+        head.innerHTML = `
+          <span class="hanzi-pack-hanzi">🔒</span>
+          <div class="hanzi-pack-text"><h3>${pack.name}</h3><p>${pack.blurb}</p></div>
+          <span class="hanzi-pack-progress">${more} more from ${prev.name} and this one's yours.</span>`;
+        grid.appendChild(head);
+      } else {
+        head.className = "hanzi-pack-head locked far";
+        head.innerHTML = `
+          <span class="hanzi-pack-hanzi">🔒</span>
+          <div class="hanzi-pack-text"><h3>${pack.name}</h3></div>`;
+        grid.appendChild(head);
+      }
+    });
+  }
+  renderGrid();
 
   function select(h, btn){
     if(currentBtn) currentBtn.classList.remove("active");
@@ -1216,11 +1278,19 @@ let openPhoto = function(){};
       status.textContent = "Draw the strokes in the right order — it'll put you straight if you go wrong. There's a proper order, apparently, and it matters.";
       writer.quiz({
         onComplete: ()=>{
+          const before = unlockedCount();
           SoundKit.fx("right");
           store.patch("hanzi", { [h.char]: true });
           status.textContent = `That's ${h.char} done. You just wrote actual Chinese.`;
-          if(!btn.querySelector(".hanzi-done"))
-            btn.insertAdjacentHTML("beforeend", `<span class="hanzi-done" title="Traced">✓</span>`);
+          /* Progress counts and lock states live in the grid, so redraw
+             it and re-mark the tile we're working from. */
+          renderGrid();
+          currentBtn = grid.querySelector(`[data-char="${h.char}"]`);
+          if(currentBtn) currentBtn.classList.add("active");
+          if(unlockedCount() > before){
+            SoundKit.fx("stamp");
+            status.textContent += " New pack unlocked below.";
+          }
         }
       });
     });

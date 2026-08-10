@@ -48,7 +48,7 @@ const DATA_FILES = [
 function loadData(){
   const src = DATA_FILES.map(read).join("\n");
   return new Function(src + ";return {TRIPS,LOCATIONS,PHOTOS,FACTS,FAMILY,SITE_VERSION," +
-    "JOURNEY,TIMELINE,HANZI,COMPARATORS,THEN_NOW,AUDIO,CATS,CAT_BONUS};")();
+    "JOURNEY,TIMELINE,HANZI,HANZI_PACKS,COMPARATORS,THEN_NOW,AUDIO,CATS,CAT_BONUS};")();
 }
 
 /* Strip HTML comments before comparing blocks — the two modal copies carry
@@ -222,16 +222,26 @@ check("COMPARATORS are declarative, resolve to trips, and template {n}", () => {
   return null;
 });
 
-check("HANZI entries have data files, fields, and the vendor script", () => {
-  const { TRIPS, HANZI } = loadData();
+check("HANZI packs are whole, unique, and have data files", () => {
+  const { TRIPS, HANZI, HANZI_PACKS } = loadData();
   const ids = new Set(TRIPS.map(t => t.id));
-  for (const h of HANZI){
-    for (const k of ["char","pinyin","meaning","word","wordMeaning"])
-      if (!h[k]) return `${h.char || "?"} is missing ${k}`;
-    if (h.trip && !ids.has(h.trip)) return `${h.char} names unknown trip ${h.trip}`;
-    const f = `assets/vendor/hanzi-data/${h.char.codePointAt(0).toString(16)}.js`;
-    if (!existsSync(join(ROOT, f))) return `${f} does not exist`;
+  const seenPack = new Set(), seenChar = new Set();
+  for (const p of HANZI_PACKS){
+    for (const k of ["id","name","hanzi","blurb"]) if (!p[k]) return `pack ${p.id || "?"} is missing ${k}`;
+    if (seenPack.has(p.id)) return `duplicate pack id ${p.id}`;
+    seenPack.add(p.id);
+    if (!p.chars || !p.chars.length) return `pack ${p.id} has no characters`;
+    for (const h of p.chars){
+      for (const k of ["char","pinyin","meaning","word","wordMeaning"])
+        if (!h[k]) return `${p.id}/${h.char || "?"} is missing ${k}`;
+      if (seenChar.has(h.char)) return `${h.char} appears in more than one pack`;
+      seenChar.add(h.char);
+      if (h.trip && !ids.has(h.trip)) return `${h.char} names unknown trip ${h.trip}`;
+      const f = `assets/vendor/hanzi-data/${h.char.codePointAt(0).toString(16)}.js`;
+      if (!existsSync(join(ROOT, f))) return `${f} does not exist`;
+    }
   }
+  if (HANZI.length !== seenChar.size) return "the flat HANZI view has drifted from HANZI_PACKS";
   if (HANZI.length && !read("play.html").includes('src="assets/vendor/hanzi-writer.min.js"'))
     return "play.html does not load the vendored hanzi-writer";
   return null;

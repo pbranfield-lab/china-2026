@@ -141,8 +141,10 @@ Field notes, per global:
   data, all declarative (check.mjs evaluates it — no functions): `JOURNEY`
   (route stops + legs; `day:true` legs return to their base city, and the leg
   chain is checked), `TIMELINE` (contiguous eras + events with the Britain
-  lines), `HANZI` (each char needs a stroke file at
-  `assets/vendor/hanzi-data/<codepoint-hex>.js`), `COMPARATORS` (unitValues
+  lines), `HANZI_PACKS` (13 packs, ~212 chars, unlocking in array order —
+  trace 10 to open the next; each char needs a stroke file at
+  `assets/vendor/hanzi-data/<codepoint-hex>.js`, chars unique across packs,
+  `HANZI` is the derived flat view), `COMPARATORS` (unitValues
   mirror numbers already in FACTS — one copy of the truth), `THEN_NOW`
   (historic `then.file` under `Photographs/historic/` with a full credit
   object; `now` is a PHOTOS **id**), `AUDIO` (per-trip loops + credits), and
