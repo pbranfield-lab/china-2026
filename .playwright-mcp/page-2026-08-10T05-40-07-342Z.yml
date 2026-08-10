@@ -1,0 +1,97 @@
+- generic [active] [ref=f4e1]:
+  - banner [ref=f4e2]:
+    - link "中 China 2026" [ref=f4e3] [cursor=pointer]:
+      - /url: index.html?trip=forbidden-city
+      - generic [ref=f4e4]: 中
+      - text: China 2026
+    - navigation [ref=f4e5]:
+      - link "The Journey" [ref=f4e6] [cursor=pointer]:
+        - /url: journey.html?trip=forbidden-city
+      - link "Meet the Expedition" [ref=f4e7] [cursor=pointer]:
+        - /url: family.html?trip=forbidden-city
+      - link "Play" [ref=f4e8] [cursor=pointer]:
+        - /url: play.html?trip=forbidden-city
+  - generic [ref=f4e9]:
+    - generic [ref=f4e10]: 中国 · 二〇二六
+    - generic [ref=f4e11]: 中国
+    - heading "China 2026" [level=1] [ref=f4e13]
+    - paragraph [ref=f4e14]: Five trips across Beijing, Xi'an, Xitang and Shanghai, told by me, Maisie, aged 11, world's leading expert.
+    - paragraph [ref=f4e15]: Mum (Queen of China, allegedly) · Dad (photographer, self-appointed) · William (18, insufferable)
+  - main [ref=f4e16]:
+    - generic [ref=f4e17]:
+      - heading "Pick a Trip" [level=2] [ref=f4e19]
+      - generic [ref=f4e20]:
+        - link "🏛️ 紫禁城 The Forbidden City The world's biggest, poshest house, built for one family and off limits to everyone else for 492 years. 12 spots · 45 photos · 10 facts" [ref=f4e21] [cursor=pointer]:
+          - /url: map.html?trip=forbidden-city
+          - generic [ref=f4e22]: 🏛️
+          - generic [ref=f4e23]: 紫禁城
+          - heading "The Forbidden City" [level=3] [ref=f4e24]
+          - paragraph [ref=f4e25]: The world's biggest, poshest house, built for one family and off limits to everyone else for 492 years.
+          - generic [ref=f4e26]: 12 spots · 45 photos · 10 facts
+        - link "🏺 西安 · 兵马俑 Xi'an & the Terracotta Warriors An entire clay army nobody knew about until 1974, plus a rainy city wall and a thousand-year-old food street. 8 spots · 21 photos · 10 facts" [ref=f4e27] [cursor=pointer]:
+          - /url: map.html?trip=xian
+          - generic [ref=f4e28]: 🏺
+          - generic [ref=f4e29]: 西安 · 兵马俑
+          - heading "Xi'an & the Terracotta Warriors" [level=3] [ref=f4e30]
+          - paragraph [ref=f4e31]: An entire clay army nobody knew about until 1974, plus a rainy city wall and a thousand-year-old food street.
+          - generic [ref=f4e32]: 8 spots · 21 photos · 10 facts
+        - link "🧱 慕田峪长城 The Great Wall at Mutianyu Not one wall but thousands of kilometres of them, held together with sticky rice — and a 1,580 m toboggan back down. 6 spots · 28 photos · 10 facts" [ref=f4e33] [cursor=pointer]:
+          - /url: map.html?trip=great-wall
+          - generic [ref=f4e34]: 🧱
+          - generic [ref=f4e35]: 慕田峪长城
+          - heading "The Great Wall at Mutianyu" [level=3] [ref=f4e36]
+          - paragraph [ref=f4e37]: Not one wall but thousands of kilometres of them, held together with sticky rice — and a 1,580 m toboggan back down.
+          - generic [ref=f4e38]: 6 spots · 28 photos · 10 facts
+        - link "🏮 西塘 Xitang Water Town A reportedly 2,500-year-old town where the roads are canals and the traffic is rowing boats — plus my full ancient-princess photo shoot. 6 spots · 9 photos · 10 facts" [ref=f4e39] [cursor=pointer]:
+          - /url: map.html?trip=xitang
+          - generic [ref=f4e40]: 🏮
+          - generic [ref=f4e41]: 西塘
+          - heading "Xitang Water Town" [level=3] [ref=f4e42]
+          - paragraph [ref=f4e43]: A reportedly 2,500-year-old town where the roads are canals and the traffic is rowing boats — plus my full ancient-princess photo shoot.
+          - generic [ref=f4e44]: 6 spots · 9 photos · 10 facts
+        - link "🌃 上海 Shanghai China's tallest tower, the world's fastest train and 24 million people — with a Ming dynasty garden hiding in the middle of it all. 4 spots · 5 photos · 10 facts" [ref=f4e45] [cursor=pointer]:
+          - /url: map.html?trip=shanghai
+          - generic [ref=f4e46]: 🌃
+          - generic [ref=f4e47]: 上海
+          - heading "Shanghai" [level=3] [ref=f4e48]
+          - paragraph [ref=f4e49]: China's tallest tower, the world's fastest train and 24 million people — with a Ming dynasty garden hiding in the middle of it all.
+          - generic [ref=f4e50]: 4 spots · 5 photos · 10 facts
+        - link "👑 家族 The Expedition Meet Mum, Dad, and William." [ref=f4e51] [cursor=pointer]:
+          - /url: family.html?trip=forbidden-city
+          - generic [ref=f4e52]: 👑
+          - generic [ref=f4e53]: 家族
+          - heading "The Expedition" [level=3] [ref=f4e54]
+          - paragraph [ref=f4e55]: Meet Mum, Dad, and William.
+        - link "🧭 旅程 The Whole Trip The route draws itself right across China, then a timeline of every dynasty since the Qin. Britain does not come out of it well. about 2,800 km · 12 dynasties" [ref=f4e56] [cursor=pointer]:
+          - /url: journey.html
+          - generic [ref=f4e57]: 🧭
+          - generic [ref=f4e58]: 旅程
+          - heading "The Whole Trip" [level=3] [ref=f4e59]
+          - paragraph [ref=f4e60]: The route draws itself right across China, then a timeline of every dynasty since the Qin. Britain does not come out of it well.
+          - generic [ref=f4e61]: about 2,800 km · 12 dynasties
+        - link "🎮 玩 The Games Bit Learn to write actual Chinese, guess my zoomed-in photos, and fill a passport up as you go. 212 characters · Spot-It · your passport" [ref=f4e62] [cursor=pointer]:
+          - /url: play.html
+          - generic [ref=f4e63]: 🎮
+          - generic [ref=f4e64]: 玩
+          - heading "The Games Bit" [level=3] [ref=f4e65]
+          - paragraph [ref=f4e66]: Learn to write actual Chinese, guess my zoomed-in photos, and fill a passport up as you go.
+          - generic [ref=f4e67]: 212 characters · Spot-It · your passport
+        - button "A small cat. Suspicious." [ref=f4e68] [cursor=pointer]
+    - generic [ref=f4e76]:
+      - generic [ref=f4e77]: Did you know?
+      - generic [ref=f4e78]: 468 m
+      - generic [ref=f4e79]: of Oriental Pearl Tower
+      - paragraph [ref=f4e80]:
+        - text: The Oriental Pearl Tower is
+        - strong [ref=f4e81]: 468 metres
+        - text: of concrete and giant spheres, finished in 1994 back when it was pretty much the only tall thing in Pudong. It looks like a retro spaceship stood next to the newer towers, and honestly that's exactly why everyone loves it.
+      - generic [ref=f4e82]:
+        - generic [ref=f4e83]: 🌃 Shanghai
+        - button "🎲 Another one" [ref=f4e84] [cursor=pointer]
+        - link "All 10, plus the quiz →" [ref=f4e85] [cursor=pointer]:
+          - /url: story.html?trip=shanghai#facts
+  - contentinfo [ref=f4e86]: This page grows every time Dad finally uploads more photos off his camera roll. Check back later. — Maisie
+  - generic: v4.2.0
+  - button "🔇 Sound off" [ref=f4e87] [cursor=pointer]:
+    - text: 🔇
+    - generic [ref=f4e88]: Sound off

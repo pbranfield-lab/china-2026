@@ -61,7 +61,14 @@ function addHeroJump(href, label){
   a.className = "hero-jump";
   a.href = href;
   a.textContent = label;
-  box.appendChild(a);
+  /* Chips arrive in script-execution order, which isn't page order —
+     slot each one by where its target section actually sits. */
+  const target = document.getElementById(href.replace(/^#/, ""));
+  const before = [...box.children].find(c=>{
+    const t = document.getElementById((c.getAttribute("href") || "").replace(/^#/, ""));
+    return t && target && (target.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+  box.insertBefore(a, before || null);
 }
 
 /* ---------- Reduced motion, shared flag ----------
@@ -747,8 +754,9 @@ let openPhoto = function(){};
 
   /* Feature cards for the trip-agnostic pages, slotted between the trips
      and the static Expedition card. Their cover lines are computed like
-     the trip counts, so they never go stale. */
-  const staticCard = chooser.querySelector('a[href="family.html"]');
+     the trip counts, so they never go stale. Prefix match: the ?trip=
+     rewrite pass has already run over the static markup by now. */
+  const staticCard = chooser.querySelector('a[href^="family.html"]');
   const feature = (href, icon, hanzi, title, blurb, counts)=>{
     const a = document.createElement("a");
     a.className = "nav-card";

@@ -1,0 +1,56 @@
+- generic [active] [ref=f11e1]:
+  - banner [ref=f11e2]:
+    - link "中 China 2026" [ref=f11e3] [cursor=pointer]:
+      - /url: index.html?trip=great-wall
+      - generic [ref=f11e4]: 中
+      - text: China 2026
+    - link "The Great Wall at Mutianyu" [ref=f11e5] [cursor=pointer]:
+      - /url: index.html?trip=great-wall
+      - generic [ref=f11e6]: 🧱
+      - generic [ref=f11e8]: ⇄
+    - navigation [ref=f11e9]:
+      - link "The Story" [ref=f11e10] [cursor=pointer]:
+        - /url: story.html?trip=great-wall
+      - link "🤯 10 Facts" [ref=f11e11] [cursor=pointer]:
+        - /url: story.html?trip=great-wall#facts
+      - link "The Journey" [ref=f11e12] [cursor=pointer]:
+        - /url: journey.html?trip=great-wall
+      - link "Meet the Expedition" [ref=f11e13] [cursor=pointer]:
+        - /url: family.html?trip=great-wall
+      - link "Play" [ref=f11e14] [cursor=pointer]:
+        - /url: play.html?trip=great-wall
+      - link "🗺️ The Map" [ref=f11e15] [cursor=pointer]:
+        - /url: map.html?trip=great-wall
+      - link "Photo Gallery" [ref=f11e16] [cursor=pointer]:
+        - /url: gallery.html?trip=great-wall
+  - main [ref=f11e17]:
+    - generic [ref=f11e18]:
+      - generic [ref=f11e19]:
+        - heading "The Map" [level=2] [ref=f11e20]
+        - paragraph [ref=f11e21]: Click a pin. That's it. That's the instructions.
+      - generic [ref=f11e23]:
+        - generic [ref=f11e24]:
+          - 'img "Side-on panorama of the Great Wall at Mutianyu: the wall running along the ridge, with the village, chairlift and toboggan run below" [ref=f11e25]'
+          - generic:
+            - button "1" [ref=f11e26] [cursor=pointer]
+            - button "2" [ref=f11e27] [cursor=pointer]
+            - button "3" [ref=f11e28] [cursor=pointer]
+            - button "4" [ref=f11e29] [cursor=pointer]
+            - button "5" [ref=f11e30] [cursor=pointer]
+            - button "6" [ref=f11e31] [cursor=pointer]
+        - button "A small cat. Suspicious." [ref=f11e32] [cursor=pointer]
+      - paragraph [ref=f11e38]: Panorama drawn for this page — not to scale, and no north on it either, because it's a view rather than a plan.
+  - generic:
+    - generic:
+      - button "✕ Back to the map":
+        - text: ✕
+        - generic: Back to the map
+      - generic:
+        - checkbox "Show William's commentary 🙄📱" [checked]
+        - text: Show William's commentary 🙄📱
+      - generic: Pick a spot on the map and I'll tell you what actually happened there (and what William had to say about it).
+  - contentinfo [ref=f11e39]: This page grows every time Dad finally uploads more photos off his camera roll. Check back later. — Maisie
+  - generic: v4.2.0
+  - button "🔇 Sound off" [ref=f11e40] [cursor=pointer]:
+    - text: 🔇
+    - generic [ref=f11e41]: Sound off
