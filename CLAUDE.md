@@ -154,14 +154,20 @@ Field notes, per global:
 
 Vanilla JS, structured as independent IIFEs — one per feature, each guarding on
 `document.getElementById(...)` so a page only wires up what it has. Module-scope
-constants resolve first: `CURRENT_TRIP` (from `?trip=`, default `TRIPS[0]`),
+constants resolve first: `CURRENT_TRIP` (explicit `?trip=`, else the trip
+remembered in `store`, else `TRIPS[0]`) with `TRIP_CHOSEN` beside it (true
+only for an explicit or remembered choice — the contextual nav and the
+link-rewrite pass are its only consumers; content code uses `CURRENT_TRIP`
+unconditionally so bare old links still render `TRIPS[0]`),
 `TRIP_LOCATIONS`, `photoSrc(photo)` — which builds a src from the photo's
 **own** `trip`, not the current one, so a photo always points at the right
 folder — plus three v4 foundations: `REDUCED_MOTION` (JS-driven animation
 must check it; the CSS blanket can't reach `textContent`/dash-offset changes),
 `store` (the **only** localStorage surface: one namespaced JSON blob under
-`china2026:v1` with keys `sound, visited, quizBest, spotBest, cats, hanzi,
-inputs`, every access try/caught so private browsing degrades silently), and
+`china2026:v1` with keys `sound, trip, visited, quizBest, spotBest, cats,
+hanzi, inputs`, every access try/caught so private browsing degrades
+silently; `store` is declared **above** the trip resolution, which reads the
+remembered trip out of it), and
 `SoundKit` (ambient loop per trip, WebAudio feedback chirps, zh-CN
 `speak()`/`hasZhVoice()`; audio only ever starts inside a user gesture).
 `data-trip` is set on `<html>` so CSS can tune per-trip.
@@ -172,9 +178,13 @@ The features with gotchas worth knowing before touching them:
   (check.mjs asserts it); site.js adapts it at load. On `index.html` the
   trip-scoped links (story/facts/map/gallery) are hidden — the home page is the
   trip chooser, and those links would silently land on `TRIPS[0]` before a trip
-  was chosen; the trip-agnostic Journey/Family/Play links stay. On every other
-  page a `.nav-trip` chip is injected after the brand, naming the current trip
-  and linking back to the chooser.
+  was chosen; the trip-agnostic Journey/Family/Play links stay. The agnostic
+  pages (family/journey/play) hide them too while `TRIP_CHOSEN` is false, and
+  show a "🧭 Pick a trip" chip instead of one naming the default; in that same
+  no-context state the link-rewrite pass stamps nothing and routes any
+  trip-scoped link via the chooser. Once a trip is chosen (this URL or a
+  remembered one) every non-index page gets the `.nav-trip` chip after the
+  brand, naming the current trip and linking back to the chooser.
 - **The Big Quiz** (`story.html#quiz`) is built from the same `FACTS` as the
   tiles — there is no separate quiz data to drift out of truth. Only facts
   whose `stat` is one leading number qualify ("east", "rice" and ranges like

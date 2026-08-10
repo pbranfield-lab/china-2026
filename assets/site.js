@@ -4,13 +4,52 @@
    only wire up the bits of UI they actually contain.
    ============================================================ */
 
+/* ---------- Persistent state ----------
+   One namespaced localStorage key holding a single JSON object, so the
+   site never scatters keys and a future format change only has to bump
+   the version suffix. Every access is wrapped: localStorage can be
+   absent or throwing (private browsing, storage-blocked embeds) and the
+   site must degrade to session-only behaviour, never error.
+
+   Keys in use: sound (on/off), trip (last explicitly chosen trip id),
+   visited {tripId:true}, quizBest {tripId:n}, spotBest (n),
+   cats {catId:true}, hanzi {char:true}, inputs {comparatorKey:value}.
+
+   Defined before the trip resolution below, which reads the remembered
+   trip out of it. */
+const store = (function(){
+  const KEY = "china2026:v1";
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e){ return {}; } };
+  const save = d  => { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch(e){} };
+  return {
+    get:   (k, fallback) => { const d = load(); return (k in d) ? d[k] : fallback; },
+    set:   (k, v) => { const d = load(); d[k] = v; save(d); },
+    patch: (k, obj) => { const d = load(); d[k] = Object.assign({}, d[k], obj); save(d); }
+  };
+})();
+
 /* ---------- Current trip ----------
-   Resolved from ?trip=<id>. Falling back to TRIPS[0] keeps every existing
-   link (and the already-deployed site) working with no query string. */
-const CURRENT_TRIP = (function(){
-  if(typeof TRIPS === "undefined") return null;
+   Resolved from ?trip=<id>. An explicit choice is remembered in the store so
+   trip context follows the reader across bare links instead of resetting;
+   falling back to TRIPS[0] last keeps every old no-query link (and a fresh
+   visitor's page) rendering exactly as before.
+
+   TRIP_CHOSEN says whether CURRENT_TRIP reflects a real choice — this URL or
+   a remembered one — or is only the compatibility default. The contextual
+   nav and the link-rewrite pass are its only consumers; content code keeps
+   using CURRENT_TRIP unconditionally. */
+const { CURRENT_TRIP, TRIP_CHOSEN } = (function(){
+  if(typeof TRIPS === "undefined") return { CURRENT_TRIP:null, TRIP_CHOSEN:false };
   const id = new URLSearchParams(location.search).get("trip");
-  return TRIPS.find(t => t.id === id) || TRIPS[0];
+  const explicit = TRIPS.find(t => t.id === id);
+  if(explicit){
+    store.set("trip", explicit.id);
+    return { CURRENT_TRIP: explicit, TRIP_CHOSEN: true };
+  }
+  const remembered = TRIPS.find(t => t.id === store.get("trip"));
+  return remembered
+    ? { CURRENT_TRIP: remembered, TRIP_CHOSEN: true }
+    : { CURRENT_TRIP: TRIPS[0], TRIP_CHOSEN: false };
 })();
 
 const TRIP_LOCATIONS = (CURRENT_TRIP && typeof LOCATIONS !== "undefined")
@@ -76,27 +115,6 @@ function addHeroJump(href, label){
    animation; anything JS drives (count-ups, path draws, injected
    animations) must check this flag itself. */
 const REDUCED_MOTION = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-/* ---------- Persistent state ----------
-   One namespaced localStorage key holding a single JSON object, so the
-   site never scatters keys and a future format change only has to bump
-   the version suffix. Every access is wrapped: localStorage can be
-   absent or throwing (private browsing, storage-blocked embeds) and the
-   site must degrade to session-only behaviour, never error.
-
-   Keys in use: sound (on/off), visited {tripId:true}, quizBest
-   {tripId:n}, spotBest (n), cats {catId:true}, hanzi {char:true},
-   inputs {comparatorKey:value}. */
-const store = (function(){
-  const KEY = "china2026:v1";
-  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e){ return {}; } };
-  const save = d  => { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch(e){} };
-  return {
-    get:   (k, fallback) => { const d = load(); return (k in d) ? d[k] : fallback; },
-    set:   (k, v) => { const d = load(); d[k] = v; save(d); },
-    patch: (k, obj) => { const d = load(); d[k] = Object.assign({}, d[k], obj); save(d); }
-  };
-})();
 
 /* ---------- SoundKit ----------
    All audio in one place: the per-trip ambient loop (from AUDIO in
@@ -212,26 +230,36 @@ const SoundKit = (function(){
    The header carries the full set of links in static markup (check.mjs asserts
    all the pages agree), and this block adapts it per page. The home page is
    the trip chooser: trip-scoped links (story/facts/map/gallery) would silently
-   land the reader on TRIPS[0] before they've chosen, so they hide there. On
-   every other page a chip names the trip you're inside and links back to the
-   chooser to switch. */
+   land the reader on TRIPS[0] before they've chosen, so they hide there — and
+   for the same reason they hide on the trip-agnostic pages (family/journey/
+   play) until a trip has actually been chosen. On every other page a chip
+   names the trip you're inside and links back to the chooser to switch; an
+   agnostic page with no chosen trip gets a "Pick a trip" prompt instead of a
+   chip claiming the default. A trip-scoped page reached by a bare old link
+   keeps the named chip — there the default is really what's on screen. */
 (function(){
   const links = document.getElementById("navLinks");
   if(!links) return;
   const here = location.pathname.split("/").pop() || "index.html";
-  if(here === "index.html"){
+  const agnostic = /^(index|family|journey|play)\.html$/.test(here);
+  if(agnostic && (here === "index.html" || !TRIP_CHOSEN)){
     links.querySelectorAll("a[href]").forEach(a=>{
       const page = a.getAttribute("href").split("#")[0].split("?")[0];
       if(/^(story|map|gallery)\.html$/.test(page)) a.hidden = true;
     });
-    return;
   }
+  if(here === "index.html") return;   // the chooser itself needs no chip
   if(!CURRENT_TRIP) return;
   const chip = document.createElement("a");
   chip.className = "nav-trip";
   chip.href = "index.html";
-  chip.title = "Choose another trip";
-  chip.innerHTML = `<span aria-hidden="true">${CURRENT_TRIP.icon}</span><span class="nav-trip-name">${CURRENT_TRIP.name}</span><b aria-hidden="true">⇄</b>`;
+  if(agnostic && !TRIP_CHOSEN){
+    chip.title = "Choose a trip";
+    chip.innerHTML = `<span aria-hidden="true">🧭</span><span class="nav-trip-name">Pick a trip</span><b aria-hidden="true">→</b>`;
+  } else {
+    chip.title = "Choose another trip";
+    chip.innerHTML = `<span aria-hidden="true">${CURRENT_TRIP.icon}</span><span class="nav-trip-name">${CURRENT_TRIP.name}</span><b aria-hidden="true">⇄</b>`;
+  }
   const brand = document.querySelector(".nav-brand");
   if(brand) brand.insertAdjacentElement("afterend", chip);
 })();
@@ -242,6 +270,11 @@ const SoundKit = (function(){
    trip on them the reader gets silently dumped back onto TRIPS[0] — the Great
    Wall gallery's "See them on the map" would open the Forbidden City map.
 
+   On a trip-agnostic page where no trip has ever been chosen there is no
+   truthful param to stamp, so nothing is stamped: links to trip-scoped pages
+   route via the chooser instead of silently defaulting to TRIPS[0], and
+   links to the other agnostic pages stay bare.
+
    Links that already name a trip are left alone, which is what protects the
    home-page chooser cards from being rewritten to all point at the same trip.
    Hash is split off BEFORE the query, or "story.html#facts" would be rebuilt
@@ -249,6 +282,9 @@ const SoundKit = (function(){
 (function(){
   if(!CURRENT_TRIP) return;
   const PAGES = /^(index|story|family|map|gallery|journey|play)\.html$/;
+  const TRIP_PAGES = /^(story|map|gallery)\.html$/;
+  const here = location.pathname.split("/").pop() || "index.html";
+  const noContext = !TRIP_PAGES.test(here) && !TRIP_CHOSEN;
   document.querySelectorAll("a[href]").forEach(a=>{
     const raw = a.getAttribute("href");
     if(/^([a-z]+:|\/\/|#)/i.test(raw)) return;          // external, protocol-relative, in-page
@@ -256,6 +292,10 @@ const SoundKit = (function(){
     const [path, query] = pathAndQuery.split("?");
     if(!PAGES.test(path)) return;
     if(query && /(^|&)trip=/.test(query)) return;       // already trip-specific
+    if(noContext){
+      if(TRIP_PAGES.test(path)) a.setAttribute("href", "index.html");
+      return;
+    }
     a.setAttribute("href", path + "?trip=" + CURRENT_TRIP.id + (hash ? "#" + hash : ""));
   });
 })();
@@ -975,7 +1015,7 @@ let openPhoto = function(){};
     <span class="leg-badge">The whole thing</span>
     <h3>${JOURNEY.totalLabel}</h3>
     <p>${JOURNEY.end}</p>
-    <a class="leg-link" href="play.html?trip=${CURRENT_TRIP ? CURRENT_TRIP.id : ""}">Earned a go on The Games Bit →</a>`);
+    <a class="leg-link" href="play.html${CURRENT_TRIP && TRIP_CHOSEN ? "?trip=" + CURRENT_TRIP.id : ""}">Earned a go on The Games Bit →</a>`);
 
   let high = -1;
   function setDistance(n){
