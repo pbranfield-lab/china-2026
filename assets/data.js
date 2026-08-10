@@ -12,9 +12,11 @@
    ============================================================ */
 
 /* ============================================================
-   SITE VERSION — bump this one line; every page picks it up.
+   SITE VERSION — bump this line AND re-stamp the ?v= cache-buster on
+   every page's styles.css/data/site.js links to match (a one-line sed;
+   check.mjs fails loudly if they drift).
    ============================================================ */
-const SITE_VERSION = "4.2.0";
+const SITE_VERSION = "4.2.1";
 
 /* Tag a group of entries with their trip, so the tag is declared once per
    group instead of repeated on every object. */

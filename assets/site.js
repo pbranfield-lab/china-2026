@@ -1945,4 +1945,15 @@ let openPhoto = function(){};
   document.getElementById("quiz").hidden = false;
   addHeroJump("#quiz", "🧠 The Big Quiz ↓");
   intro();
+
+  /* Cross-page #quiz links (passport, the quiz cross-link) arrive before
+     this section exists, so the browser's own fragment jump found nothing
+     and left the reader at the top — which reads as a dead link. Scroll
+     now, and once more after the CJK webfonts have reflowed the page. */
+  if(location.hash === "#quiz"){
+    const go = () => document.getElementById("quiz")
+      .scrollIntoView({ behavior: "auto", block: "start" });
+    go();
+    setTimeout(go, 600);
+  }
 })();

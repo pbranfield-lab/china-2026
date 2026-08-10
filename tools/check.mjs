@@ -74,7 +74,8 @@ check("site.js parses", () => { new Function(read("assets/site.js")); return nul
 check("every trip file is loaded, in order, before site.js", () => {
   for (const p of PAGES){
     const s = read(p);
-    const at = f => s.indexOf(`src="${f}"`);
+    /* Prefix match: asset URLs carry a ?v= cache-buster after the path. */
+    const at = f => s.indexOf(`src="${f}`);
     const positions = DATA_FILES.map(at);
     if (positions.some(i => i < 0))
       return `${p} is missing: ${DATA_FILES.filter((f, i) => positions[i] < 0).join(", ")}`;
@@ -106,7 +107,25 @@ check("every page links the same font stylesheet", () => {
 });
 
 check("every page links assets/styles.css", () =>
-  PAGES.filter(p => !read(p).includes('href="assets/styles.css"')).join(", ") || null);
+  PAGES.filter(p => !read(p).includes('href="assets/styles.css')).join(", ") || null);
+
+check("asset links carry the current SITE_VERSION cache-buster", () => {
+  /* GitHub Pages caches assets for ~10 minutes, so a deploy can hand a
+     browser new HTML with yesterday's site.js — layouts break and links
+     built by the old script go missing. The ?v= query ties every asset to
+     the release; bumping SITE_VERSION means re-stamping the pages (sed in
+     the v4.2.1 commit). */
+  const { SITE_VERSION } = loadData();
+  const want = [...DATA_FILES.map(f => `src="${f}?v=${SITE_VERSION}"`),
+    `src="assets/site.js?v=${SITE_VERSION}"`,
+    `href="assets/styles.css?v=${SITE_VERSION}"`];
+  for (const p of PAGES){
+    const s = read(p);
+    const missing = want.find(w => !s.includes(w));
+    if (missing) return `${p} is missing ${missing} (stale ?v= after a SITE_VERSION bump?)`;
+  }
+  return null;
+});
 
 check("the site nav is identical on every page", () => {
   const navs = PAGES.map(p => stripComments(block(read(p), /<header class="site-nav">/, /<\/header>/) || ""));
