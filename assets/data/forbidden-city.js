@@ -23,6 +23,7 @@ const TRIP_FORBIDDEN_CITY = {
     mapCredit:"Base plan: labeled Forbidden City floor plan by Tommy Chen, Wikimedia Commons (CC BY-SA 3.0 / GFDL) — my pins and commentary are extra.",
     photoDir:"forbidden-city",
     hero:"assets/forbidden-city-hero.jpg",
+    heroAlt:"The Hall of Supreme Harmony on its white marble terraces, crowds crossing the huge courtyard under a clear blue sky",
     intro: INTRO_FORBIDDEN_CITY },
 
   facts: [

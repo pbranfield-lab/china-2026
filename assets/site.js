@@ -722,19 +722,38 @@ let openPhoto = function(){};
   if(legend) legend.textContent = CURRENT_TRIP.mapCredit;
 })();
 
-/* ---------- Home page: rotate the hero image per visit ----------
-   No trip is the site's theme, so the front page shouldn't permanently lead
-   with one trip's photograph. Picks a random trip's `hero` on each load. The
-   stylesheet keeps a hard-coded background as the no-JS fallback; note its URL
-   is relative to assets/, whereas `hero` paths here are relative to the page. */
+/* ---------- Home page: the rotating postcard ----------
+   No trip is the site's theme, so the front page leads with a different
+   trip's photograph on every visit. It renders as a whole, taped-in postcard
+   at the photo's own aspect ratio — the previous full-bleed background band
+   cover-cropped everything to ~6:1, which cut vertical shots (Shanghai's
+   towers, the Xitang hanfu portrait) down to an unrecognisable sliver.
+   The caption names the trip and the card links into it; the dice redraws.
+   Injected after the rewrite pass, so the link carries its own ?trip=. */
 (function(){
-  const hero = document.querySelector(".hero.home-hero");
-  if(!hero || typeof TRIPS === "undefined") return;
+  const card = document.getElementById("heroPostcard");
+  if(!card || typeof TRIPS === "undefined") return;
   const candidates = TRIPS.filter(t => t.hero);
   if(!candidates.length) return;
-  const pick = candidates[Math.floor(Math.random() * candidates.length)];
-  hero.style.backgroundImage = `url('${pick.hero}')`;
-  hero.dataset.heroTrip = pick.id;
+  let last = -1;
+  function draw(){
+    let i;
+    do { i = Math.floor(Math.random() * candidates.length); } while(candidates.length > 1 && i === last);
+    last = i;
+    const trip = candidates[i];
+    card.innerHTML = `
+      <a class="postcard-photo" href="map.html?trip=${trip.id}" title="Have a look at ${trip.name}">
+        <img src="${trip.hero}" alt="${trip.heroAlt || "One of our photos from " + trip.name}">
+        <span class="postcard-caption">
+          <span aria-hidden="true">📍</span>${trip.name}
+          <span class="postcard-hanzi">${trip.chinese}</span>
+        </span>
+      </a>
+      <button class="postcard-again" type="button" aria-label="Show a photo from a different trip" title="Another one">🎲</button>`;
+    card.querySelector(".postcard-again").addEventListener("click", draw);
+  }
+  draw();
+  card.hidden = false;
 })();
 
 /* ---------- Home page: the hero subtitle, counted from TRIPS ----------

@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Outfit:wght@400;600;800&family=Nunito:wght@400;600;700&family=Noto+Serif+SC:wght@500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/styles.css?v=4.3.0">
+<link rel="stylesheet" href="assets/styles.css?v=4.4.0">
 </head>
 <body>
 
@@ -27,14 +27,23 @@
 </header>
 
 <div class="hero home-hero">
-  <div class="hero-hanzi">中国 · 二〇二六</div>
-  <div class="seal-title"><span>中国</span></div>
-  <h1>China 2026</h1>
-  <!-- The trip count and city list are rewritten from TRIPS on load, so adding a
-       trip never leaves a stale "two trips" claim here. This markup is the
-       no-JS fallback. -->
-  <p class="sub" id="heroSub">Our trips across China, told by me, Maisie, aged 11, world's leading expert.</p>
-  <p class="byline">Mum (Queen of China, allegedly) · Dad (photographer, self-appointed) · William (18, insufferable)</p>
+  <div class="home-hero-inner">
+    <div class="home-hero-text">
+      <div class="hero-hanzi">中国 · 二〇二六</div>
+      <div class="seal-title"><span>中国</span></div>
+      <h1>China 2026</h1>
+      <!-- The trip count and city list are rewritten from TRIPS on load, so adding a
+           trip never leaves a stale "two trips" claim here. This markup is the
+           no-JS fallback. -->
+      <p class="sub" id="heroSub">Our trips across China, told by me, Maisie, aged 11, world's leading expert.</p>
+      <p class="byline">Mum (Queen of China, allegedly) · Dad (photographer, self-appointed) · William (18, insufferable)</p>
+    </div>
+    <!-- A different trip's photo every visit, shown WHOLE at its natural shape
+         and taped in like a postcard — the old background-crop band cut
+         vertical shots down to an unrecognisable sliver. Filled by site.js;
+         hidden so a no-JS load doesn't show an empty frame. -->
+    <figure class="home-postcard" id="heroPostcard" hidden></figure>
+  </div>
 </div>
 
 <main>
@@ -70,13 +79,13 @@
 <!-- One file per trip, plus extras.js (cross-trip data), then the assembler
      that stitches them into the flat TRIPS / LOCATIONS / PHOTOS / FACTS
      globals. Order matters: every data file must load before assets/data.js. -->
-<script src="assets/data/forbidden-city.js?v=4.3.0"></script>
-<script src="assets/data/xian.js?v=4.3.0"></script>
-<script src="assets/data/great-wall.js?v=4.3.0"></script>
-<script src="assets/data/xitang.js?v=4.3.0"></script>
-<script src="assets/data/shanghai.js?v=4.3.0"></script>
-<script src="assets/data/extras.js?v=4.3.0"></script>
-<script src="assets/data.js?v=4.3.0"></script>
-<script src="assets/site.js?v=4.3.0"></script>
+<script src="assets/data/forbidden-city.js?v=4.4.0"></script>
+<script src="assets/data/xian.js?v=4.4.0"></script>
+<script src="assets/data/great-wall.js?v=4.4.0"></script>
+<script src="assets/data/xitang.js?v=4.4.0"></script>
+<script src="assets/data/shanghai.js?v=4.4.0"></script>
+<script src="assets/data/extras.js?v=4.4.0"></script>
+<script src="assets/data.js?v=4.4.0"></script>
+<script src="assets/site.js?v=4.4.0"></script>
 </body>
 </html>

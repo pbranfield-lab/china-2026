@@ -25,6 +25,7 @@ const TRIP_XITANG = {
     mapCredit:"Site plan drawn for this page — not to scale.",
     photoDir:"xitan",
     hero:"Photographs/xitan/hanfu-parasol-bridge.jpg",
+    heroAlt:"A full traditional hanfu costume with a calligraphy parasol, posed in front of a stone arch bridge over the Xitang canal",
     intro: INTRO_XITANG },
 
   facts: [

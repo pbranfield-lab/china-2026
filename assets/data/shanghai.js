@@ -23,6 +23,7 @@ const TRIP_SHANGHAI = {
     mapCredit:"Site plan drawn for this page — not to scale.",
     photoDir:"shanghai",
     hero:"Photographs/shanghai/lujiazui-three-towers.jpg",
+    heroAlt:"Looking straight up at Lujiazui's three supertall towers lit up against the night sky",
     intro: INTRO_SHANGHAI },
 
   facts: [

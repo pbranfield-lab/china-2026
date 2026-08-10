@@ -109,12 +109,14 @@ popout indexes into positionally.
 Field notes, per global:
 
 - **`TRIPS[]`** — `id` (used in `?trip=`), `name`, `chinese`, `city`, `icon`,
-  `blurb`, `map`, `mapAlt`, `mapCredit`, `photoDir`, `hero`, `intro`.
+  `blurb`, `map`, `mapAlt`, `mapCredit`, `photoDir`, `hero`, `heroAlt`, `intro`.
   `photoDir` is deliberately separate from `id` so URLs stay short while folders
   stay descriptive (`id:"xian"` → `photoDir:"terracotta-warriors"`).
   ⚠️ **`map` resolves under `assets/`, but `hero` is a full page-relative path** —
-  different kinds of value. `hero` wants a wide/panoramic image: it sits behind a
-  dark scrim in a short full-width band, so portraits crop badly.
+  different kinds of value. `hero` renders whole, at its natural aspect ratio,
+  in the home postcard — any shape works (the old cover-cropped band that
+  punished portraits is gone). `heroAlt` is its alt text: write it from the
+  actual image, per the photo-caption rule.
 - **`LOCATIONS[]`** — `id`, `trip`, `num`, `x`/`y` as percentages over that trip's
   plan image, `name`, `chinese`, `story` HTML, **optional** `william` quote.
   `num` restarts at 1 per trip. Drives the map pins.
@@ -264,8 +266,9 @@ The features with gotchas worth knowing before touching them:
   unlocks `#catBonus` and the print-only certificate — `@media print` shows
   only `.cert-print`).
 - Also: nav toggle + current-page highlight, `?loc=` deep links validated against
-  the current trip, scroll-reveal, the home hero image rotation and the hero
-  subtitle counted from `TRIPS`, the trip chooser, the gallery location filter,
+  the current trip, scroll-reveal, the home postcard (a different trip's `hero`
+  each visit, whole at natural aspect, dice to redraw, links into its trip) and
+  the hero subtitle counted from `TRIPS`, the trip chooser, the gallery location filter,
   the injected sound toggle (bottom-right; stamp owns bottom-left) and the
   play-page credits panel (audio + vendored-library attribution).
 

@@ -325,18 +325,77 @@ section.tight .section-title::after{width:110px;}
 }
 .hero.compact{padding:2.2rem 1.5rem 1.8rem;}
 
-/* Home hero: one wide photo, framed like a giant postcard print */
+/* Home hero: the title stack beside a rotating postcard. The photo renders
+   WHOLE at its natural aspect ratio (width/height auto, both axes capped) —
+   the old cover-cropped background band reduced vertical shots to an
+   unrecognisable sliver. Frame recipe matches the gallery polaroids. */
 .hero.home-hero{
-  padding:1.6rem 1rem 1.5rem;min-height:0;
-  background-image:url('forbidden-city-hero.jpg');
-  background-size:cover;
-  background-position:center 60%;
+  padding:2rem 1rem 2.2rem;
   border-bottom:2.5px solid var(--ink);
 }
-.hero.home-hero::before{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg, rgba(48,34,23,.18) 0%, rgba(48,34,23,.5) 100%);
+.home-hero-inner{
+  position:relative;z-index:1;
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+  gap:1.4rem 3rem;
+  max-width:1060px;margin:0 auto;
 }
+.home-hero-text{flex:0 1 480px;}
+.home-postcard{
+  flex:0 1 auto;margin:0;
+  position:relative;
+  transform:rotate(1.8deg);
+}
+/* Washi tape sits on the figure, not the link, so it stays put on hover. */
+.home-postcard::before{
+  content:"";
+  position:absolute;top:-10px;left:50%;
+  width:64px;height:18px;
+  transform:translateX(-50%) rotate(-3deg);
+  background:var(--tape);
+  border-radius:2px;
+  pointer-events:none;
+  z-index:2;
+}
+.postcard-photo{
+  display:block;
+  border:2px solid var(--ink);border-radius:6px;
+  padding:8px 8px 5px;
+  background-color:var(--cream);
+  background-image:var(--texture-paper);
+  box-shadow:var(--pop);
+  text-decoration:none;
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease;
+}
+.postcard-photo:hover{
+  transform:translateY(-4px) rotate(-.6deg);
+  box-shadow:var(--pop-big);
+}
+.postcard-photo img{
+  display:block;
+  width:auto;height:auto;
+  max-width:min(86vw, 480px);
+  max-height:clamp(200px, 26vw, 320px);
+  border-radius:4px;
+  border:2px solid var(--ink);
+}
+.postcard-caption{
+  display:flex;align-items:center;justify-content:center;gap:.45rem;
+  padding:.42rem .3rem .15rem;
+  font-family:var(--font-ui);font-weight:800;font-size:.85rem;
+  color:var(--ink);
+}
+.postcard-hanzi{font-family:var(--font-hanzi);font-weight:700;color:var(--red-deep);}
+.postcard-again{
+  position:absolute;right:-14px;top:-16px;z-index:3;
+  width:40px;height:40px;
+  font-size:1.05rem;line-height:1;
+  background:var(--cream);
+  border:2px solid var(--ink);border-radius:50%;
+  box-shadow:3px 4px 0 rgba(48,34,23,.5);
+  cursor:pointer;
+  transition:transform .15s ease;
+}
+.postcard-again:hover{transform:rotate(20deg) scale(1.08);}
 .hero-hanzi{
   position:relative;z-index:1;
   display:inline-block;
@@ -1681,6 +1740,10 @@ footer{position:relative;text-align:center;color:var(--ink-soft);padding:3rem 1.
 /* ---------- Mobile ---------- */
 @media (max-width:600px){
   .hero{padding:3.2rem 1rem 2rem;}
+  .hero.home-hero{padding:1.8rem 1rem 2rem;}
+  .home-hero-inner{gap:1.5rem;}
+  .postcard-photo img{max-height:230px;}
+  .postcard-again{right:-8px;top:-14px;width:36px;height:36px;}
   .seal-title{width:92px;height:92px;}
   .seal-title span{font-size:2rem;}
   section{padding:2.2rem 1rem;}

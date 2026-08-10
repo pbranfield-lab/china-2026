@@ -22,6 +22,7 @@ const TRIP_XIAN = {
     mapCredit:"Site plan drawn for this page — not to scale.",
     photoDir:"terracotta-warriors",
     hero:"Photographs/terracotta-warriors/city-wall-gate-tower.jpg",
+    heroAlt:"A gate tower of Xi'an's Ming city wall rising over its arched gateway on a rainy day, a tree growing by the brick wall",
     intro: INTRO_XIAN },
 
   facts: [

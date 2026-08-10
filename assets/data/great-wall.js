@@ -23,6 +23,7 @@ const TRIP_GREAT_WALL = {
     mapCredit:"Panorama drawn for this page — not to scale, and no north on it either, because it's a view rather than a plan.",
     photoDir:"the-great-wall",
     hero:"Photographs/the-great-wall/wall-to-the-mountains.jpg",
+    heroAlt:"The Great Wall at Mutianyu snaking along a green mountain ridge towards distant peaks, walkers dotted along the walkway",
     intro: INTRO_GREAT_WALL },
 
   facts: [

@@ -16,7 +16,7 @@
    every page's styles.css/data/site.js links to match (a one-line sed;
    check.mjs fails loudly if they drift).
    ============================================================ */
-const SITE_VERSION = "4.3.0";
+const SITE_VERSION = "4.4.0";
 
 /* Tag a group of entries with their trip, so the tag is declared once per
    group instead of repeated on every object. */
